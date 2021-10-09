@@ -2,6 +2,14 @@
  * Globals
  */
 
+/*ORANGE: #fbb74c
+LIGHT-ORANGE:#fad6af
+BLUE-GREY: #3d444f or #3a484e
+PINK: #ff8592
+DARK PINK: #fa8997
+BEIGE: #faead1
+WHITE: #f8f8f8*/
+
 
 /* Custom default button */
 
@@ -13,6 +21,18 @@
     /* Prevent inheritance from `body` */
 }
 
+.btn-custom{
+    background-color: #3a484e;
+}
+
+.btn-cta{
+    background-color: #ff8592;
+    color: white;
+}
+
+img{
+    margin-bottom: 10px;
+}
 
 /*
  * Base structure
@@ -21,14 +41,33 @@
 body {
     /*text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);*/
     /*box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);*/
-    background-color: #fff;
-    color: rgb(61, 60, 60);
+    background-color: #F8F8F8;
+    color: #3d444f;
 }
 
 
 
 .navbar{
-    background-color: #FCB810 !important;
+    background-color: #FBB74C !important;
+    color: #414F5A !important;
+}
+
+.navbar img{
+    /*background-color: red;*/
+    margin-left: 10px;
+}
+
+.navbar .brand{
+    letter-spacing: 3px;
+    /*background-color: red;*/
+    margin-left: 5px;
+}
+
+.avatar img{
+    width: 50px;
+    height: 50px;
+    margin-top: -5px;
+    margin-bottom: -5px;
 }
 
 .homeRow{
@@ -38,10 +77,9 @@ body {
 }
 
 .headerTitle {
-    color: rgba(0, 0, 0, 0.836) ;
+    color: #414F5A ;
 }
 
 .cover-container {
     max-width: 42em;
 }
-
