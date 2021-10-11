@@ -5,12 +5,15 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
-	<meta name="author" content="Hui Ru, Mindy, Biondi, Wei Hern, Gadman">
+	<meta name="author" content="Sun Jun, Mindy, Biondi, Wei Hern, Gadman">
 	<meta name="generator" content="Hugo 0.84.0">
 	<title>Snail Mail · Sure and Steady</title>
 
 	<!-- Bootstrap CSS File -->
 	<link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- using CDN -->
+    <script src="https://unpkg.com/vue@next"></script>
 
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
@@ -27,6 +30,7 @@
 </head>
 
 <body>
+	<!-- using Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#">
@@ -51,64 +55,98 @@
 	</nav>
 
 	<div class="container">
-		<div class="row-md">
+		<div class="row-md ">
 			<h3 class="homeRow"> Recently Received:</h3>
 		</div>
-		<div class="row d-inline-flex">	
+		<div class="row d-inline-flex" id=open_mails>	
 			<div class="col">
-				<h6>From: Hui Rui</h6>
+				<h6>From: Sun Jun</h6>
 				<img src="./img/envelope.png" style="width: 4rem;"class="card-img-top" alt="...">
 				<a href="#mail-header" class="btn btn-cta btn-lg px-4 me-md-2">Open</a>
 			</div>
 			<div class="col">
-				<h6>From: Hui Rui1</h6>
+				<h6>From: Sun Jun1</h6>
 				<img src="./img/envelope.png" style="width: 4rem;"class="card-img-top" alt="...">
 				<a href="#mail-header" class="btn btn-cta btn-lg px-4 me-md-2">Open</a>
 			</div>
 		</div>
 
 		<div class="row-md d-flex">
-			<h3 class="homeRow" id="mail-header"> Mail: From - Hui Ru</h3>
+			<h3 class="homeRow" id="mail-header"> Mail: From - Sun Jun</h3>
 		</div>
+		<div id="mail_chat" class="row-md d-flex justify-content-center">
 
-		<div class="row-md d-flex justify-content-center">
 			<div class="card bg-dark">
 				<img class="card-img img-fluid m-auto" style="width: 50rem;height:30rem;" src="./img/postcard1.jpg" alt="Card image">
 				<div class="card-img-overlay">
-					<h5 class="card-title">Subject: I LOVE WAD I LOVE WAD I LOVE WAD</h5>
-					<p class="card-text"><span class="tab"></span>
+					<h5 id="mail_subject" class="card-title">Subject: I LOVE WAD I LOVE WAD I LOVE WAD</h5>
+					<p id="mail_body" class="card-text"><span class="tab"></span>
 						When we click on open, the content will change to the mail. As for
 						Chat history, it will allow user to chose all their letters that have 
-						been send or received on the left side. This CSS is taking forever.. this is so not worth 25%.
+						been send or received on the left side. New mail and reply mail will have the same format.
+						All containers and row are flexible for different screen size. 
+						Envelope image of received will change after being opened (This will be checked during backend aspect)
 						<br><br>Note to self: Missing chat history, Missing reply button & send new,
 						processing of text-content, getting database value and looping it, 
-						backend aspect of updating values.
-
+						backend aspect of updating values, scrollable content for row if exceed certain content length value.
+						Nav Bar for chat history??
 					</p>
 				</div>
 			  </div>
+			  
 		</div>
 
 		<div class="row-md d-block">
 			<h3 class="homeRow"> Chat History:</h3>
 		</div>
-
-		<div class="row d-inline-flex">
-			<div class="col">
-				<img src="./img/envelopemulti.png" style="width: 8rem;"class="card-img-top" alt="...">
-				<div>Hui Rui</div>
+		<div class="row d-inline-flex" id="chat_history">
+			<div class="col text-center">
+				<a href="#mail-header">
+					<img src="./img/envelopemulti.png" style="width: 8rem;"class="card-img-top" alt="...">
+				</a>
+				<h6>Sun Jun</h6>
 			</div>
-			<div class="col">
-				<img src="./img/envelopemulti.png" style="width: 8rem;"class="card-img-top" alt="...">
-				<div>Hui Rui1</div>
+			<div class="col text-center">
+				<a href="#mail-header">
+					<img src="./img/envelopemulti.png" style="width: 8rem;"class="card-img-top" alt="...">
+				</a>
+				<h6>Sun Jun</h6>
 			</div>
 		</div>
 
 	</div>
-
 </body>
 
 <script>
+	// Adding of events 
+	var open_mails = document.getElementById("open_mails");
+	for (mail of open_mails.children){
+		// console.log(mail.querySelector('a'));
+		mail.querySelector('a').addEventListener("click",update_mail)
+	}
+
+	var chat_history = document.getElementById("chat_history");
+	for (chat of chat_history.children){
+		// console.log(chat.querySelector('a'));
+		chat.querySelector('a').addEventListener("click",display_chat)
+	}
+
+	function display_chat(){
+		var chat = document.getElementById('mail_chat');
+		var chat_bar = "<div id='chat_bar' class='card bg-dark'><img class='card-img img-fluid m-auto' style='width: 15rem;height:30rem;' src='./img/postcard1.jpg'></div>";
+		chat.innerHTML = chat_bar + chat.innerHTML;
+	}
+	
+	
+	function update_mail(){
+		// Traversing element to get name
+		var name = this.parentElement.querySelector('h6').innerHTML.split("From: ")[1].trim();
+		// console.log(name);
+		document.getElementById("mail_subject").innerHTML = "Use name to get subject and body from JSON"; 
+		document.getElementById("mail_body").innerHTML = name;
+		//TO:DO use the name to get newest body content from json. 
+	}
+
 </script>
 
 <!-- Bootstrap JS File -->

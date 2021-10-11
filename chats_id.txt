@@ -1,0 +1,6 @@
+list of ids to adjust with:
+open_mails
+mail_body
+mail_subject
+chat_history
+chat_bar
