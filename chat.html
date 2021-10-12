@@ -54,99 +54,132 @@
 		</div>
 	</nav>
 
-	<div class="container">
+	<div id=app class="container">
 		<div class="row-md ">
 			<h3 class="homeRow"> Recently Received:</h3>
 		</div>
-		<div class="row d-inline-flex" id=open_mails>	
-			<div class="col">
-				<h6>From: Sun Jun</h6>
+		<div class="row d-inline-flex">	
+			<div class="col" v-for='(name,idx) in unopen_list'>
+				<h6>From: {{ name }}</h6>
 				<img src="./img/envelope.png" style="width: 4rem;"class="card-img-top" alt="...">
-				<a href="#mail-header" class="btn btn-cta btn-lg px-4 me-md-2">Open</a>
-			</div>
-			<div class="col">
-				<h6>From: Sun Jun1</h6>
-				<img src="./img/envelope.png" style="width: 4rem;"class="card-img-top" alt="...">
-				<a href="#mail-header" class="btn btn-cta btn-lg px-4 me-md-2">Open</a>
+				<a href="#mail-header">
+					<button @click="update_mail(idx)" class="btn btn-cta btn-lg px-4 me-md-2">Open</button>
+				</a>
 			</div>
 		</div>
 
-		<div class="row-md d-flex">
-			<h3 class="homeRow" id="mail-header"> Mail: From - Sun Jun</h3>
+		<div class="row-md d-flex" id="mail-header">
+			<h3 class="homeRow"> Mail: From - {{ mail_name }}</h3>
 		</div>
 		<div id="mail_chat" class="row-md d-flex justify-content-center">
-
-			<div class="card bg-dark">
-				<img class="card-img img-fluid m-auto" style="width: 50rem;height:30rem;" src="./img/postcard1.jpg" alt="Card image">
-				<div class="card-img-overlay">
-					<h5 id="mail_subject" class="card-title">Subject: I LOVE WAD I LOVE WAD I LOVE WAD</h5>
-					<p id="mail_body" class="card-text"><span class="tab"></span>
-						When we click on open, the content will change to the mail. As for
-						Chat history, it will allow user to chose all their letters that have 
-						been send or received on the left side. New mail and reply mail will have the same format.
-						All containers and row are flexible for different screen size. 
-						Envelope image of received will change after being opened (This will be checked during backend aspect)
-						<br><br>Note to self: Missing chat history, Missing reply button & send new,
-						processing of text-content, getting database value and looping it, 
-						backend aspect of updating values, scrollable content for row if exceed certain content length value.
-						Nav Bar for chat history??
-					</p>
+			<div class='card col-sm-2 ' v-bind:style="{display:display}" >
+				<img class='.bg-image img-fluid m-auto mh-100' style="width: 50rem;height:100vh;"  src='./img/postcard1.jpg'>
+				
+				<div class="card-img-overlay overflow-auto">
+					<h5 class="card-title">Chats</h5>
+					<div class="row " v-for="(name,idx) in chat_history.slice().reverse()" @click=open_chat(idx)>
+						<p class="m-auto">
+							{{ name }}
+						</p>
+						<img class="w-50" src="./img/envelopeclose.png">
+						
+					</div>
 				</div>
-			  </div>
-			  
+			</div>
+			
+			<div class="card col-md-8">
+				<img class="card-img img-fluid m-auto" style="width: 50rem;height:100vh;" src="./img/postcard1.jpg" alt="Card image">
+				<div class="card-img-overlay overflow-auto">
+					<h5 class="card-title">Subject: {{ subject }}</h5>
+					
+					<p class="card-text"><span class="tab"></span>
+						{{ body }}
+					</p>
+					<div class="position-absolute bottom-0 end-0">
+						<button type="button" class="btn btn-cta btn-lg px-4 m-4" @click="reply()" aria-label="Reply">Reply</button>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<div class="row-md d-block">
 			<h3 class="homeRow"> Chat History:</h3>
 		</div>
-		<div class="row d-inline-flex" id="chat_history">
-			<div class="col text-center">
-				<a href="#mail-header">
+		<div class="row d-inline-flex" >
+			<div class="col text-center" v-for='(chat ,idx) in chats' >
+				<a href="#mail-header" @click="display_chat(idx)">
 					<img src="./img/envelopemulti.png" style="width: 8rem;"class="card-img-top" alt="...">
 				</a>
-				<h6>Sun Jun</h6>
-			</div>
-			<div class="col text-center">
-				<a href="#mail-header">
-					<img src="./img/envelopemulti.png" style="width: 8rem;"class="card-img-top" alt="...">
-				</a>
-				<h6>Sun Jun</h6>
+				<h6>{{ chat }}</h6>
 			</div>
 		</div>
 
 	</div>
 </body>
 
+<script src="https://unpkg.com/vue@next"></script>
 <script>
-	// Adding of events 
-	var open_mails = document.getElementById("open_mails");
-	for (mail of open_mails.children){
-		// console.log(mail.querySelector('a'));
-		mail.querySelector('a').addEventListener("click",update_mail)
-	}
 
-	var chat_history = document.getElementById("chat_history");
-	for (chat of chat_history.children){
-		// console.log(chat.querySelector('a'));
-		chat.querySelector('a').addEventListener("click",display_chat)
+	var json_axios = {
+		names: ['Sun','Moon','Sky'],
+		chats: ['Sun','Moon','Sky','Sea','Hell'],
+		chat_history: ['chat1','chat2','chat3','chat4','chat5']
 	}
+	var temp_note = `When we click on open, the content will change to the mail. As for
+					Chat history, it will allow user to chose all their letters that have 
+					been send or received on the left side. New mail and reply mail will have the same format.
+					All containers and row are flexible for different screen size. 
+					Envelope image of received will change after being opened (This will be checked during backend aspect)
+					
+					Note to self: Missing chat history, Missing reply button & send new,
+					processing of text-content, getting database value and looping it, 
+					backend aspect of updating values, scrollable content for row if exceed certain content length value.
+					Nav Bar for chat history??`
 
-	function display_chat(){
-		var chat = document.getElementById('mail_chat');
-		var chat_bar = "<div id='chat_bar' class='card bg-dark'><img class='card-img img-fluid m-auto' style='width: 15rem;height:30rem;' src='./img/postcard1.jpg'></div>";
-		chat.innerHTML = chat_bar + chat.innerHTML;
-	}
-	
-	
-	function update_mail(){
-		// Traversing element to get name
-		var name = this.parentElement.querySelector('h6').innerHTML.split("From: ")[1].trim();
-		// console.log(name);
-		document.getElementById("mail_subject").innerHTML = "Use name to get subject and body from JSON"; 
-		document.getElementById("mail_body").innerHTML = name;
-		//TO:DO use the name to get newest body content from json. 
-	}
+	Vue.createApp(
+		{
+			data(){
+				return {
+					// data_base should be updated via axios method
+					data_base: json_axios,
+					unopen_list: json_axios.names,
+					subject: "I LOVE WAD I LOVE WAD I LOVE WAD1",
+					body: temp_note,
+					mail_name: '',
+					chats: json_axios.chats,
+					display:'none',
+					chat_history: json_axios.chat_history
+				}	
+			},
 
+			methods: {
+				update_mail(idx){
+					this.subject = "using the name go further into json to retrieve subject"
+					this.body = this.unopen_list[idx]
+					this.mail_name = this.unopen_list[idx]
+					// TO:DO use the name to get newest body content from json. 
+
+				},
+				display_chat(idx){
+					this.display = "inline-flex"
+					this.mail_name =  this.chats[idx]
+					this.open_chat(0)
+					
+				},
+				open_chat(idx){
+					this.subject = "use the chat name to find subject and body"
+					this.body = this.chat_history[idx];
+				},
+				update_mail_status(){
+					//To do and return database value.
+				},
+				reply(){
+					alert("To be completed")
+				}
+			}
+
+		}
+	).mount("#app")
 </script>
 
 <!-- Bootstrap JS File -->
