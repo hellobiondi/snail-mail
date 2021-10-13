@@ -1,8 +1,10 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
+
 /*
  * Globals
  */
 
-/*ORANGE: #fbb74c
+ /*ORANGE: #fbb74c
 LIGHT-ORANGE:#fad6af
 BLUE-GREY: #3d444f or #3a484e
 PINK: #ff8592
@@ -10,6 +12,116 @@ DARK PINK: #fa8997
 BEIGE: #faead1
 WHITE: #f8f8f8*/
 
+
+body {
+    /*text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);*/
+    /*box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);*/
+    font-family: 'IBM Plex Sans', sans-serif;
+    background-color: #F8F8F8;
+    color: #3d444f;
+}
+
+/***************************** Navigation Bar *****************************/
+.navbar{
+    background-color: #FBB74C !important;
+    padding: 10 0 10 0 ;
+    margin: 0px;
+}
+
+.navbar-brand{
+    padding: 0px;
+}
+
+.brand{
+    letter-spacing: 10px;
+    margin-left: 20px;
+    font-size: 30px;
+    color: #414F5A;
+}
+
+#navbarMenu > ul > li > a{
+    font-size: 25px;
+    color: #3d444f;
+}
+
+#navbarMenu > ul > li > a:hover{
+    color: white;
+}
+
+div#navbarMenu > ul > li > a:active{
+    color: white;
+}
+
+/* Logo */
+.navbar img{
+    width: 80px; 
+    height: 80px;
+    margin-left: 10px;
+}
+
+/* Profile Icon*/
+.nav-link{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.avatar img{
+    width: 60px;
+    height: 60px;
+    margin-left: 0px;
+}
+
+.avatar-button a{
+    border: 3px solid #3a484e;
+    border-radius: 15px;
+    padding-top: 10px;
+    margin-bottom: 0px;
+    background: #faead1;
+    text-align: center;
+}
+
+.avatar-button a:hover{
+    border: 3px solid #3a484e;
+    border-radius: 15px;
+    padding-top: 10px;
+    margin-bottom: 0px;
+    background: #fa8997;
+    text-align: center;
+    font-weight: bolder;
+}
+
+
+/***************************** End Navigation Bar *****************************/
+
+/***************************** homepage.html *****************************/
+
+.action-buttons {
+    padding: auto;
+    margin-bottom: 15px;
+    color: #3d444f;
+}
+/***************************** End homepage.html *****************************/
+
+/***************************** about.html *****************************/
+#founders{
+    font-size: 75px;
+}
+
+.card{
+    background: #3a484e;
+    color: white;
+    border-radius: 20px;
+}
+
+.card img {
+    border-radius: 50%;
+    width: 50%;
+    height: 50%;
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 15px;
+}
+/***************************** End about.html *****************************/
 
 /* Custom default button */
 
@@ -34,41 +146,10 @@ img{
     margin-bottom: 10px;
 }
 
-/*
- * Base structure
- */
-
-body {
-    /*text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);*/
-    /*box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);*/
-    background-color: #F8F8F8;
-    color: #3d444f;
-}
 
 
 
-.navbar{
-    background-color: #FBB74C !important;
-    color: #414F5A !important;
-}
 
-.navbar img{
-    /*background-color: red;*/
-    margin-left: 10px;
-}
-
-.navbar .brand{
-    letter-spacing: 3px;
-    /*background-color: red;*/
-    margin-left: 5px;
-}
-
-.avatar img{
-    width: 50px;
-    height: 50px;
-    margin-top: -5px;
-    margin-bottom: -5px;
-}
 
 .homeRow{
     padding-top: 75px ;
