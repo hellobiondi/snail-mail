@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
 import { getDatabase, ref, set, child, get} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-database.js";
 
 const firebaseConfig = {
@@ -20,9 +20,7 @@ const auth = getAuth(app);
 
 const db = getDatabase(app);
 
-document.getElementById("loginGoogle").addEventListener("click",loginGoogle);
-
-function loginGoogle(){
+ export function loginGoogle(){
   //console.log(auth)
   //console.log(provider)
   signInWithPopup(auth, provider)
@@ -69,4 +67,34 @@ function writeToDatabase(uid, name, email, photo){
     profile_picture : photo
   });
   console.log("successfully added to database!");
+}
+
+export function isUserSignedIn(){
+  //console.log("hello");
+  //const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      const uid = user.uid;
+      console.log("current user:"+uid);//see if this appears in console, if yes meant user currently signed in
+      sessionStorage.setItem("currentUser", uid);//call sessionStorage.getItem to get the user uid, you may use it for doing firebase database
+      
+      // ...
+    } else {
+      console.log("Please login again");
+    }
+  });
+}
+
+export function signOutUser(){
+  signOut(auth).then(() => {
+    // Sign-out successful.
+    sessionStorage.clear();
+    console.log("logout Successfully");
+  }).catch((error) => {
+    // An error happened.
+    console.log(error.message);
+  });
+  
 }
