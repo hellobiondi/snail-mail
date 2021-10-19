@@ -16,14 +16,14 @@ WHITE: #f8f8f8*/
 body {
     /*text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);*/
     /*box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);*/
-    font-family: 'IBM Plex Sans', sans-serif;
-    background-color: #F8F8F8;
+    font-family: 'Crete Round', serif;
+    background-color: #E7ECF4;
     color: #3d444f;
 }
 
 /***************************** Navigation Bar *****************************/
 .navbar{
-    background-color: #FBB74C !important;
+    background-color: #6EB6CF !important;
     padding: 10 0 10 0 ;
     margin: 0px;
 }
@@ -33,19 +33,28 @@ body {
 }
 
 .brand{
-    letter-spacing: 10px;
+    font-family: 'Gugi', cursive;
     margin-left: 20px;
-    font-size: 30px;
-    color: #414F5A;
+    font-size: 35px;
+    color: #385264;
 }
 
 #navbarMenu > ul > li > a{
-    font-size: 25px;
+    font-size: 30px;
     color: #3d444f;
+    padding-right: 50px;
 }
 
 #navbarMenu > ul > li > a:hover{
     color: white;
+}
+
+.btn-custom{
+    background-color: #E7ECF4;
+    color: #385264;
+    border: 3px solid #395264;
+    border-radius: 10px;
+    font-size: 30px;
 }
 
 div#navbarMenu > ul > li > a:active{
@@ -100,6 +109,33 @@ div#navbarMenu > ul > li > a:active{
     margin-bottom: 15px;
     color: #3d444f;
 }
+
+.speech-bubble {
+    position: relative;
+    background: #FFFFFF;
+    color: #000000;
+    font-size: 20px;
+    line-height: 120px;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    padding: 0px;
+}
+.speech-bubble:after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 0;
+    z-index: 1;
+    border-style: solid;
+    border-color: transparent #FFFFFF;
+    border-width: 20px 20px 20px 0;
+    top: 50%;
+    left: -20px;
+    margin-top: -20px;
+}
+
 /***************************** End homepage.html *****************************/
 
 /***************************** about.html *****************************/
@@ -123,6 +159,38 @@ div#navbarMenu > ul > li > a:active{
 }
 /***************************** End about.html *****************************/
 
+
+/***************************** profile.html *****************************/
+.profile-pic{
+    height: 250px;
+    width: 250px;
+}
+
+.profile-card{
+    background-color: #FFFFFF;
+    border-radius: 40px;
+}
+
+#map {
+    height: 500px;  /* The height is 400 pixels */
+    width: 100%;  /* The width is the width of the web page */
+   }
+/***************************** End profile.html *****************************/
+
+.button-light{
+    background-color: #6EB6CF;
+    color: #FFFFFF;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+    font-size: 30px;
+}
+
+.button-light:hover{
+    color: #FFFFFF;
+    background-color: #5495B0;
+}
+
+
 /* Custom default button */
 
 .btn-secondary,
@@ -133,9 +201,7 @@ div#navbarMenu > ul > li > a:active{
     /* Prevent inheritance from `body` */
 }
 
-.btn-custom{
-    background-color: #3a484e;
-}
+
 
 .btn-cta{
     background-color: #ff8592;
