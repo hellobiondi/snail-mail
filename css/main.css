@@ -4,15 +4,19 @@
  * Globals
  */
 
- /*ORANGE: #fbb74c
-LIGHT-ORANGE:#fad6af
-BLUE-GREY: #3d444f or #3a484e
-PINK: #ff8592
-DARK PINK: #fa8997
-BEIGE: #faead1
-WHITE: #f8f8f8*/
+.grow {
+    transition: all .2s ease-in-out;
+}
 
+.grow:hover {
+    transform: scale(1.1);
+}
 
+.owl-stage-outer {
+    padding: 10px;
+}
+
+ 
 body {
     /*text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);*/
     /*box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);*/
@@ -39,6 +43,10 @@ body {
     color: #385264;
 }
 
+#logo{
+    font-family: 'Gugi', cursive;
+}
+
 #navbarMenu > ul > li > a{
     font-size: 30px;
     color: #3d444f;
@@ -57,7 +65,7 @@ body {
     font-size: 30px;
 }
 
-div#navbarMenu > ul > li > a:active{
+#navbarMenu > ul > li > a:active{
     color: white;
 }
 
@@ -77,7 +85,8 @@ div#navbarMenu > ul > li > a:active{
 .avatar img{
     width: 60px;
     height: 60px;
-    margin-left: 0px;
+    margin-left: 10px;
+    margin-right: -30px;
 }
 
 .avatar-button a{
@@ -85,7 +94,7 @@ div#navbarMenu > ul > li > a:active{
     border-radius: 15px;
     padding-top: 10px;
     margin-bottom: 0px;
-    background: #faead1;
+    background: #E7ECF4;
     text-align: center;
 }
 
@@ -94,7 +103,7 @@ div#navbarMenu > ul > li > a:active{
     border-radius: 15px;
     padding-top: 10px;
     margin-bottom: 0px;
-    background: #fa8997;
+    background: #c7cbd1;
     text-align: center;
     font-weight: bolder;
 }
@@ -144,8 +153,6 @@ div#navbarMenu > ul > li > a:active{
 }
 
 .card{
-    background: #3a484e;
-    color: white;
     border-radius: 20px;
 }
 

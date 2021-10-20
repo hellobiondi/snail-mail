@@ -26,17 +26,50 @@
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
 	<style>
-		
+
 	</style>
 </head>
 
 <body>
+	<script src="./js/module.js" type="module"></script>
+	<script type="module">
+		import { isUserSignedIn, readFromDatabase, signOutUser} from './js/module.js';
+	
+		function getUserName(userObject){
+			var userName = userObject.name;
+			var userEmail = userObject.email;
+			var userPic = userObject.profile_picture;
 
+			document.getElementById("userName").value = userName;
+			document.getElementById("userBio").value = userEmail;
+			document.getElementById("userPic").src = userPic;
+			document.getElementById("userAvatarPic").src = userPic;
+		}
+
+		async function getData(){
+			var uid = await isUserSignedIn();
+			var property =  "users/" + uid;
+			var data = await readFromDatabase(property);
+			console.log(data);
+			getUserName(data);
+		}
+
+		getData();
+
+		if (sessionStorage.getItem("currentUser")) {
+			console.log(sessionStorage.getItem("currentUser"));
+			var userData = readUser(sessionStorage.getItem("currentUser"));
+			var img = sessionStorage.getItem("profilePicture")
+			console.log(img);
+			document.getElementById("test").src = img;
+			document.getElementById("signout").addEventListener("click", signOutUser());
+		}
+	</script>
 	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="homepage.html">
-				<img src="./img/snailLogo.PNG" alt="" class="d-inline-block align-text-center"> 
+				<img src="./img/snailLogo.PNG" alt="" class="d-inline-block align-text-center">
 				<span class="brand">SNAIL MAIL</span>
 			</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
@@ -55,7 +88,7 @@
 				<ul class="navbar-nav ml-auto nav-flex-icons justify-content-end avatar-button">
 					<li class="nav-item avatar">
 						<a class="nav-link" href="profile.html">
-							Welcome, Sun Jun! <img src="img/sunjun.jpeg" class="rounded-circle z-depth-0" alt="avatar image">
+							<img id="userAvatarPic" class="rounded-circle z-depth-0" alt="avatar image">
 						</a>
 					</li>
 				</ul>
@@ -68,10 +101,10 @@
 			<div class="col-lg-4 col-sm-1">
 				<div class="row text-center">
 					<div class="col-12">
-						<img class = "rounded-circle profile-pic" src="./img/sunjun.jpeg">
+						<img id="userPic" class="rounded-circle profile-pic">
 					</div>
 					<div class="col-12 py-2">
-						<button class="btn button-light">Sign Out</button>
+						<button class="btn button-light" id="signout">Sign Out</button>
 					</div>
 				</div>
 			</div>
@@ -80,13 +113,13 @@
 				<div class="col-12 px-4">
 					<div class="input-group mb-3">
 						<span class="input-group-text">Name:</span>
-						<input type="text" class="form-control">
+						<input id="userName" type="text" class="form-control">
 					</div>
 				</div>
 				<div class="col-12 px-4">
 					<div class="input-group mb-3">
 						<span class="input-group-text">Bio</span>
-						<textarea type="text" class="form-control"></textarea>
+						<textarea id="userBio" type="text" class="form-control"></textarea>
 					</div>
 				</div>
 				<button class="btn button-light">Edit</button>
@@ -107,7 +140,7 @@
 							<span class="input-group-text">Country Code</span>
 							<input type="text" aria-label="First name" class="form-control" value="Singapore" disabled>
 						</div>
-					<button class="btn button-light">Edit</button>
+						<button class="btn button-light">Edit</button>
 					</div>
 					<div class="col-12 py-5">
 						<div id="map"></div>
@@ -120,20 +153,22 @@
 				<h1 class="col-12 py-4 px-4">Settings</h1>
 				<div class="row px-4">
 					<div class="col-6">
-						
+
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Javascript -->
 	<script src="./js/snailmail.js"></script>
 
 	<!-- Google Map API -->
-	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8lhtpvwx2mVd3s9LZn4SHdmWupn0zhXc&callback=initMap&libraries=&v=weekly"></script>
-	
+	<script async
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8lhtpvwx2mVd3s9LZn4SHdmWupn0zhXc&callback=initMap&libraries=&v=weekly"></script>
+
 	<!-- Bootstrap JS File -->
 	<script src="./bootstrap/js/bootstrap.min.js"></script>
 </body>
+
 </html>

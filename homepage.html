@@ -22,16 +22,10 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Crete+Round&display=swap" rel="stylesheet">
 
+	<!-- Owl -->
+	<link rel="stylesheet" href="owlcarousel/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="owlcarousel/css/owl.theme.default.min.css">
 
-	<!-- Fonts  -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
-
-	<!-- Fonts Gugi -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
 
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
@@ -74,10 +68,10 @@
 
 	<div class="container col-xxl-10 px-4 py-1">
 		<div class="row homeRow">
-			<div class="col-12 col-sm-12 col-lg-6">
+			<div class="col-12 col-sm-6 col-lg-6">
 				<img src="./img/snail.PNG" class="d-block mx-lg-auto img-fluid w-75" alt="Snail Mail Logo">
 			</div>
-			<div class="col-lg-6">
+			<div class="col-sm-6 col-lg-6">
 				<div class="speech-bubble">
 					<p>
 						How are you feeling today, Sun Jun?
@@ -88,61 +82,100 @@
 			</div>
 		</div>
 
-		<div class="row ">
-			<div class="col profile-card">
+		<div class="row profile-card">
+			<div class="col-12">
 				<h1 class="py-5 px-4">Your Friends</h1>
+			</div>
+			<div class="col-12 pb-5">
+				<div id="friendsList" class="owl-carousel owl-theme" align="center">
+					<div class="item grow px-4">
+						<a href="#"><img src="img/huiru.jpeg" class="rounded-circle">
+							<div class="text-warning" align="center">Hui Ru</div>
+						</a>
+					</div>
+					<div class="item grow px-4">
+						<a href="#">
+							<img src="img/mindy.jpeg" class="rounded-circle">
+							<div class="text-warning" align="center">Mindy</div>
+						</a>
+					</div>
+					<div class="item grow px-4">
+						<a href="#"><img src="img/biondi.jpeg" class="rounded-circle">
+							<div class="text-warning" align="center">Biondi</div>
+						</a>
+					</div>
+					<div class="item grow px-4">
+						<a href="#"><img src="img/weihern.jpeg" class="rounded-circle">
+							<div class="text-warning" align="center">Wei Hern</div>
+						</a>
+					</div>
+					<div class="item grow px-4">
+						<a href="#"><img src="img/gadman.jpeg" class="rounded-circle">
+							<div class="text-warning" align="center">Gadman</div>
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
 
 		<div class="row profile-card my-5">
-			<h1 class="py-5 px-4">Your Friends Awaiting For Your Next Step</h1>
-			<div class="col-3">
-				<div class="card" style="width: 18rem;">
-					<img src="..." class="card-img-top" alt="...">
-					<div class="card-body">
-						<h5 class="card-title">Connect 4</h5>
-						<p class="card-text">
-							Some quick example text to build on the card title and make up the bulk of
-							the card's content.
-						</p>
-					</div>
-					
-				</div>
+			<div class="col-12">
+				<h1 class="pt-5 pb-3 px-4">Your Friends Awaiting For Your Next Step...</h1>
 			</div>
-			<div class="col-3">
-				<div class="card" style="width: 18rem;">
-					<img src="..." class="card-img-top" alt="...">
-					<div class="card-body">
-						<h5 class="card-title">Connect 4</h5>
-						<p class="card-text">
-							Some quick example text to build on the card title and make up the bulk of
-							the card's content.
-						</p>
+			<div class="col-12 pb-5">
+				<div id="gameList" class="owl-carousel owl-theme" align="center">
+					<div class="item card grow px-4 pt-5" style="width:15em;">
+						<img src="img/PM Lee.jpeg" class="card-img-top" alt="...">
+						<div class="card-body">
+							<h5 class="card-title">Connect 4</h5>
+							<p class="card-text">
+								Player: Kyong <br/>
+								Last Move: 15/10/2021
+							</p>
+							<a class="btn btn-lg btn-success">
+								Play Now
+							</a>
+						</div>
 					</div>
-					
-				</div>
-			</div>
-			<div class="col-3">
-				<div class="card" style="width: 18rem;">
-					<img src="..." class="card-img-top" alt="...">
-					<div class="card-body">
-						<h5 class="card-title">Connect 4</h5>
-						<p class="card-text">
-							Some quick example text to build on the card title and make up the bulk of
-							the card's content.
-						</p>
+					<div class="item card grow px-4 pt-5" style="width:15em;">
+						<img src="img/PM Lee.jpeg" class="card-img-top" alt="...">
+						<div class="card-body">
+							<h5 class="card-title">Battleship</h5>
+							<p class="card-text">
+								Player: Kyong <br/>
+								Last Move: 15/10/2021
+							</p>
+							<a class="btn btn-lg btn-success">
+								Play Now
+							</a>
+						</div>
 					</div>
-					
+					<div class="item card grow px-4 pt-5" style="width:15em;">
+						<img src="img/PM Lee.jpeg" class="card-img-top" alt="...">
+						<div class="card-body">
+							<h5 class="card-title">Chess</h5>
+							<p class="card-text">
+								Player: Kyong <br/>
+								Last Move: 15/10/2021
+							</p>
+							<a class="btn btn-lg btn-success">
+								Play Now
+							</a>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
+	<script src="owlcarousel/js/jquery.min.js"></script>
+	<script src="owlcarousel/js/owl.carousel.min.js"></script>
 	<script src="./js/snailmail.js"></script>
 </body>
 
 <!-- Bootstrap JS File -->
 
 <script src="./bootstrap/js/bootstrap.min.js"></script>
+
 
 </html>
