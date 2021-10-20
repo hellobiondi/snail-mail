@@ -25,6 +25,10 @@
 		.tab {
 			display: inline-block;
 			margin-left: 40px;
+		
+		}
+		.word{
+			color:black;
 		}
 	</style>
 	
@@ -55,10 +59,14 @@
 			</div>
 		</div>
 	</nav>
-
+		
 	
 	<div id=app class="container">
-		<div class="row profile-card my-5 px-5 pb-2">
+		<div class="btn position-fixed bottom-0 end-0 px-3">
+			<img class="rounded-circle btn-outline-light img-fluid" @click=compose() style="height: 60px;" src="img/compose.png">
+		</div>
+			
+		<div class="row profile-card mt-5 px-5 pb-2">
 			<div class="row-md ">
 				<h3 class="homeRow"> Recently Received:</h3>
 			</div>
@@ -73,35 +81,35 @@
 		</div>
 
 
-		<div class="row-md d-flex" id="mail-header">
-			<h3 class="homeRow"> Mail: From - {{ mail_name }}</h3>
+		<div class="row-md d-flex justify-content-center" id="mail-header">
+			<h3 class="homeRow "> From - {{ mail_name }}</h3>
 		</div>
+
 		<div id="mail_chat" class="row-md d-flex justify-content-center">
 			<div class='card col-sm-2 ' v-bind:style="{display:display}" >
-				<img class='.bg-image img-fluid m-auto mh-100' style="width: 50rem;height:100vh;"  src='./img/postcard1.jpg'>
-				
+				<img class='.bg-image img-fluid m-auto' style="border-radius:20px;height:400px;" src='./img/postcard1.jpg'>
 				<div class="card-img-overlay overflow-auto">
-					<h5 class="card-title">Chats</h5>
-					<div class="row " v-for="(content,idx) in chats" @click=open_chat(idx)>
-						<p class="m-auto">
+					<h5 class="card-title word">Letters History</h5>
+					<button type="button" class="btn-close position-absolute p-3 top-0 end-0" @click="close()" aria-label="Close"></button>		
+					<div class="row" v-for="(content,idx) in chats">
+						<p class="m-auto word">
 							Letter - {{content[1]}}
 						</p>
-						<img class="w-50" src="./img/envelopeclose.png">
-						
+						<a href="#mail-header" class="text-center" @click=open_chat(idx)>
+							<img class="img-fluid" style="height:70px;" src="./img/envelopeclose.png">
+						</a>
 					</div>
 				</div>
 			</div>
 			
 			<div class="card col-md-8">
-				<img class="card-img img-auto m-0" style="border-radius:20px;height:400px;" src="./img/postcard1.jpg" alt="Card image">
+				<img class="card-img img-fluid m-0" style="border-radius:20px;height:400px;" src="./img/postcard1.jpg">
 				<div class="card-img-overlay overflow-auto">
-					<h5 class="card-title text-black">Subject: {{ subject }}</h5>
-					
-					<p class="card-text text-black"><span class="tab"></span>
+					<p class="word text-center">
 						{{ body }}
-					</p>
+					</p>	
 					<div class="position-absolute bottom-0 end-0">
-						<button type="button" class="btn btn-cta btn-lg px-4 m-4" @click="reply()" aria-label="Reply">Reply</button>
+						<button type="button" class="btn btn-cta btn-lg px-2 m-4" @click="reply()" aria-label="Reply">Reply</button>
 					</div>
 				</div>
 			</div>
@@ -117,9 +125,21 @@
 					<a href="#mail-header" @click="display_chat(name)">
 						<img src="./img/openenvelope.png" class="img-auto img-fluid">
 					</a>
-					
 				</div>
-				
+			</div>
+		</div>
+
+		<div class="row profile-card my-5 px-5 pb-2">
+			<div class="row-md d-block">
+				<h3 class="homeRow"> Drafts: </h3>
+			</div>
+			<div class="row d-inline-flex" >
+				<div class="col-2 inline" v-for='(chat ,name) in chathistory' >
+					<h6>{{ name }}</h6>
+					<a href="#mail-header" @click="display_chat(name)">
+						<img src="./img/openenvelope.png" class="img-auto img-fluid">
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -137,10 +157,10 @@
 						"Heaven" : ["ABC"]
 					},
 					"chatrecent" : {
-						"Hell" : "dumbx1",
-						"Sky" : "dumbx2",
-						"Sun" : "dumbx3",
-						"Hell" : "dumbx4"
+						"Hell" : "content1 abcdef dear ",
+						"Sky" : "content2 abcdef dear ",
+						"Sun" : "content3 abcdef dear ",
+						"Hell" : "content4 abcdef dear "
 					}
 				},
 	}[uid]
@@ -180,12 +200,19 @@
 					
 				},
 				open_chat(idx){
+					console.log(idx);
 					this.subject = "use the chat name to find subject and body"
 					let content = 0 // index
 					console.log(this.chats[idx][content])
 					this.body = this.chats[idx][content];
 				},
 
+				close(){
+					this.display = "none";
+				},
+				compose(){
+					alert("ABC")
+				}
 				// update_mail_status(){
 				// 	//To do and return database value.
 				// },
