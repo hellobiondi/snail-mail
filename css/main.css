@@ -149,7 +149,7 @@ div#navbarMenu > ul > li > a:active{
     border-radius: 20px;
 }
 
-.card img {
+.circle {
     border-radius: 50%;
     width: 50%;
     height: 50%;
