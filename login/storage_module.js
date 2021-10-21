@@ -2,7 +2,8 @@ import { getStorage, getDownloadURL, ref } from "https://www.gstatic.com/firebas
 
 export function getImages(){
     const storage = getStorage();
-    getDownloadURL(ref(storage, 'images/default_profile_pic.png'))
+    const img = "images/default_profile_pic.png";
+    return new Promise(resolve => {getDownloadURL(ref(storage, img))
     .then((url) => {
       // `url` is the download URL for 'images/stars.jpg'
   
@@ -17,11 +18,13 @@ export function getImages(){
       xhr.send();*/
   
       // Or inserted into an <img> element
-      const img = document.getElementById('myimg');
-      img.setAttribute('src', url);
+      //const img = document.getElementById('myimg');
+      //img.setAttribute('src', url);
+      resolve(url);
     })
     .catch((error) => {
       // Handle any errors
       console.log(error.message);
-    });
+    })
+  });
 }
