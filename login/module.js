@@ -1,6 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js";
+<<<<<<< Updated upstream
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
 import { getDatabase, ref, set, child, get, onValue, update } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-database.js";
+=======
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, createUserWithEmailAndPassword ,signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
+import { getDatabase, ref, set, child, get, onValue, update, push} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-database.js";
+>>>>>>> Stashed changes
 
 const firebaseConfig = {
 	apiKey: "AIzaSyCTCrFgusQmwcWt-xwYCoe-8uJS_IHStxs",
@@ -58,6 +63,7 @@ export function readFromDatabase(prop) {
 	});
 }
 
+<<<<<<< Updated upstream
 export function loginGoogle() {
 	signInWithPopup(auth, provider)
 		.then((result) => {
@@ -98,6 +104,84 @@ export function loginGoogle() {
 			});
 
 		})
+=======
+ export function loginGoogle(){
+  signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    console.log(user);
+    sessionStorage.setItem("currentUser",user.uid);
+    //var check = checkIfUserExists(user.uid);
+    const usersRef = ref(getDatabase());
+    get(child(usersRef, 'users/'+user.uid)).then((snapshot) => {
+    if (snapshot.exists()) {
+      var result = true;
+    } else {
+      var result = false;
+    }
+    console.log(result);
+    if(result==false){
+      var prop = "users/" + user.uid;
+      var dt = {name:user.displayName,email:user.email,profile_picture:user.photoURL};
+      writeToDatabase(prop,dt);
+    }
+    
+    // ...
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    
+    const errorMessage = error.message;
+    console.log(errorCode + " " + errorMessage);
+    // The email of the user's account used.
+    //const email = error.email;
+    // The AuthCredential type that was used.
+    //const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  });
+
+})}
+
+export function loginEmail(email,pwd){
+  signInWithEmailAndPassword(auth,email, pwd)
+  .then((result) => {
+    const user = result.user;
+    console.log("login successfully");
+    
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode+" "+errorMessage);
+  });
+}
+
+export function resgiterWithEmail(email,pwd,username){
+  createUserWithEmailAndPassword(auth,email,pwd)
+  .then((result) => {
+    const user = result.user;
+    const uid = user.uid;
+    var prop = "users/" + uid;
+    var dt = {name:username,email:email,profile_picture:"img/default_profile_pic.png"};
+    writeToDatabase(prop,dt);
+    window.location.href="./requestAddress.html";
+
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode+" "+errorMessage);
+  });
+}
+
+export function writeToDatabase(key, data){
+  set(ref(db, key), data);
+  console.log("successfully added to database!");
+>>>>>>> Stashed changes
 }
 
 export function writeToDatabase(key, data) {
