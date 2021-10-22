@@ -1,8 +1,10 @@
-import { getStorage, getDownloadURL, ref } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-storage.js";
+import { getStorage, getDownloadURL, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-storage.js";
 
-export function getImages(){
-    const storage = getStorage();
-    const img = "images/default_profile_pic.png";
+const storage = getStorage();
+
+export function getImages(img){
+    
+    //const img = "images/default_profile_pic.png";
     return new Promise(resolve => {getDownloadURL(ref(storage, img))
     .then((url) => {
       // `url` is the download URL for 'images/stars.jpg'
@@ -28,3 +30,15 @@ export function getImages(){
     })
   });
 }
+
+export function uploadImages(uid,file,filename){
+  const storageRef = ref(storage, uid+"/"+filename);
+  const metadata = {
+    contentType: 'image/jpeg',
+  };
+  
+  return new Promise(resolve => {uploadBytes(storageRef, file,metadata).then((snapshot) => {
+    console.log('Uploaded a blob or file!');
+    resolve(uid+"/"+file);
+  });
+});}
