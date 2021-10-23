@@ -75,8 +75,8 @@
                 <div class="btn-group-vertical" role="group" aria-label="Basic radio toggle button group">
                     <div v-for='imagesrc in test'>
                         <input type="radio" class="btn-check" name="btnradio" v-bind:id="imagesrc" autocomplete="off">
-                        <label class="btn my-1 mx-4 btn-outline-secondary" v-bind:for="imagesrc">
-                            <img class="p-0 img-fluid m-auto" @click=update_design(imagesrc) v-bind:src="'./img/postcard/'+imagesrc">
+                        <label @click=update_design(imagesrc) class="btn my-1 mx-4 btn-outline-secondary" v-bind:for="imagesrc">
+                            <img class="p-0 img-fluid m-auto" v-bind:src="'./img/postcard/'+imagesrc">
                         </label>
                     </div>
                   </div>
@@ -102,9 +102,7 @@
                 <div class ="row-md d-flex">
                     <div class="my-3">
                         <label for="exampleFormControlTextarea1" class="form-label fw-bold">Content</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" cols="100">
-                            {{body}}
-                        </textarea>
+                        <textarea v-model:value="body" class="form-control" id="exampleFormControlTextarea1" rows="10" cols="100"></textarea>
                     </div>
                 </div>
                 <div class="d-flex">
@@ -122,8 +120,8 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="card col-md-8 d-flex m-auto">
-                        <img class="card-img img-fluid m-auto" style="border-radius:20px;height:400px;" src="./img/postcard/postcard1.jpg">
+                    <div class="card col-md-8 d-flex m-auto">   
+                        <img class="card-img img-fluid m-auto opacity-50" style="border-radius:20px;height:400px;" v-bind:src="'./img/postcard/'+mail_design">
                         <div class="card-img-overlay overflow-auto">
                             <p class="word m-4">
                                 {{ body }} with {{ mail_design}}  
