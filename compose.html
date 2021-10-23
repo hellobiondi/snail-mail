@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="Sun Jun, Mindy, Biondi, Wei Hern, Gadman">
+	<meta name="generator" content="Hugo 0.84.0">
+	<title>Snail Mail · Sure and Steady</title>
+
+	<!-- Bootstrap CSS File -->
+	<link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- using CDN -->
+    <script src="https://unpkg.com/vue@next"></script>
+	
+	<!-- Stylesheet for Page -->
+	<link href="./css/main.css" rel="stylesheet">
+	<style>
+		.homeRow{
+			padding-bottom: 10px;
+			padding-top: 30px;
+		}
+		.tab {
+			display: inline-block;
+			margin-left: 40px;
+		
+		}
+		.word{
+			color:black;
+		}
+	</style>
+	
+</head>
+
+<body>
+	<!-- using Navbar -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="index.html">
+				<img src="./img/snailLogo.PNG" alt="" class="d-inline-block align-text-center">
+				<span class="brand">SNÄIL MÄIL</span>
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+				aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" href="about.html">About Us</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Features</a>
+					</li>
+				</ul>
+				<button class="btn btn-lg btn-custom btn-outline-light" type="submit">Log In / Sign Up</button>
+			</div>
+		</div>
+	</nav>
+		
+	
+	<div id=app class="container">
+		<div class="btn position-fixed bottom-0 end-0 px-3">
+			<img class="rounded-circle btn-outline-light img-fluid" @click=compose() style="height: 60px;" src="img/compose.png">
+		</div>
+
+        <div class="row-md d-inline-flex" id="mail-header">
+            <div class='col-3 profile-card my-5 pb-2 mx-4 overflow-auto' style="height:500px;">
+                <div class="row d-flex text-center mx-1">
+                    <h3 class="text-center homeRow"> Choose your design </h3>
+                </div>
+                <div class="row d-flex text-center my-3 mx-4" v-for='imagesrc in test'>
+                    <button class="p-0 btn btn-outline-dark">
+                        <img class="img-fluid m-auto" @click=update_design(imagesrc) data-bs-toggle="button" autocomplete="off" v-bind:src="'./img/postcard/'+imagesrc">
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-8 d-block profile-card my-5 px-5">
+                <div class="row-md d-flex">
+                    <h3 class="homeRow"> Write Your Mail</h3>
+                </div>
+                <div class="row-md d-flex">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label fw-bold">To:</label>
+                    <div class="col-sm-10">
+                        <select class="form-select" id="to" aria-label="Default select example">
+                            <option selected>Select who to send</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                </div>
+                <div class ="row-md d-flex">
+                    <div class="my-3">
+                        <label for="exampleFormControlTextarea1" class="form-label fw-bold">Content</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" cols="100"></textarea>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <button type="button" class="me-auto btn btn-cta btn-lg" @click="send()" aria-label="Reply">Send</button>                        
+                    <button type="button" class="btn btn-cta btn-lg" data-bs-toggle="modal" data-bs-target="#preview" aria-label="Reply">Preview</button>                       
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="preview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Preview of letter</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card col-md-8 d-flex m-auto">
+                        <img class="card-img img-fluid m-auto" style="border-radius:20px;height:400px;" src="./img/postcard/postcard1.jpg">
+                        <div class="card-img-overlay overflow-auto">
+                            <p class="word m-4">
+                                {{ body }} with {{ mail_design}}  
+                            </p>	
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-cta btn-lg" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-cta btn-lg" data-bs-dismiss="modal">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+
+    
+</body>
+
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    // To be replaced with code from my WAMP 
+	var uid = 'HuiRu';
+	var data = {
+				"HuiRu" : {
+					"chathistory" : {
+						"Sky" : [["content1","time11/2/21"],["content2","time"]],
+						"Heaven" : ["ABC"]
+					},
+					"chatrecent" : {
+						"Hell" : "content1 abcdef dear ",
+						"Sky" : "content2 abcdef dear ",
+						"Sun" : "content3 abcdef dear ",
+						"Hell" : "content4 abcdef dear "
+					}
+				},
+	}[uid]
+    
+	var temp_note = `NIL`
+
+	Vue.createApp(
+		{
+			data(){
+				return {
+					// data_base should be updated via axios method
+					database: data,
+					name: uid,
+					chatrecent: data['chatrecent'],
+					chathistory: data['chathistory'],
+					chats: [],
+					subject: "I LOVE WAD I LOVE WAD I LOVE WAD1",
+					body: temp_note,
+					mail_name: uid,
+					display:'none',
+                    mail_design:'postcard.jpg',
+                    test: ["postcard.jpg","postcard1.jpg","postcard1.jpg","postcard1.jpg","postcard1.jpg"],
+				}	
+			},
+
+			methods: {
+                send(){
+                    alert("tbc")
+                },
+
+				update_mail(name){
+					this.subject = "using the name go further into json to retrieve subject"
+					this.body = this.chatrecent[name]
+					this.mail_name = this.chatrecent[name]
+				// 	// TO:DO use the name to get newest body content from json. 
+
+				},
+				display_chat(name){
+					this.display = "inline-flex"
+					this.chats =  this.chathistory[name]
+					this.open_chat(0)
+					// TO:DO open_chat 
+					
+				},
+				open_chat(idx){
+					console.log(idx);
+					this.subject = "use the chat name to find subject and body"
+					let content = 0 // index
+					console.log(this.chats[idx][content])
+					this.body = this.chats[idx][content];
+				},
+
+				close(){
+					this.display = "none";
+				},
+				compose(){
+					alert("ABC")
+				},
+                update_design(imagesrc){
+                    this.mail_design = imagesrc
+                }
+				// update_mail_status(){
+				// 	//To do and return database value.
+				// },
+				// reply(){
+				// 	alert("To be completed")
+				// }
+			}
+
+		}
+	).mount("#app")
+</script>
+
+<!-- Bootstrap JS File -->
+<script src="./bootstrap/js/bootstrap.min.js"></script>
+
+</html>
