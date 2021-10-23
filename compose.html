@@ -71,16 +71,22 @@
                 <div class="row d-flex text-center mx-1">
                     <h3 class="text-center homeRow"> Choose your design </h3>
                 </div>
-                <div class="row d-flex text-center my-3 mx-4" v-for='imagesrc in test'>
-                    <button class="p-0 btn btn-outline-dark">
-                        <img class="img-fluid m-auto" @click=update_design(imagesrc) data-bs-toggle="button" autocomplete="off" v-bind:src="'./img/postcard/'+imagesrc">
-                    </button>
-                </div>
+
+                <div class="btn-group-vertical" role="group" aria-label="Basic radio toggle button group">
+                    <div v-for='imagesrc in test'>
+                        <input type="radio" class="btn-check" name="btnradio" v-bind:id="imagesrc" autocomplete="off">
+                        <label class="btn my-1 mx-4 btn-outline-secondary" v-bind:for="imagesrc">
+                            <img class="p-0 img-fluid m-auto" @click=update_design(imagesrc) v-bind:src="'./img/postcard/'+imagesrc">
+                        </label>
+                    </div>
+                  </div>
             </div>
 
             <div class="col-8 d-block profile-card my-5 px-5">
                 <div class="row-md d-flex">
-                    <h3 class="homeRow"> Write Your Mail</h3>
+                    <h3 class="homeRow me-auto"> Write Your Mail</h3>
+                    <button type="button" class="my-auto me-2 btn btn-cta btn-lg" @click="save_draft()" aria-label="savedraft">Save Draft</button>                        
+                    <button type="button" class="my-auto btn btn-cta btn-lg" @click="discard()" aria-label="discard">Discard</button>                       
                 </div>
                 <div class="row-md d-flex">
                     <label for="inputEmail3" class="col-sm-2 col-form-label fw-bold">To:</label>
@@ -96,7 +102,9 @@
                 <div class ="row-md d-flex">
                     <div class="my-3">
                         <label for="exampleFormControlTextarea1" class="form-label fw-bold">Content</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" cols="100"></textarea>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" cols="100">
+                            {{body}}
+                        </textarea>
                     </div>
                 </div>
                 <div class="d-flex">
@@ -171,13 +179,23 @@
 					mail_name: uid,
 					display:'none',
                     mail_design:'postcard.jpg',
-                    test: ["postcard.jpg","postcard1.jpg","postcard1.jpg","postcard1.jpg","postcard1.jpg"],
+                    test: ["postcard.jpg","postcard1.jpg","postcard2.jpg","postcard1.jpg","postcard1.jpg"],
 				}	
 			},
 
 			methods: {
                 send(){
-                    alert("tbc")
+                    alert(this.mail_design)
+                },
+
+                save_draft(){
+                    alert("TBC")
+                },
+
+                discard(){
+                    this.body = "";
+                    this.mail_design = 'postcard.jpg'
+                    
                 },
 
 				update_mail(name){
