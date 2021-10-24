@@ -65,16 +65,21 @@
 		<div class="btn position-fixed bottom-0 end-0 px-3">
 			<img class="rounded-circle btn-outline-light img-fluid" @click=compose() style="height: 60px;" src="img/compose.png">
 		</div>
-			
+		<div class="d-none">
+			{{initalise}}
+		</div>
+		<div @click=filter()>
+			{{database}}
+		</div>
 		<div class="row profile-card mt-5 px-5 pb-2">
 			<div class="row-md ">
 				<h3 class="homeRow"> Recently Received:</h3>
 			</div>
 			<div class="row d-inline-flex">	
-				<div class="col-2 inline" v-for='(content,name) in chatrecent'>
-					<h6 class="">{{ name }}</h6>
+				<div class="col-2 inline" v-for='(content,name) in chatRecent'>
+					<h6 class="">{{ content['senderName'] }}</h6>
 					<a href="#mail-header" @click="update_mail(name)">
-						<img src="./img/closedenvelope.png" class="img-auto img-fluid">
+						<img src="./img/closedEnvelope.png" @click="changeImage()" class="img-fluid">
 					</a>
 				</div>
 			</div>
@@ -82,30 +87,30 @@
 
 
 		<div class="row-md d-flex justify-content-center" id="mail-header">
-			<h3 class="homeRow "> From - {{ mail_name }}</h3>
+			<h3 class="homeRow "> From - {{ senderName }}</h3>
 		</div>
 
 		<div id="mail_chat" class="row-md d-flex justify-content-center">
 			<div class='card col-sm-2 ' v-bind:style="{display:display}" >
-				<img class='.bg-image img-fluid m-auto' style="border-radius:20px;height:400px;" src='./img/postcard/postcard1.jpg'>
+				<img class='.bg-image img-fluid m-auto' style="border-radius:20px;height:400px;" v-bind:src="'./img/postcard/'+mailDesign">
 				<div class="card-img-overlay overflow-auto">
 					<h5 class="card-title word">Letters History</h5>
 					<button type="button" class="btn-close position-absolute p-3 top-0 end-0" @click="close()" aria-label="Close"></button>		
 					<div class="row" v-for="(content,idx) in chats">
 						<p class="m-auto word">
-							Letter - {{content[1]}}
+							Letter - {{idx.slice(0,-5)}}
 						</p>
-						<a href="#mail-header" class="text-center" @click=open_chat(idx)>
-							<img class="img-fluid" style="height:70px;" src="./img/envelopeclose.png">
+						<a href="#mail-header" class="m-auto" @click=open_chat(idx)>
+							<img class="m-0 p-0 img-fluid" style="height:70px;" src="./img/closedEnvelope.png">
 						</a>
 					</div>
 				</div>
 			</div>
 			
 			<div class="card col-md-8">
-				<img class="card-img img-fluid m-0" style="border-radius:20px;height:400px;" src="./img/postcard/postcard1.jpg">
+				<img class="card-img img-fluid m-0  opacity-50" style="border-radius:20px;height:400px;" v-bind:src="'./img/postcard/'+mailDesign">
 				<div class="card-img-overlay overflow-auto">
-					<p class="word text-center">
+					<p class="word m-4">
 						{{ body }}
 					</p>	
 					<div class="position-absolute bottom-0 end-0">
@@ -120,10 +125,10 @@
 				<h3 class="homeRow"> Chat History:</h3>
 			</div>
 			<div class="row d-inline-flex" >
-				<div class="col-2 inline" v-for='(chat ,name) in chathistory' >
-					<h6>{{ name }}</h6>
+				<div class="col-2 inline" v-for='(content ,name) in chatHistory' >
+					<h6>{{ content['senderName'] }}</h6>
 					<a href="#mail-header" @click="display_chat(name)">
-						<img src="./img/openenvelope.png" class="img-auto img-fluid">
+						<img src="./img/openenvelope.png" class="img-fluid">
 					</a>
 				</div>
 			</div>
@@ -134,7 +139,7 @@
 				<h3 class="homeRow"> Drafts: </h3>
 			</div>
 			<div class="row d-inline-flex" >
-				<div class="col-2 inline" v-for='(chat ,name) in chathistory' >
+				<div class="col-2 inline" v-for='(chat ,name) in chatHistory' >
 					<h6>{{ name }}</h6>
 					<a href="#mail-header" @click="display_chat(name)">
 						<img src="./img/openenvelope.png" class="img-auto img-fluid">
@@ -147,23 +152,14 @@
 </body>
 
 <script src="https://unpkg.com/vue@next"></script>
-<script>
+<script type="module" src="./testing/module.js"></script>
+
+<script type="module">
+	// DATABASE TESTING
+	import {readFromDatabase} from "./testing/module.js";
+
     // To be replaced with code from my WAMP 
-	var uid = 'HuiRu';
-	var data = {
-				"HuiRu" : {
-					"chathistory" : {
-						"Sky" : [["content1","time11/2/21"],["content2","time"]],
-						"Heaven" : ["ABC"]
-					},
-					"chatrecent" : {
-						"Hell" : "content1 abcdef dear ",
-						"Sky" : "content2 abcdef dear ",
-						"Sun" : "content3 abcdef dear ",
-						"Hell" : "content4 abcdef dear "
-					}
-				},
-	}[uid]
+
 
 	var temp_note = `NIL`
 
@@ -172,53 +168,80 @@
 			data(){
 				return {
 					// data_base should be updated via axios method
-					database: data,
-					name: uid,
-					chatrecent: data['chatrecent'],
-					chathistory: data['chathistory'],
+					database: '',
+					username: '',
+					chatRecent: '',
+					chatHistory: '',
 					chats: [],
-					subject: "I LOVE WAD I LOVE WAD I LOVE WAD1",
+					name: '',
+
+					senderName:'None',
 					body: temp_note,
-					mail_name: uid,
+					mailDesign:"postcard1.jpg",
+
 					display:'none',
 				}	
+			},
+			computed: {
+				initalise:async function getdb(){
+					//TO:DO getuid from session
+					var uid = "123"
+					var prop = "Chats/"+ uid;
+					var data = await readFromDatabase(prop);
+
+					//Debug
+					console.log(uid);
+					console.log(data);
+					this.database = data;
+					this.username = data["name"];
+					this.chatRecent = data["chatRecent"];
+					this.chatHistory = data["chatHistory"];
+					return "done";
+				}
 			},
 
 			methods: {
 				update_mail(name){
-					this.subject = "using the name go further into json to retrieve subject"
-					this.body = this.chatrecent[name]
-					this.mail_name = this.chatrecent[name]
-				// 	// TO:DO use the name to get newest body content from json. 
+					this.senderName = this.chatRecent[name]['senderName'];
+					this.body = this.chatRecent[name]['content'];
+					this.mailDesign = this.chatRecent[name]['mailDesign'];
+					
+					//Add recent to chat history 
+					//Remove from this.database recent or firebase tbc
+					// chatRecent[name].remove() or smth 
 
+					// Add to chat history in firebase
+					// chatHistory[name][mails].datetime = this.body
+					// chatHistory[name].senderName = this.senderName
 				},
 				display_chat(name){
-					this.display = "inline-flex"
-					this.chats =  this.chathistory[name]
-					this.open_chat(0)
-					// TO:DO open_chat 
-					
+					this.display = "inline-flex";
+					this.chats =  this.chatHistory[name]["mails"];
+					// console.log(this.chats);
 				},
 				open_chat(idx){
-					console.log(idx);
-					this.subject = "use the chat name to find subject and body"
-					let content = 0 // index
-					console.log(this.chats[idx][content])
-					this.body = this.chats[idx][content];
+					// console.log(idx);
+					// console.log(this.chats[idx])
+					this.body = this.chats[idx];
 				},
-
+				filter(chatRecent1){
+					let chatRecent = this.chatRecent;
+					console.log(chatRecent);
+					for (const [key,value] of Object.entries(chatRecent)){
+						// console.log(key);
+						// console.log(value);
+						console.log(value['datetime']);
+						// if now - sendtime not 0 or less 
+						// 		append object to disable mails 
+						// 		delete 
+					}
+				},
 				close(){
 					this.display = "none";
 				},
 				compose(){
 					alert("ABC")
 				}
-				// update_mail_status(){
-				// 	//To do and return database value.
-				// },
-				// reply(){
-				// 	alert("To be completed")
-				// }
 			}
 
 		}
