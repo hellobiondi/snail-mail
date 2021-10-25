@@ -1,3 +1,21 @@
+import {loginGoogle, readFromDatabase, writeToDatabase} from "./module.js";
+
+document.getElementById("loginGoogle").addEventListener("click",loginGoogle);
+console.log(sessionStorage.currentUser);
+var uid = sessionStorage.currentUser;
+var dataList = {};
+
+async function yourFunction(){
+    var prop = "users/" + uid;
+    var data = await readFromDatabase(prop);
+    console.log(data); // {email: 'bokzmmindy@gmail.com', name: 'bok mindy', profile_picture: 'https://lh3.googleusercontent.com/a/AATXAJztuF0yzXyjB2lcv656YraWU00docU31bqpqWTN=s96-c'}
+    // dataList["email"] = data.email;
+    dataList["name"] = data.name;
+    dataList["profile_picture"] = data.profile_picture;
+}
+
+
+
 const wordEl = document.getElementById('word');
 const wrongLettersEl = document.getElementById('wrong-letters');
 const playAgainBtn = document.getElementById('play-button');
@@ -8,7 +26,7 @@ const finalMessageRevealWord = document.getElementById('final-message-reveal-wor
 
 const figureParts = document.querySelectorAll('.figure-part');
 
-const words = ['biondi', 'mindy', 'gadman', 'hui ru', 'wei hern'];
+const words = ['afghanistan', 'albania', 'algeria', 'andorra', 'angola', 'anguilla', 'antarctica', 'argentina', 'armenia', 'aruba', 'australia', 'austria', 'azerbaijan', 'bahamas', 'bahrain', 'bangladesh', 'barbados', 'belarus', 'belgium', 'belize', 'benin', 'bermuda', 'bhutan', 'bolivia', 'bosnia', 'botswana', 'brazil', 'brunei', 'bulgaria', 'burundi', 'cambodia', 'cameroon', 'canada', 'capeverde', 'caymanislands', 'chad', 'chile', 'china', 'christmasisland', 'colombia', 'comoros', 'congo', 'cook islands', 'croatia', 'cuba', 'cyprus', 'czechrepublic', 'denmark', 'djibouti', 'dominica', 'ecuador', 'egypt', 'elsalvador', 'eritrea', 'estonia', 'ethiopia', 'falklandislands', 'faroeislands', 'fiji', 'finland', 'france', 'gabon', 'gambia', 'georgia', 'germany', 'ghana', 'gibraltar', 'greece', 'greenland', 'grenada', 'guadeloupe', 'guam', 'guatemala', 'guinea', 'guyana', 'haiti', 'honduras', 'hongkong', 'hungary', 'iceland', 'india', 'indonesia', 'iran', 'iraq', 'ireland', 'israel', 'italy', 'jamaica', 'japan', 'jordan', 'kazakhstan', 'kenya', 'kiribati', 'northkorea', 'korea', 'kuwait', 'kyrgyzstan', 'laos', 'latvia', 'lebanon', 'lesotho', 'liberia', 'libya', 'liechtenstein', 'lithuania', 'luxembourg', 'macao', 'macedonia', 'madagascar', 'malawi', 'malaysia', 'maldives', 'mali', 'malta', 'marshallislands', 'martinique', 'mauritania', 'mauritius', 'mayotte', 'mexico', 'micronesia', 'moldova', 'monaco', 'mongolia', 'montserrat', 'morocco', 'mozambique', 'myanmar', 'namibia', 'nauru', 'nepal', 'netherlands', 'newcaledonia', 'newzealand', 'nicaragua', 'niger', 'nigeria', 'niue', 'norfolkisland', 'norway', 'oman', 'pakistan', 'palau', 'palestine', 'panama', 'newguinea', 'paraguay', 'peru', 'philippines', 'pitcairn', 'poland', 'portugal', 'puertorico', 'qatar', 'romania', 'russia', 'rwanda', 'sainthelena', 'saintlucia', 'samoa', 'saudiarabia', 'senegal', 'serbia', 'seychelles', 'sierraleone', 'singapore', 'slovakia', 'slovenia', 'solomonislands', 'somalia', 'southafrica', 'spain', 'srilanka', 'sudan', 'suriname', 'svalbard', 'swaziland', 'sweden', 'switzerland', 'syria', 'taiwan', 'tajikistan', 'tanzania', 'thailand', 'timor', 'togo', 'tokelau', 'tonga', 'trinidad', 'tunisia', 'turkey', 'turkmenistan', 'tuvalu', 'uganda', 'ukraine', 'unitedkingdom', 'unitedstates', 'uruguay', 'uzbekistan', 'vanuatu', 'vietnam', 'yemen', 'zimbabwe'];
 
 let selectedWord = words[Math.floor(Math.random() * words.length)];
 
@@ -16,6 +34,7 @@ let playable = true;
 
 const correctLetters = [];
 const wrongLetters = [];
+var score = 0;
 
 // Show hidden word
 function displayWord() {
@@ -38,7 +57,8 @@ function displayWord() {
 		finalMessage.innerText = 'Congratulations! You won! 😃';
 		finalMessageRevealWord.innerText = '';
 		popup.style.display = 'flex';
-
+		score += 1;
+		writeToDatabase("games/hangman/game0001/score0001", score);
 		playable = false;
 	}
 }
