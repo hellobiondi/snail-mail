@@ -22,7 +22,6 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Crete+Round&display=swap" rel="stylesheet">
 
-
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
 	<style>
@@ -31,9 +30,9 @@
 </head>
 
 <body>
-	<script src="./js/module.js" type="module"></script>
+	<script src="./testing/module.js" type="module"></script>
 	<script type="module">
-		import { isUserSignedIn, readFromDatabase, signOutUser} from './js/module.js';
+		import {isUserSignedIn, readFromDatabase, signOutUser} from './testing/module.js';
 	
 		function getUserName(userObject){
 			var userName = userObject.name;
@@ -44,6 +43,7 @@
 			document.getElementById("userBio").value = userEmail;
 			document.getElementById("userPic").src = userPic;
 			document.getElementById("userAvatarPic").src = userPic;
+			console.log(userPic);
 		}
 
 		async function getData(){
@@ -56,14 +56,14 @@
 
 		getData();
 
-		if (sessionStorage.getItem("currentUser")) {
+		/*if (sessionStorage.getItem("currentUser")) {
 			console.log(sessionStorage.getItem("currentUser"));
 			var userData = readUser(sessionStorage.getItem("currentUser"));
 			var img = sessionStorage.getItem("profilePicture")
 			console.log(img);
 			document.getElementById("test").src = img;
 			document.getElementById("signout").addEventListener("click", signOutUser());
-		}
+		}*/
 	</script>
 	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
