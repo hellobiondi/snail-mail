@@ -1,4 +1,4 @@
-import {loginGoogle, readFromDatabase} from "./module.js";
+import {loginGoogle, readFromDatabase, writeToDatabase} from "./module.js";
 
 document.getElementById("loginGoogle").addEventListener("click",loginGoogle);
 console.log(sessionStorage.currentUser);
@@ -34,6 +34,7 @@ let playable = true;
 
 const correctLetters = [];
 const wrongLetters = [];
+var score = 0;
 
 // Show hidden word
 function displayWord() {
@@ -56,7 +57,8 @@ function displayWord() {
 		finalMessage.innerText = 'Congratulations! You won! 😃';
 		finalMessageRevealWord.innerText = '';
 		popup.style.display = 'flex';
-
+		score += 1;
+		writeToDatabase("games/hangman/game0001/score0001", score);
 		playable = false;
 	}
 }
