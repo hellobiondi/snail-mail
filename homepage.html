@@ -32,7 +32,38 @@
 </head>
 
 <body>
+	<script src="./testing/module.js" type="module"></script>
+	<script type="module">
+		import {isUserSignedIn, readFromDatabase} from './testing/module.js';
+	
+		function getUserName(userObject){
+			var userName = userObject.name;
+			var userPic = userObject.profile_picture;
 
+			document.getElementById("userName").innerHTML = userName;
+			document.getElementById("userAvatarPic").src = userPic;
+			console.log(userName);
+		}
+
+		async function getData(){
+			var uid = await isUserSignedIn();
+			var property =  "users/" + uid;
+			var data = await readFromDatabase(property);
+			console.log(data);
+			getUserName(data);
+		}
+
+		getData();
+
+		/*if (sessionStorage.getItem("currentUser")) {
+			console.log(sessionStorage.getItem("currentUser"));
+			var userData = readUser(sessionStorage.getItem("currentUser"));
+			var img = sessionStorage.getItem("profilePicture")
+			console.log(img);
+			document.getElementById("test").src = img;
+			document.getElementById("signout").addEventListener("click", signOutUser());
+		}*/
+	</script>
 	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
@@ -56,8 +87,7 @@
 				<ul class="navbar-nav ml-auto nav-flex-icons justify-content-end avatar-button">
 					<li class="nav-item avatar">
 						<a class="nav-link" href="profile.html">
-							Welcome, Sun Jun! <img src="img/sunjun.jpeg" class="rounded-circle z-depth-0"
-								alt="avatar image">
+							<img id="userAvatarPic" class="rounded-circle z-depth-0" alt="avatar image">
 						</a>
 					</li>
 				</ul>
@@ -74,7 +104,8 @@
 			<div class="col-sm-6 col-lg-6">
 				<div class="speech-bubble">
 					<p>
-						How are you feeling today, Sun Jun?
+						How are you feeling today, <span id="userName"></span>?
+						<br/>
 						You haven't made a new friend today,
 						would you like to meet someone new?
 					</p>

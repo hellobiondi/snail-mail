@@ -25,6 +25,58 @@ body {
     color: #3d444f;
 }
 
+/***************************** login_page.html *****************************/
+.tabs{
+    font-size: 20px;
+}
+
+#icon {
+    width: 150px;
+    height: 150px;
+}
+
+img[src="img/btn_google_signin_light_normal_web@2x.png"] {
+    height: 50px;
+}
+
+#signInBox,
+#signUpBox {
+    background-color: white;
+    border-radius: 0% 0% 10px 10px;
+}
+
+.selected {
+    background-color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 10px 10px 0% 0%;
+}
+
+.unselected {
+    background-color: rgba(226, 226, 226, 0.493);
+    color: rgb(0, 0, 0, .2);
+    cursor: pointer;
+    border-radius: 10px 10px 0% 0%;
+}
+
+
+
+h4 {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #414f5a;
+    line-height: 0.1em;
+    margin: 10px 0 20px;
+}
+
+h4 span {
+    background: white;
+    padding: 0 10px;
+    font-size: 15px;
+}
+
+/***************************** End login_page.html *****************************/
+
 /***************************** Navigation Bar *****************************/
 .navbar{
     background-color: #6EB6CF !important;
@@ -65,7 +117,7 @@ body {
     font-size: 30px;
 }
 
-#navbarMenu > ul > li > a:active{
+#navbarMenu > ul > li > a.active{
     color: white;
 }
 
@@ -218,11 +270,6 @@ body {
 img{
     margin-bottom: 10px;
 }
-
-
-
-
-
 
 .homeRow{
     padding-top: 75px ;
