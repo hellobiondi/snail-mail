@@ -84,6 +84,7 @@ export function readFromDatabase(prop){
     get(child(usersRef, 'users/'+user.uid)).then((snapshot) => {
     if (snapshot.exists()) {
       var result = true;
+      window.location.href="./homepage.html";
     } else {
       var result = false;
     }
@@ -92,6 +93,7 @@ export function readFromDatabase(prop){
       var prop = "users/" + user.uid;
       var dt = {name:user.displayName,email:user.email,profile_picture:user.photoURL};
       writeToDatabase(prop,dt);
+      window.location.href="./requestAddress.html";
     }
     
     // ...
@@ -115,6 +117,7 @@ export function loginEmail(email,pwd){
   .then((result) => {
     const user = result.user;
     console.log("login successfully");
+    window.location.href="./homepage.html";
     
   })
   .catch((error) => {
