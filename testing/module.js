@@ -20,6 +20,17 @@ const auth = getAuth(app);
 
 const db = getDatabase(app);
 
+export function updateChatDatabase(prop,sender,datetime,content) {
+  const db = getDatabase();
+  push(ref(db, prop + '/chatHistory/'+sender+'/mails'), {
+    datetime,content
+  });
+
+  // delete of chat recent, uncomment when final testing
+  // set(ref(db, prop + '/chatRecent/'+sender ),null
+  // );
+}
+
 /*just in case if yall can't do async, can use sessionStorage to test first*/
 export function readToDatabase(prop){
   onValue(ref(db, prop), (snapshot) => {

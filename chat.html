@@ -78,8 +78,8 @@
 			<div class="row d-inline-flex">	
 				<div class="col-2 inline" v-for='(content,name) in chatRecent'>
 					<h6 class="">{{ content['senderName'] }}</h6>
-					<a href="#mail-header" @click="update_mail(name)">
-						<img src="./img/closedEnvelope.png" @click="changeImage()" class="img-fluid">
+					<a href="#mail-header" @click="update_mail(name)" @click.once="update_fb(name)">
+						<img class="img-fluid" src="./img/closedEnvelopeWNoti.png" class="img-fluid">
 					</a>
 				</div>
 			</div>
@@ -98,10 +98,10 @@
 					<button type="button" class="btn-close position-absolute p-3 top-0 end-0" @click="close()" aria-label="Close"></button>		
 					<div class="row" v-for="(content,idx) in chats">
 						<p class="m-auto word">
-							Letter - {{idx.slice(0,-5)}}
+							{{content['datetime']}}
 						</p>
 						<a href="#mail-header" class="m-auto" @click=open_chat(idx)>
-							<img class="m-0 p-0 img-fluid" style="height:70px;" src="./img/closedEnvelope.png">
+							<img class="m-0 p-2 img-fluid" style="height:70px;" src="./img/closedEnvelope.png">
 						</a>
 					</div>
 				</div>
@@ -153,11 +153,11 @@
 
 <script src="https://unpkg.com/vue@next"></script>
 <script type="module" src="./testing/module.js"></script>
+<script src="./js/moment.js"></script>
 
 <script type="module">
 	// DATABASE TESTING
-	import {readFromDatabase} from "./testing/module.js";
-
+	import {readFromDatabase, updateChatDatabase} from "./testing/module.js";
     // To be replaced with code from my WAMP 
 
 
@@ -169,12 +169,13 @@
 				return {
 					// data_base should be updated via axios method
 					database: '',
+					uid:'',
 					username: '',
 					chatRecent: '',
 					chatHistory: '',
 					chats: [],
 					name: '',
-
+					
 					senderName:'None',
 					body: temp_note,
 					mailDesign:"postcard1.jpg",
@@ -185,34 +186,53 @@
 			computed: {
 				initalise:async function getdb(){
 					//TO:DO getuid from session
-					var uid = "123"
-					var prop = "Chats/"+ uid;
+					this.uid = "123"
+					var prop = "Chats/"+ this.uid;
 					var data = await readFromDatabase(prop);
 
 					//Debug
-					console.log(uid);
+					console.log(this.uid);
 					console.log(data);
 					this.database = data;
 					this.username = data["name"];
 					this.chatRecent = data["chatRecent"];
 					this.chatHistory = data["chatHistory"];
+					
+					// Filter away all those mails that have not reached based on time
+					var currentdate = moment();
+					for (const [key,value] of Object.entries(this.chatRecent)){
+						var mailDTString = value['datetime'];
+						var mailReceive = moment(mailDTString,"DD-MM-YY hh:mm");
+						// console.log(currentdate.isBefore(mailReceive));
+						if (currentdate.isBefore(mailReceive)){
+							console.log(this.chatRecent[key]);
+							delete this.chatRecent[key];
+						}
+					}
+					
 					return "done";
+				},
+				filter:function(){
+					alert("ABC")
 				}
+				
 			},
 
 			methods: {
+				update_fb(name){
+					let datetime = this.chatRecent[name]['datetime']
+					let prop = "Chats/"+this.uid
+					console.log(prop);
+					console.log(name);
+					console.log(datetime);
+					console.log(this.body);
+					updateChatDatabase(prop,name,datetime,this.body)
+					console.log("updated Firebase");
+				},
 				update_mail(name){
 					this.senderName = this.chatRecent[name]['senderName'];
 					this.body = this.chatRecent[name]['content'];
 					this.mailDesign = this.chatRecent[name]['mailDesign'];
-					
-					//Add recent to chat history 
-					//Remove from this.database recent or firebase tbc
-					// chatRecent[name].remove() or smth 
-
-					// Add to chat history in firebase
-					// chatHistory[name][mails].datetime = this.body
-					// chatHistory[name].senderName = this.senderName
 				},
 				display_chat(name){
 					this.display = "inline-flex";
@@ -222,19 +242,7 @@
 				open_chat(idx){
 					// console.log(idx);
 					// console.log(this.chats[idx])
-					this.body = this.chats[idx];
-				},
-				filter(chatRecent1){
-					let chatRecent = this.chatRecent;
-					console.log(chatRecent);
-					for (const [key,value] of Object.entries(chatRecent)){
-						// console.log(key);
-						// console.log(value);
-						console.log(value['datetime']);
-						// if now - sendtime not 0 or less 
-						// 		append object to disable mails 
-						// 		delete 
-					}
+					this.body = this.chats[idx]['content'];
 				},
 				close(){
 					this.display = "none";
