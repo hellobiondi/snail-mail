@@ -22,12 +22,99 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Crete+Round&display=swap" rel="stylesheet">
 
+	<!-- Owl -->
+	<link rel="stylesheet" href="owlcarousel/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="owlcarousel/css/owl.theme.default.min.css">
+
+
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
 </head>
 
 <body>
+	<script src="./js/module.js" type="module"></script>
+	<script type="module">
+		import { isUserSignedIn, readFromDatabase } from './js/module.js';
 
+		//Set User Login Data after their data is returned from Google API
+		function setUserData(userObject) {
+			var userName = userObject.name;
+			var userPic = userObject.profile_picture;
+			var userFriends = userObject.friends;
+			showFriendList(userFriends);
+			document.getElementById("userAvatarPic").src = userPic;
+		}
+
+		//Create and set each Friend's data
+		function setFriendData(FriendUid) {
+			var userName = FriendUid.name;
+			var userPic = FriendUid.profile_picture;
+
+			var outerDiv = document.createElement("div");
+			outerDiv.classList.add("item", "grow", "px-4");
+
+			var a = document.createElement("a");
+			a.setAttribute("href", "#")
+			var img = document.createElement("img");
+			img.setAttribute("src", userPic);
+			img.classList.add("rounded-circle");
+
+			var innerDiv = document.createElement("div");
+			innerDiv.classList.add("text-warning");
+			innerDiv.setAttribute("align", "center");
+			var text = document.createTextNode(userName);
+
+			innerDiv.appendChild(text);
+			a.appendChild(img);
+			a.appendChild(innerDiv);
+			outerDiv.appendChild(a);
+			document.getElementById("friendsList").appendChild(outerDiv);
+		}
+
+
+
+		async function showFriendList(userFriends) {
+			const userFriendArray = userFriends.split(",");
+			let result = await getFriendList(userFriendArray);
+			if (result) {
+				loadFriends();
+			}
+			/*for (let friendUid of userFriendArray){
+				var property =  "users/" + friendUid;
+				var data = await readFromDatabase(property);
+				setFriendData(data);
+			}*/
+		}
+
+		//Get the list of user's friends
+		async function getFriendList(userFriendArray) {
+			for (let friendUid of userFriendArray) {
+				var property = "users/" + friendUid;
+				var data = await readFromDatabase(property);
+				setFriendData(data);
+			}
+			return true;
+		}
+
+		//Get User Login Data
+		async function getData() {
+			var uid = await isUserSignedIn();
+			var property = "users/" + uid;
+			var data = await readFromDatabase(property);
+			setUserData(data);
+		}
+
+		getData();
+
+		/*if (sessionStorage.getItem("currentUser")) {
+			console.log(sessionStorage.getItem("currentUser"));
+			var userData = readUser(sessionStorage.getItem("currentUser"));
+			var img = sessionStorage.getItem("profilePicture")
+			console.log(img);
+			document.getElementById("test").src = img;
+			document.getElementById("signout").addEventListener("click", signOutUser());
+		}*/
+	</script>
 	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
@@ -42,17 +129,16 @@
 			<div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="chat.html">Chats</a>
+						<a class="nav-link" aria-current="page" href="chat.html">Chats</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" aria-current="page" href="games.html">Games</a>
+						<a class="nav-link active" aria-current="page" href="games.html">Games</a>
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto nav-flex-icons justify-content-end avatar-button">
 					<li class="nav-item avatar">
 						<a class="nav-link" href="profile.html">
-							Welcome, Sun Jun! <img src="img/sunjun.jpeg" class="rounded-circle z-depth-0"
-								alt="avatar image">
+							<img id="userAvatarPic" class="rounded-circle z-depth-0" alt="avatar image">
 						</a>
 					</li>
 				</ul>
@@ -62,76 +148,52 @@
 
 
 	<div class="container col-xxl-10 px-4 py-1">
-		<div class="row homeRow">
-			<div class="col-12 col-sm-12 col-lg-6">
-				<img src="./img/snail.PNG" class="d-block mx-lg-auto img-fluid w-75" alt="Snail Mail Logo">
+		<div class="row mt-5 profile-card">
+			<div class="col-12">
+				<h1 class="py-5 px-4">Games</h1>
 			</div>
-			<div class="col-lg-6">
-				<div class="speech-bubble">
-					<p>
-						How are you feeling today, Sun Jun?
-						You haven't made a new friend today,
-						would you like to meet someone new?
-					</p>
-				</div>
-			</div>
-		</div>
-
-		<div class="row ">
-			<div class="col profile-card">
-				<h1 class="py-5 px-4">Your Friends</h1>
-			</div>
-		</div>
-
-		<div class="row profile-card my-5">
-			<h1 class="py-5 px-4">Your Friends Awaiting For Your Next Step</h1>
-			<div class="col-3">
-				<div class="card" style="width: 18rem;">
-					<img src="..." class="card-img-top" alt="...">
-					<div class="card-body">
-						<h5 class="card-title">Connect 4</h5>
-						<p class="card-text">
-							Some quick example text to build on the card title and make up the bulk of
-							the card's content.
-						</p>
+			<div class="row">
+				<div class="col-sm-6 col-12 pb-5">
+					<div class="card">
+						<img src="./img/connect4.jpeg" class="card-img-top" alt="...">
+						<div class="card-body">
+							<h2 class="card-title">Connect 4</h2>
+							<p class="card-text mt-5 gameCardText">
+								A two-player connection board game, in which the players choose a color and then take 
+								turns dropping colored discs into a seven-column, six-row vertically suspended grid. <br/> <br/>
+								The first player to connect 4 in a row is the winner of the game.
+							</p>
+							<a href="#" class="btn button-light">Play Connect 4</a>
+						</div>
 					</div>
-					
 				</div>
-			</div>
-			<div class="col-3">
-				<div class="card" style="width: 18rem;">
-					<img src="..." class="card-img-top" alt="...">
-					<div class="card-body">
-						<h5 class="card-title">Connect 4</h5>
-						<p class="card-text">
-							Some quick example text to build on the card title and make up the bulk of
-							the card's content.
-						</p>
+				<div class="col-sm-6 col-12 pb-5">
+					<div class="card">
+						<img src="./img/hangman.jpeg" class="card-img-top" alt="...">
+						<div class="card-body">
+							<h2 class="card-title">Hangman</h2>
+							<p class="card-text mt-5 gameCardText">
+								OA guessing gam where one player thinks of a word, phrase or sentence and the other(s) 
+								tries to guess it by suggesting letters within a certain number of guesses.
+								<br/> <br/>
+								The game ends when guessing player completes/guess the word or when the other player 
+								completes the diagram of the hanged man.
+							</p>
+							<a href="#" class="btn button-light">Play Hangman</a>
+						</div>
 					</div>
-					
-				</div>
-			</div>
-			<div class="col-3">
-				<div class="card" style="width: 18rem;">
-					<img src="..." class="card-img-top" alt="...">
-					<div class="card-body">
-						<h5 class="card-title">Connect 4</h5>
-						<p class="card-text">
-							Some quick example text to build on the card title and make up the bulk of
-							the card's content.
-						</p>
-					</div>
-					
 				</div>
 			</div>
 		</div>
 	</div>
 
+	<script src="owlcarousel/js/jquery.min.js"></script>
+	<script src="owlcarousel/js/owl.carousel.min.js"></script>
 	<script src="./js/snailmail.js"></script>
 </body>
 
 <!-- Bootstrap JS File -->
-
 <script src="./bootstrap/js/bootstrap.min.js"></script>
+
 
 </html>
