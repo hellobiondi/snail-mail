@@ -127,7 +127,7 @@ export function loginEmail(email,pwd){
   });
 }
 
-export function resgiterWithEmail(email,pwd,username){
+export function registerWithEmail(email,pwd,username){
   createUserWithEmailAndPassword(auth,email,pwd)
   .then((result) => {
     const user = result.user;

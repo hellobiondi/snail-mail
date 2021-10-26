@@ -88,9 +88,9 @@
 	</div>
 
 	<script src="login_page.js"></script>
-	<script type="module" src="./testing/module.js"></script>
+	<script type="module" src="./js/module.js"></script>
 	<script type="module">
-		import { loginGoogle, loginEmail, resgiterWithEmail } from "./testing/module.js";
+		import { loginGoogle, loginEmail, registerWithEmail } from "./js/module.js";
 		document.getElementById("loginGoogle").addEventListener("click", loginGoogle);
 		document.getElementById("sign_up_btn").addEventListener("click", register);
 		document.getElementById("sign_in_btn").addEventListener("click", login);
@@ -100,10 +100,10 @@
 			var email = document.getElementById("register_email").value;
 			var password = document.getElementById("register_password").value;
 			var cfm_password = document.getElementById("confirm_password").value;
-			console.log(password);
-			console.log(cfm_password)
+			//console.log(password);
+			//console.log(cfm_password)
 			if (password == cfm_password) {
-				resgiterWithEmail(email, password, name);
+				registerWithEmail(email, password, name);
 			} else {
 				console.log("password not match!");
 			}
