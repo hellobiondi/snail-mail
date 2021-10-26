@@ -30,6 +30,20 @@
 		.word{
 			color:black;
 		}
+		::-webkit-scrollbar {
+			width: 12px;
+		}
+
+		::-webkit-scrollbar-track {
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+			border-radius: 10px;
+		}
+
+		::-webkit-scrollbar-thumb {
+			border-radius: 10px;
+			background-color: #E7ECF4;
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+		}
 	</style>
 	
 </head>
@@ -62,12 +76,13 @@
 		
 	
 	<div id=app class="container">
+		<div> {{initialise}} </div>
 		<div class="btn position-fixed bottom-0 end-0 px-3">
-			<img class="rounded-circle btn-outline-light img-fluid" @click=compose() style="height: 60px;" src="img/compose.png">
+			<img class="rounded-circle btn-outline-light img-fluid" @click=compose() style="height: 100px;" src="img/compose.png">
 		</div>
 
         <div class="row-md d-inline-flex" id="mail-header">
-            <div class='col-3 profile-card my-5 pb-2 mx-4 overflow-auto' style="height:500px;">
+            <div class='col-3 profile-card my-5 pb-2 mx-3 overflow-auto' style="height:500px;border-top-right-radius:1px;border-bottom-right-radius:1px;">
                 <div class="row d-flex text-center mx-1">
                     <h3 class="text-center homeRow"> Choose your design </h3>
                 </div>
@@ -82,32 +97,30 @@
                   </div>
             </div>
 
-            <div class="col-8 d-block profile-card my-5 px-5">
+            <div class="col-8 profile-card my-5 px-5" style="border-top-left-radius:1px;border-bottom-left-radius:1px;">
                 <div class="row-md d-flex">
-                    <h3 class="homeRow me-auto"> Write Your Mail</h3>
-                    <button type="button" class="my-auto me-2 btn btn-cta btn-lg" @click="save_draft()" aria-label="savedraft">Save Draft</button>                        
-                    <button type="button" class="my-auto btn btn-cta btn-lg" @click="discard()" aria-label="discard">Discard</button>                       
+                    <h3 class="d-flex homeRow me-auto"> Write Your Mail</h3>
+                    <button type="button" class="my-auto me-2 btn button-light fs-5" @click="save_draft()" aria-label="savedraft">Save</button>                        
+                    <button type="button" class="my-auto btn button-light fs-5" @click="discard()" aria-label="discard">Discard</button>                       
                 </div>
                 <div class="row-md d-flex">
                     <label for="inputEmail3" class="col-sm-2 col-form-label fw-bold">To:</label>
                     <div class="col-sm-10">
                         <select class="form-select" id="to" aria-label="Default select example">
                             <option selected>Select who to send</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            <option v-for="friend in friends" v-bind:value=friend>{{this.data[friend]['name']}}</option>
                         </select>
                     </div>
                 </div>
                 <div class ="row-md d-flex">
                     <div class="m-auto">
                         <label for="exampleFormControlTextarea1" class="form-label fw-bold">Content</label>
-                        <textarea v-model:value="body" class="form-control" id="exampleFormControlTextarea1" rows="10" cols="100"></textarea>
+                        <textarea v-model.lazy:value="body" class="form-control" id="exampleFormControlTextarea1" rows="10" cols="100"></textarea>
                     </div>
                 </div>
-                <div class="row-md d-flex my-3">
-                    <button type="button" class="me-auto btn btn-cta btn-lg" @click="send()" aria-label="Reply">Send</button>                        
-                    <button type="button" class="btn btn-cta btn-lg" data-bs-toggle="modal" data-bs-target="#preview" aria-label="Reply">Preview</button>                       
+                <div class="row-md d-flex my-4">
+                    <button type="button" class="me-auto my-auto btn button-light fs-5" @click="send()" aria-label="Reply">Send</button>                        
+                    <button type="button" class="my-auto btn button-light fs-5" data-bs-toggle="modal" data-bs-target="#preview" aria-label="Reply">Preview</button>                       
                 </div>
             </div>
         </div>
@@ -142,7 +155,12 @@
 </body>
 
 <script src="https://unpkg.com/vue@next"></script>
-<script>
+<script type="module" src="./js/module.js"></script>
+<script src="./js/moment.js"></script>
+
+<script type="module">
+	import {readFromDatabase} from "./js/module.js";
+    
     // To be replaced with code from my WAMP 
 	var uid = 'HuiRu';
 	var data = {
@@ -177,13 +195,39 @@
 					mail_name: uid,
 					display:'none',
                     mail_design:'postcard.jpg',
-                    test: ["postcard.jpg","postcard1.jpg","postcard2.jpg","postcard1.jpg","postcard1.jpg"],
+                    data:'',
+					friends:[],
+					test: ["postcard.jpg","postcard1.jpg","postcard2.jpg","postcard3.jpg","postcard4.jpg","postcard5.jpg","postcard6.jpg","postcard7.jpg","postcard8.jpg"],
 				}	
 			},
+			computed:{
+				initialise:async function getdb(){
+					//TO:DO getuid from session
+					this.uid = '76G9Xa7eszPHMFltAzdF46CluQn1'
 
+					// 
+					this.data = await readFromDatabase('users');
+
+					// To be deleted once i can get from db 
+					console.log(this.data[this.uid]['friends'])
+
+					// To be deleted once i can get from db
+					this.friends = this.data[this.uid]['friends']
+					// var friends = "7iX2SI5PDNfLwvQzlyXetSY5Vem1,123";
+
+					this.friends = this.friends.split(",");
+					console.log(this.friends);
+
+					for (let fren of this.friends){
+						console.log(this.data[fren]['name'])
+						
+					}
+					return "done";
+				}
+			},
 			methods: {
-                send(){
-                    alert(this.mail_design)
+                send(friend){
+                    alert(`${this.mail_design} with ${this.body} from ${document.getElementById("to").value}`)
                 },
 
                 save_draft(){
