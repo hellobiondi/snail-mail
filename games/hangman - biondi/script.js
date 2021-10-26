@@ -1,6 +1,6 @@
-import {loginGoogle, readFromDatabase, writeToDatabase} from "./module.js";
+import {loginGoogle, readFromDatabase, writeToDatabase} from "./../../js/module.js";
 
-document.getElementById("loginGoogle").addEventListener("click",loginGoogle);
+document.getElementById("loginGoogle").addEventListener("click", loginGoogle);
 console.log(sessionStorage.currentUser);
 var uid = sessionStorage.currentUser;
 var dataList = {};
