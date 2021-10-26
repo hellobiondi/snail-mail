@@ -100,9 +100,9 @@ h4 span {
 }
 
 #navbarMenu > ul > li > a{
-    font-size: 30px;
+    font-size: 25px;
     color: #3d444f;
-    padding-right: 50px;
+    padding-right: 30px;
 }
 
 #navbarMenu > ul > li > a:hover{
@@ -114,7 +114,7 @@ h4 span {
     color: #385264;
     border: 3px solid #395264;
     border-radius: 10px;
-    font-size: 30px;
+    font-size: 25px;
 }
 
 #navbarMenu > ul > li > a.active{
