@@ -69,31 +69,39 @@ export function readFromDatabase(prop){
   });
 }
 
- export function loginGoogle(){
-  signInWithPopup(auth, provider)
+export async function requestAddress(){
+  var prop = "users/" + user.uid;
+  var dt = {name:user.displayName,email:user.email,profile_picture:user.photoURL};
+  writeToDatabase(prop,dt);
+}
+
+ export async function loginGoogle(){
+  return new Promise(resolve => {signInWithPopup(auth, provider)
   .then((result) => {
     // This gives you a Google Access Token. You can use it to access the Google API.
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
     // The signed-in user info.
     const user = result.user;
-    console.log(user);
-    sessionStorage.setItem("currentUser",user.uid);
+    //console.log(user);
+    //sessionStorage.setItem("currentUser",user.uid);
     //var check = checkIfUserExists(user.uid);
     const usersRef = ref(getDatabase());
     get(child(usersRef, 'users/'+user.uid)).then((snapshot) => {
     if (snapshot.exists()) {
-      var result = true;
-      window.location.href="./../homepage.html";
+      var exist = true;
+      window.location.href="./homepage.html";
     } else {
-      var result = false;
+      var exist = false;
     }
-    console.log(result);
-    if(result==false){
-      var prop = "users/" + user.uid;
-      var dt = {name:user.displayName,email:user.email,profile_picture:user.photoURL};
-      writeToDatabase(prop,dt);
-      window.location.href="./requestAddress.html";
+    //console.log(result);
+    if(exist==false){
+      //var data ={uid:user.uid,name:user.displayName,email:user.email,profile_picture:user.photoURL};
+      resolve(user);
+      //writeToDatabase(prop,dt);
+      //window.location.href="./requestAddress.html";
+    }else{
+      resolve(false);
     }
     
     // ...
@@ -110,7 +118,7 @@ export function readFromDatabase(prop){
     // ...
   });
 
-})}
+})});}
 
 export function loginEmail(email,pwd){
   signInWithEmailAndPassword(auth,email, pwd)

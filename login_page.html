@@ -66,7 +66,7 @@
 				<br>
 				<h4><span>OR</span></h4>
 				<div class="text-center">
-					<button class="btn" id="loginGoogle"><img
+					<button class="btn" id="loginGoogle1"><img
 							src="img/btn_google_signin_light_normal_web@2x.png"></button>
 				</div>
 			</div>
@@ -83,7 +83,7 @@
 				<br>
 				<h4><span>OR</span></h4>
 				<div class="text-center">
-					<button class="btn" id="loginGoogle"><img
+					<button class="btn" id="loginGoogle2"><img
 							src="img/btn_google_signin_light_normal_web@2x.png"></button>
 				</div>
 			</div>
@@ -339,11 +339,13 @@
 		</div>
 	</div>
 
-	<script src="login_page.js"></script>
+	<script src="./js/login_page.js"></script>
 	<script type="module" src="./js/module.js"></script>
 	<script type="module">
-		import { loginGoogle, loginEmail, registerWithEmail } from "./js/module.js";
-		document.getElementById("loginGoogle").addEventListener("click", loginGoogle);
+		import { loginGoogle, loginEmail, registerWithEmail, writeToDatabase } from "./js/module.js";
+        //import {}
+		document.getElementById("loginGoogle1").addEventListener("click", loginViaGoogle);
+        document.getElementById("loginGoogle2").addEventListener("click", loginViaGoogle);
 		document.getElementById("sign_up_btn").addEventListener("click", register);
 		document.getElementById("sign_in_btn").addEventListener("click", login);
 
@@ -352,8 +354,6 @@
 			var email = document.getElementById("register_email").value;
 			var password = document.getElementById("register_password").value;
 			var cfm_password = document.getElementById("confirm_password").value;
-			//console.log(password);
-			//console.log(cfm_password)
 			if (password == cfm_password) {
 				registerWithEmail(email, password, name);
 			} else {
@@ -367,6 +367,57 @@
 
 			loginEmail(email, password);
 		}
+
+        async function loginViaGoogle(){
+            console.log("logining");
+            var data = await loginGoogle();
+
+            if(data){
+                //showAddressBox(data);
+                
+                if(!document.getElementById("signUpBox").classList.contains("d-none")){
+                    document.getElementById("signUpBox").classList.add("d-none");
+                }
+                
+                if(!document.getElementById("signInBox").classList.contains("d-none")){
+                    document.getElementById("signInBox").classList.add("d-none");
+                }
+                
+                document.getElementById("addressBox").classList.remove("d-none");
+
+                document.getElementById("aftSignUp").classList.remove("d-none");
+
+                document.getElementById("bfrSignUp").classList.add("d-none");
+
+                var input1 = document.createElement("input");
+                //{name:user.displayName,email:user.email,profile_picture:user.photoURL};
+                input1.value= data.displayName+","+data.email+","+data.photoURL+","+data.uid;
+                input1.id = "hidden_data";
+                input1.type="hidden";
+                document.body.appendChild(input1);
+                document.getElementById("complete").addEventListener("click",complete);
+            
+            }else{
+                window.location.href="./homepage.html";
+            }
+    }
+
+        function complete(){
+            var userData = document.getElementById("hidden_data").value;
+            var userData_arr = userData.split(",");
+            //console.log(userData_arr);
+            var user_name = userData_arr[0];
+            var user_email = userData_arr[1];
+            var profile_pic = userData_arr[2];
+            var uid = userData_arr[3];
+
+            var user_postal_code = document.getElementById("postal_code").value;
+            var user_country = document.getElementById("country").value;
+
+            var prop = "users/" + uid;
+            var dt = {name:user_name,email:user_email,profile_picture:profile_pic,address:{postalCode:user_postal_code,country:user_country}};
+            writeToDatabase(prop,dt);
+        }
 
 	</script>
 </body>
