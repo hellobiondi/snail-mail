@@ -84,7 +84,7 @@ export function readFromDatabase(prop){
     get(child(usersRef, 'users/'+user.uid)).then((snapshot) => {
     if (snapshot.exists()) {
       var result = true;
-      window.location.href="./homepage.html";
+      window.location.href="./../homepage.html";
     } else {
       var result = false;
     }

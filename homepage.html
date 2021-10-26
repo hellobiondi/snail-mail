@@ -32,25 +32,77 @@
 </head>
 
 <body>
-	<script src="./testing/module.js" type="module"></script>
+	<script src="./js/module.js" type="module"></script>
 	<script type="module">
-		import {isUserSignedIn, readFromDatabase} from './testing/module.js';
-	
-		function getUserName(userObject){
+		import {isUserSignedIn, readFromDatabase} from './js/module.js';
+		
+		//Set User Login Data after their data is returned from Google API
+		function setUserData(userObject){
 			var userName = userObject.name;
 			var userPic = userObject.profile_picture;
-
+			var userFriends = userObject.friends;
+			showFriendList(userFriends);
 			document.getElementById("userName").innerHTML = userName;
 			document.getElementById("userAvatarPic").src = userPic;
-			console.log(userName);
 		}
 
+		//Create and set each Friend's data
+		function setFriendData(FriendUid){
+			var userName = FriendUid.name;
+			var userPic = FriendUid.profile_picture;
+
+			var outerDiv = document.createElement("div");
+			outerDiv.classList.add("item", "grow", "px-4");
+			
+			var a = document.createElement("a");
+			a.setAttribute("href", "#")
+			var img = document.createElement("img");
+			img.setAttribute("src", userPic);
+			img.classList.add("rounded-circle");
+
+			var innerDiv = document.createElement("div");
+			innerDiv.classList.add("text-warning");
+			innerDiv.setAttribute("align", "center");
+			var text = document.createTextNode(userName);
+
+			innerDiv.appendChild(text);
+			a.appendChild(img);
+			a.appendChild(innerDiv);
+			outerDiv.appendChild(a);
+			document.getElementById("friendsList").appendChild(outerDiv);
+		}
+
+
+
+		async function showFriendList(userFriends){
+			const userFriendArray = userFriends.split(",");
+			let result = await getFriendList(userFriendArray);
+			if(result){
+				loadFriends();
+			}
+			/*for (let friendUid of userFriendArray){
+				var property =  "users/" + friendUid;
+				var data = await readFromDatabase(property);
+				setFriendData(data);
+			}*/
+		}
+
+		//Get the list of user's friends
+		async function getFriendList(userFriendArray){
+			for (let friendUid of userFriendArray){
+				var property =  "users/" + friendUid;
+				var data = await readFromDatabase(property);
+				setFriendData(data);
+			}
+			return true;
+		}
+
+		//Get User Login Data
 		async function getData(){
 			var uid = await isUserSignedIn();
 			var property =  "users/" + uid;
 			var data = await readFromDatabase(property);
-			console.log(data);
-			getUserName(data);
+			setUserData(data);
 		}
 
 		getData();
@@ -124,27 +176,6 @@
 							<div class="text-warning" align="center">Hui Ru</div>
 						</a>
 					</div>
-					<div class="item grow px-4">
-						<a href="#">
-							<img src="img/mindy.jpeg" class="rounded-circle">
-							<div class="text-warning" align="center">Mindy</div>
-						</a>
-					</div>
-					<div class="item grow px-4">
-						<a href="#"><img src="img/biondi.jpeg" class="rounded-circle">
-							<div class="text-warning" align="center">Biondi</div>
-						</a>
-					</div>
-					<div class="item grow px-4">
-						<a href="#"><img src="img/weihern.jpeg" class="rounded-circle">
-							<div class="text-warning" align="center">Wei Hern</div>
-						</a>
-					</div>
-					<div class="item grow px-4">
-						<a href="#"><img src="img/gadman.jpeg" class="rounded-circle">
-							<div class="text-warning" align="center">Gadman</div>
-						</a>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -205,7 +236,6 @@
 </body>
 
 <!-- Bootstrap JS File -->
-
 <script src="./bootstrap/js/bootstrap.min.js"></script>
 
 

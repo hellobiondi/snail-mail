@@ -30,20 +30,21 @@
 </head>
 
 <body>
-	<script src="./testing/module.js" type="module"></script>
+	<script src="./js/module.js" type="module"></script>
 	<script type="module">
-		import { isUserSignedIn, readFromDatabase, signOutUser } from './testing/module.js';
+		import { isUserSignedIn, readFromDatabase, signOutUser } from './js/module.js';
 
 		function getUserName(userObject) {
 			var userName = userObject.name;
 			var userEmail = userObject.email;
+			var userFriends = user.Object.friends;
 			var userPic = userObject.profile_picture;
 
 			document.getElementById("userName").value = userName;
 			document.getElementById("userBio").value = userEmail;
 			document.getElementById("userPic").src = userPic;
 			document.getElementById("userAvatarPic").src = userPic;
-			console.log(userPic);
+			console.log(userFriends);
 		}
 
 		async function getData() {
@@ -72,8 +73,7 @@
 				<img src="./img/snailLogo.PNG" alt="" class="d-inline-block align-text-center">
 				<span class="brand">SNAIL MAIL</span>
 			</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
-				aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
