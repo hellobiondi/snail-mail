@@ -40,7 +40,8 @@ img[src="img/btn_google_signin_light_normal_web@2x.png"] {
 }
 
 #signInBox,
-#signUpBox {
+#signUpBox,
+#addressBox {
     background-color: white;
     border-radius: 0% 0% 10px 10px;
 }
@@ -53,7 +54,7 @@ img[src="img/btn_google_signin_light_normal_web@2x.png"] {
 }
 
 .unselected {
-    background-color: rgba(226, 226, 226, 0.493);
+    background-color: rgba(225, 225, 225, 0.3);
     color: rgb(0, 0, 0, .2);
     cursor: pointer;
     border-radius: 10px 10px 0% 0%;
