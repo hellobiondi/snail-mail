@@ -1,20 +1,20 @@
-import {loginGoogle, readFromDatabase, writeToDatabase} from "./../../js/module.js";
+import { loginGoogle, readFromDatabase, writeToDatabase } from "./../../js/module.js";
 // import {readFromDatabase} from "./module.js";
 // import {pushToDatabase} from "./module.js";
 
-document.getElementById("loginGoogle").addEventListener("click",loginGoogle);
+document.getElementById("loginGoogle").addEventListener("click", loginGoogle);
 console.log(sessionStorage.currentUser);
 var uid = sessionStorage.currentUser;
 var dataList = {};
 
-async function yourFunction(){
+async function yourFunction() {
     var prop = "users/" + uid;
     var data = await readFromDatabase(prop);
     console.log(data); // {email: 'bokzmmindy@gmail.com', name: 'bok mindy', profile_picture: 'https://lh3.googleusercontent.com/a/AATXAJztuF0yzXyjB2lcv656YraWU00docU31bqpqWTN=s96-c'}
     // dataList["email"] = data.email;
     dataList["name"] = data.name;
     dataList["profile_picture"] = data.profile_picture;
-    startGame(); 
+    startGame();
 }
 yourFunction();
 console.log(dataList)
@@ -22,7 +22,7 @@ console.log(dataList)
 // var prop = "users/" + uid;
 //import {readFromDatabase} from "./module";
 
-function startGame(){
+function startGame() {
     // var player1Color = dataList["profile_picture"]
 
     // test upddate db
@@ -45,10 +45,10 @@ function startGame(){
     var UID1 = uid;
     var UID2 = 'bkLfaqpZH7TfCuXvajP3lbbmJBx2';
 
-    console.log(typeof(dataList));
+    console.log(typeof (dataList));
     var player1 = dataList["name"];
     var player2 = '1125';
-    
+
     // Selectors
     var tableRow = document.getElementsByTagName('tr');
     var tableCell = document.getElementsByTagName('td');
@@ -56,21 +56,10 @@ function startGame(){
     var tableSlot = document.querySelectorAll('.slot');
     const reset = document.querySelector('.reset');
 
-    var currentPlayer =1;
+    var currentPlayer = 1;
     playerTurn.textContent = `${player1}'s turn!`
 
     var temp = "";
-    for (let i=0; i<tableCell.length; i++){
-        tableCell[i].addEventListener('click', (e) =>{
-            console.log(`${e.target.parentElement.rowIndex},${e.target.cellIndex}`);
-            writeToDatabase("games/connect4/game0001/lastmove", `${e.target.parentElement.rowIndex},${e.target.cellIndex}`);
-            // console.log(typeof(`${e.target.parentElement.rowIndex},${e.target.cellIndex}`));
-            temp += `${e.target.parentElement.rowIndex},${e.target.cellIndex}` + "/";
-            writeToDatabase("games/connect4/game0001/allmoves", temp);
-        });
-    }
-
-
 
     Array.prototype.forEach.call(tableCell, (cell) => {
         cell.addEventListener('click', changeColor);
@@ -78,108 +67,112 @@ function startGame(){
         cell.style.backgroundColor = 'white';
     });
 
-    function changeColor(e){ //the event
+    function changeColor(e) { //the event
         // Get clicked column index
         let column = e.target.cellIndex;
         let row = [];
 
-        for (var i = 5; i > -1; i--){
-            if (tableRow[i].children[column].style.backgroundColor == 'white'){
+        for (var i = 5; i > -1; i--) {
+            if (tableRow[i].children[column].style.backgroundColor == 'white') {
                 row.push(tableRow[i].children[column]);
-                if (currentPlayer === 1){
+                writeToDatabase("games/connect4/game0001/lastmove", `${row[0].id}`);
+                    temp += `${row[0].id}` + ",";
+                    writeToDatabase("games/connect4/game0001/allmoves", temp);
+                    console.log(row[0].id);
+                if (currentPlayer === 1) {
                     row[0].style.backgroundColor = player1Color;
                     row[0].style.backgroundImage = player1Img; //red
 
-                    if (horizontalCheck() || verticalCheck() || diagonalCheck()|| diagonalCheck2()){
+                    if (horizontalCheck() || verticalCheck() || diagonalCheck() || diagonalCheck2()) {
                         playerTurn.textContent = `${player1} WINS!!`;
                         playerTurn.style.color = player1Color;
                         return alert(`${player1} WINS!!`);
-                    }else if (drawCheck()){
+                    } else if (drawCheck()) {
                         playerTurn.textContent = 'DRAW!';
                         return alert('DRAW!');
-                    }else{
+                    } else {
                         playerTurn.textContent = `${player2}'s turn`;
                         return currentPlayer = 2;
                     }
-                    
-                }else{
+
+                } else {
                     row[0].style.backgroundColor = player2Color;
-                    row[0].style.backgroundImage = player2Img; 
-                    if (horizontalCheck() || verticalCheck() || diagonalCheck() || diagonalCheck2()){
+                    row[0].style.backgroundImage = player2Img;
+                    if (horizontalCheck() || verticalCheck() || diagonalCheck() || diagonalCheck2()) {
                         playerTurn.textContent = `${player2} WINS!!`;
                         playerTurn.style.color = player2Color;
                         return alert(`${player2} WINS!!`);
-                    }else if (drawCheck()){
+                    } else if (drawCheck()) {
                         playerTurn.textContent = 'DRAW!';
                         return alert('DRAW!');
-                    }else{
+                    } else {
                         playerTurn.textContent = `${player1}'s turn`;
                         return currentPlayer = 1;
                     }
                 }
             }
         }
-    
+
     }
 
-    function colorMatchCheck(one, two, three, four){
+    function colorMatchCheck(one, two, three, four) {
         return (one === two && one === three && one === four && one !== 'white');
         //return (one === two && one === three && one === four && one !== 'white' && one !== undefined);
     }
 
-    function horizontalCheck(){
-        for (let row = 0; row < tableRow.length; row++){
-            for (let col =0; col < 4; col++){
-            if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor,tableRow[row].children[col+1].style.backgroundColor, 
-                                    tableRow[row].children[col+2].style.backgroundColor, tableRow[row].children[col+3].style.backgroundColor)){
-                return true;
-            }
+    function horizontalCheck() {
+        for (let row = 0; row < tableRow.length; row++) {
+            for (let col = 0; col < 4; col++) {
+                if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor, tableRow[row].children[col + 1].style.backgroundColor,
+                    tableRow[row].children[col + 2].style.backgroundColor, tableRow[row].children[col + 3].style.backgroundColor)) {
+                    return true;
+                }
             }
         }
     }
 
-    function verticalCheck(){
-        for (let col = 0; col < 7; col++){
-            for (let row = 0; row < 3; row++){
-                if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor, tableRow[row+1].children[col].style.backgroundColor,
-                                    tableRow[row+2].children[col].style.backgroundColor,tableRow[row+3].children[col].style.backgroundColor)){
+    function verticalCheck() {
+        for (let col = 0; col < 7; col++) {
+            for (let row = 0; row < 3; row++) {
+                if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor, tableRow[row + 1].children[col].style.backgroundColor,
+                    tableRow[row + 2].children[col].style.backgroundColor, tableRow[row + 3].children[col].style.backgroundColor)) {
                     return true;
                 };
-            }   
-        }
-    }
-
-    function diagonalCheck(){
-        for(let col = 0; col < 4; col++){
-            for (let row = 0; row < 3; row++){
-                if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor, tableRow[row+1].children[col+1].style.backgroundColor,
-                    tableRow[row+2].children[col+2].style.backgroundColor,tableRow[row+3].children[col+3].style.backgroundColor)){
-                        return true;
-                    }
-                }
-            }
-
-    }
-
-    function diagonalCheck2(){
-        for(let col = 0; col < 4; col++){
-            for (let row = 5; row > 2; row--){
-                if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor, tableRow[row-1].children[col+1].style.backgroundColor,
-                    tableRow[row-2].children[col+2].style.backgroundColor,tableRow[row-3].children[col+3].style.backgroundColor)){
-                        return true;
-                }
             }
         }
     }
 
-    function drawCheck(){
+    function diagonalCheck() {
+        for (let col = 0; col < 4; col++) {
+            for (let row = 0; row < 3; row++) {
+                if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor, tableRow[row + 1].children[col + 1].style.backgroundColor,
+                    tableRow[row + 2].children[col + 2].style.backgroundColor, tableRow[row + 3].children[col + 3].style.backgroundColor)) {
+                    return true;
+                }
+            }
+        }
+
+    }
+
+    function diagonalCheck2() {
+        for (let col = 0; col < 4; col++) {
+            for (let row = 5; row > 2; row--) {
+                if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor, tableRow[row - 1].children[col + 1].style.backgroundColor,
+                    tableRow[row - 2].children[col + 2].style.backgroundColor, tableRow[row - 3].children[col + 3].style.backgroundColor)) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    function drawCheck() {
         let fullSlot = []
-        for (var i=0; i < tableCell.length; i++){
-            if (tableCell[i].style.backgroundColor !== 'white'){
+        for (var i = 0; i < tableCell.length; i++) {
+            if (tableCell[i].style.backgroundColor !== 'white') {
                 fullSlot.push(tableCell[i]);
             }
         }
-        if (fullSlot.length === tableCell.length){
+        if (fullSlot.length === tableCell.length) {
             return true;
         }
     }
