@@ -1,4 +1,4 @@
-import {loginGoogle, readFromDatabase, writeToDatabase} from "./module.js";
+import {loginGoogle, readFromDatabase, writeToDatabase} from "./../../js/module.js";
 // import {readFromDatabase} from "./module.js";
 // import {pushToDatabase} from "./module.js";
 
