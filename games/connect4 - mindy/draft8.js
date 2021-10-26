@@ -1,4 +1,4 @@
-import { loginGoogle, readFromDatabase, writeToDatabase } from "./module.js";
+import { loginGoogle, readFromDatabase, writeToDatabase } from "./../../js/module.js";
 // import {readFromDatabase} from "./module.js";
 // import {pushToDatabase} from "./module.js";
 
@@ -30,7 +30,8 @@ console.log(dataList)
 //     return player;
 //    }
 
-   
+//initialise board based on moves
+
 
 // var prop = "users/" + uid;
 //import {readFromDatabase} from "./module";
@@ -38,6 +39,8 @@ console.log(dataList)
 async function startGame() {
     //var tempProp = "games/connect4/game0001/currentPlayer";
     // var data = await readFromDatabase(tempProp);
+
+    
 
     // test upddate db
     console.log("testing");
@@ -74,8 +77,8 @@ async function startGame() {
     var property =  "games/connect4/game0001/currentPlayer";
     var currentPlayer = await readFromDatabase(property);
     //var currentPlayer = getPlayer();
-    console.log(currentPlayer);
-    playerTurn.textContent = `${player1}'s turn!`
+    console.log(currentPlayer + 'hello');
+    playerTurn.textContent = `${player1}'s turn`
 
     var temp = "";
 
@@ -84,7 +87,33 @@ async function startGame() {
         // Set all slots to white for new game.
         cell.style.backgroundColor = 'white';
     });
+async function getGameBoard(){
+    var prop = "games/connect4/game0001/allmoves"; // hardcoded game0001 for now
+    var data = await readFromDatabase(prop);
+    return data;
+}
+var gameBoard = await getGameBoard();
+var gameBoardList = gameBoard.split(',');
+gameBoardList.pop();
+console.log(gameBoardList);
 
+function setGameBoard() {
+    var counter = 0;
+    for (var move of gameBoardList) {
+        var slot = document.getElementById(`${move}`);
+        console.log(slot);
+        if (counter % 2 == 0) {
+            slot.style.backgroundColor = '#f88796';
+        }
+
+        else {
+            slot.style.backgroundColor = '#fbb74c';
+        }
+        counter++;
+        
+    }
+}
+setGameBoard();
     function changeColor(e) { //the event
         // Get clicked column index
         let column = e.target.cellIndex;
