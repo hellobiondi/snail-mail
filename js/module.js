@@ -140,11 +140,8 @@ export async function registerWithEmail(email,pwd,username){
   .then((result) => {
     const user = result.user;
     const uid = user.uid;
-    //var prop = "users/" + uid;
     var dt = {displayName:username,email:email,photoURL:"https://firebasestorage.googleapis.com/v0/b/snail-mail-3e13f.appspot.com/o/images%2Fdefault_profile_pic.png?alt=media&token=debe0320-d002-49e5-b8fa-fa2f62003f21",uid:uid};
     resolve(dt);
-    //writeToDatabase(prop,dt);
-    //window.location.href="./requestAddress.html";
   })
   .catch((error) => {
     const errorCode = error.code;
@@ -168,8 +165,6 @@ export function updateToDatabase(key,data){
 }
 
 export function isUserSignedIn(){
-  //console.log("hello");
-  //const auth = getAuth();
   return new Promise(resolve=>{onAuthStateChanged(auth, (user) => {
     if (user) {
       // User is signed in, see docs for a list of available properties
@@ -188,11 +183,10 @@ export function isUserSignedIn(){
 
 export function signOutUser(){
   signOut(auth).then(() => {
-    // Sign-out successful.
     sessionStorage.clear();
     console.log("logout Successfully");
+    window.location.href="./index.html";
   }).catch((error) => {
-    // An error happened.
     console.log(error.message);
   });
   
