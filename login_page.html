@@ -12,6 +12,10 @@
 	<!-- Bootstrap CSS File -->
 	<link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
+    <!--Google Map API-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnUQJTmjrMkcN6j9ZEl1-yVDMfJf5DbiY"></script>
+
 	<!-- Fonts Gugi -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -343,6 +347,7 @@
 	<script type="module" src="./js/module.js"></script>
 	<script type="module">
 		import { loginGoogle, loginEmail, registerWithEmail, writeToDatabase } from "./js/module.js";
+        import {codeAddress} from "./js/cal_dist.js";
 		document.getElementById("loginGoogle1").addEventListener("click", loginViaGoogle);
         document.getElementById("loginGoogle2").addEventListener("click", loginViaGoogle);
 		document.getElementById("sign_up_btn").addEventListener("click", register);
@@ -430,20 +435,34 @@
         }
 
         async function complete(){
-            var userData = document.getElementById("hidden_data").value;
-            var userData_arr = userData.split(",");
-            var user_name = userData_arr[0];
-            var user_email = userData_arr[1];
-            var profile_pic = userData_arr[2];
-            var uid = userData_arr[3];
-
             var user_postal_code = document.getElementById("postal_code").value;
             var user_country = document.getElementById("country").value;
+            var bio = "The world does not know who is he/she yet! :)";
+            if(user_postal_code==" "){
+                alert("postal code is required!");
+            }else{
+                var checkAddress = await codeAddress(user_postal_code + ", " + user_country);
+                if(checkAddress){
+                    var userData = document.getElementById("hidden_data").value;
+                    var userData_arr = userData.split(",");
+                    var user_name = userData_arr[0];
+                    var user_email = userData_arr[1];
+                    var profile_pic = userData_arr[2];
+                    var uid = userData_arr[3];
 
-            var prop = "users/" + uid;
-            var dt = {name:user_name,email:user_email,profile_picture:profile_pic,address:{postalCode:user_postal_code,country:user_country}};
-            await writeToDatabase(prop,dt);
-            window.location.href="./homepage.html";
+                    var user_postal_code = document.getElementById("postal_code").value;
+                    var user_country = document.getElementById("country").value;
+
+                    var prop = "users/" + uid;
+                    var dt = {bio:bio,name:user_name,email:user_email,profile_picture:profile_pic,address:{postalCode:user_postal_code,country:user_country}};
+                    await writeToDatabase(prop,dt);
+                    window.location.href="./homepage.html";
+                }else{
+                    alert("Please enter a valid address");
+                }
+                
+            }
+            
         }
 
 	</script>
