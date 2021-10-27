@@ -154,9 +154,12 @@ export async function registerWithEmail(email,pwd,username){
   });
 });}
 
-export function writeToDatabase(key, data){
-  set(ref(db, key), data);
-  console.log("successfully added to database!");
+export async function writeToDatabase(key, data){
+  return new Promise(resolve => {set(ref(db, key), data).then((result)=>{
+    console.log("successfully added to database!");
+    resolve(result);
+  });});
+  
 }
 
 export function updateToDatabase(key,data){

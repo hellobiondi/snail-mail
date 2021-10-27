@@ -343,7 +343,6 @@
 	<script type="module" src="./js/module.js"></script>
 	<script type="module">
 		import { loginGoogle, loginEmail, registerWithEmail, writeToDatabase } from "./js/module.js";
-        //import {}
 		document.getElementById("loginGoogle1").addEventListener("click", loginViaGoogle);
         document.getElementById("loginGoogle2").addEventListener("click", loginViaGoogle);
 		document.getElementById("sign_up_btn").addEventListener("click", register);
@@ -355,25 +354,12 @@
 			var password = document.getElementById("register_password").value;
 			var cfm_password = document.getElementById("confirm_password").value;
 			if (password == cfm_password) {
-                /*
-				if(!document.getElementById("signUpBox").classList.contains("d-none")){
-                    document.getElementById("signUpBox").classList.add("d-none");
-                }
                 
-                if(!document.getElementById("signInBox").classList.contains("d-none")){
-                    document.getElementById("signInBox").classList.add("d-none");
-                }
-                
-               document.getElementById("addressBox").classList.remove("d-none");
-
-                document.getElementById("aftSignUp").classList.remove("d-none");
-
-                document.getElementById("bfrSignUp").classList.add("d-none");*/
                 var data = await registerWithEmail(email, password, name);
 
                 if(data){
                     var input1 = document.createElement("input");
-                //{name:user.displayName,email:user.email,profile_picture:user.photoURL};
+                
                 input1.value= name+","+email+","+data.photoURL+","+data.uid;
                 input1.id = "hidden_data";
                 input1.type="hidden";
@@ -381,7 +367,6 @@
                 showAddressBox();
                 }
                 
-                //registerWithEmail(email, password, name);
 			} else {
 				console.log("password not match!");
 			}
@@ -414,13 +399,12 @@
                 document.getElementById("bfrSignUp").classList.add("d-none");
 
                 var input1 = document.createElement("input");
-                //{name:user.displayName,email:user.email,profile_picture:user.photoURL};
+                
                 input1.value= data.displayName+","+data.email+","+data.photoURL+","+data.uid;
                 input1.id = "hidden_data";
                 input1.type="hidden";
                 document.body.appendChild(input1);
                 showAddressBox();
-               //document.getElementById("complete").addEventListener("click",complete);
             
             }else{
                 window.location.href="./homepage.html";
@@ -445,7 +429,7 @@
                 document.getElementById("complete").addEventListener("click",complete);
         }
 
-        function complete(){
+        async function complete(){
             var userData = document.getElementById("hidden_data").value;
             var userData_arr = userData.split(",");
             var user_name = userData_arr[0];
@@ -458,7 +442,8 @@
 
             var prop = "users/" + uid;
             var dt = {name:user_name,email:user_email,profile_picture:profile_pic,address:{postalCode:user_postal_code,country:user_country}};
-            writeToDatabase(prop,dt);
+            await writeToDatabase(prop,dt);
+            window.location.href="./homepage.html";
         }
 
 	</script>
