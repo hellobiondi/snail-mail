@@ -188,19 +188,18 @@
 	import {readFromDatabase, sendMailDatabase} from "./js/module.js";
     
     // To be replaced with code from my WAMP 
-	var uid = '123';
 
 	Vue.createApp(
 		{
 			data(){
 				return {
 					// get uid
-					uid: uid,
+					uid: '',
 					chatrecent: '',
 					chathistory: '',
 					chats: [],
 					body: "Dear",
-					mail_name: uid,
+					mail_name: '',
 					display:'none',
 					
                     mailDesign:'postcard.jpg',
@@ -215,7 +214,9 @@
 			computed:{
 				initialise:async function getdb(){
 					//TO:DO getuid from session
+					//Current uid is default user Gadman Tang
 					this.uid = '76G9Xa7eszPHMFltAzdF46CluQn1'
+					
 					// 
 					this.data = await readFromDatabase('users');
 
@@ -231,7 +232,6 @@
 
 					for (let fren of this.friends){
 						// console.log(this.data[fren]['name'])
-						
 					}
 					return "done";
 				}
@@ -251,16 +251,17 @@
 					// newMail is a object to be send to chat recent of receiveruid
 					// next to test, update new data as data object directly into db
 
-					var newMail = new Object()
-					newMail[this.uid] = {
+					var chatRecent = new Object()
+					chatRecent[this.uid] = {
 						"senderName":senderName,
 						"datetime":"fixdate",
 						"mailDesign":this.mailDesign,
 						"content":this.body,
 					}
-					console.log(newMail);
-					sendMailDatabase(this.receiverUid,newMail);
-
+					console.log(chatRecent);
+					var prop = 'Chats/'+this.receiverUid+"/chatRecent/"
+					sendMailDatabase(prop,chatRecent);
+					console.log(`Successfully send to ${this.receiverUid}`)
                     // console.log(`${this.mailDesign} with ${this.body} from ${document.getElementById("to").value}`)
                 },
 
@@ -271,15 +272,7 @@
                 discard(){
                     this.body = "";
                     this.mailDesign = 'postcard.jpg';
-                    
                 },
-
-				update_mail(name){
-					this.subject = "using the name go further into json to retrieve subject"
-					this.body = this.chatrecent[name]
-					this.mail_name = this.chatrecent[name]
-				// 	// TO:DO use the name to get newest body content from json. 
-				},
 
 				compose(){
 					alert("ABC")

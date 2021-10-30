@@ -83,13 +83,12 @@
 	
 	<div id=app class="container">
 		<div class="btn position-fixed bottom-0 end-0 px-3">
-			<img class="rounded-circle btn-outline-light img-fluid" @click=compose() style="height: 100px;" src="img/compose.png">
+			<a class="nav-link" href="compose.html">
+			<img class="rounded-circle btn-outline-light img-fluid" style="height: 80px;" src="img/compose.png">
+			</a>
 		</div>
 		<div class="d-none">
 			{{initalise}}
-		</div>
-		<div @click=filter()>
-			{{database}}
 		</div>
 		<div class="row profile-card mt-5 px-5 pb-2">
 			<div class="row-md ">
@@ -105,7 +104,7 @@
 			</div>
 		</div>
 
-		<div class="row profile-card mt-5 px-5 pb-2">
+		<div class="row profile-card mt-5 px-5 pb-2" :style={display:display_mailbody}>
 			<div class="row-md d-flex" id="mail-header">
 				<h3 class="homeRow me-auto"> Sent from {{ senderName }}</h3>
 			</div>
@@ -176,14 +175,12 @@
 <script src="https://unpkg.com/vue@next"></script>
 <script type="module" src="./js/module.js"></script>
 <script src="./js/moment.js"></script>
+<script src="./js/chat.vue"></script>
 
 <script type="module">
 	// DATABASE TESTING
-	import {readFromDatabase, updateChatDatabase} from "./js/module.js";
+	import {readFromDatabase, updateChatDatabase, deleteChatRecent} from "./js/module.js";
     // To be replaced with code from my WAMP 
-
-
-	var temp_note = `NIL`
 
 	Vue.createApp(
 		{
@@ -199,22 +196,26 @@
 					name: '',
 					
 					senderName:'None',
-					body: temp_note,
+					body: '',
 					mailDesign:"postcard1.jpg",
 
+					display_mailbody:'none',
 					display:'none',
 				}	
 			},
 			computed: {
 				initalise:async function getdb(){
 					//TO:DO getuid from session
+					// default user is Sun Jun for now 
 					this.uid = "123"
+					
 					var prop = "Chats/"+ this.uid;
 					var data = await readFromDatabase(prop);
 
 					//Debug
-					console.log(this.uid);
-					console.log(data);
+					// console.log(this.uid);
+					// console.log(data);
+
 					this.database = data;
 					this.username = data["name"];
 					this.chatRecent = data["chatRecent"];
@@ -222,36 +223,42 @@
 					
 					// Filter away all those mails that have not reached based on time
 					var currentdate = moment();
-					for (const [key,value] of Object.entries(this.chatRecent)){
-						var mailDTString = value['datetime'];
-						var mailReceive = moment(mailDTString,"DD-MM-YY hh:mm");
-						// console.log(currentdate.isBefore(mailReceive));
-						if (currentdate.isBefore(mailReceive)){
-							console.log(this.chatRecent[key]);
-							delete this.chatRecent[key];
+					if (this.chatRecent){
+						for (const [key,value] of Object.entries(this.chatRecent)){
+							var mailDTString = value['datetime'];
+							var mailReceive = moment(mailDTString,"DD-MM-YY hh:mm");
+							// console.log(currentdate.isBefore(mailReceive));
+							if (currentdate.isBefore(mailReceive)){
+								console.log(this.chatRecent[key]);
+								delete this.chatRecent[key];
+							}
 						}
 					}
+
 					
 					return "done";
 				},
-				filter:function(){
-					alert("ABC")
-				}
-				
 			},
 
 			methods: {
-				update_fb(name){
-					let datetime = this.chatRecent[name]['datetime']
-					let prop = "Chats/"+this.uid
-					console.log(prop);
-					console.log(name);
-					console.log(datetime);
-					console.log(this.body);
-					updateChatDatabase(prop,name,datetime,this.body)
-					console.log("updated Firebase");
+				update_fb(uid){
+					// let datetime = this.chatRecent[name]['datetime']
+					
+					// let currentMailDesign = this.chatRecent[name]['mailDesign']
+					let recent_data = this.chatRecent[uid];
+					// console.log(recent_data)
+					
+					let prop = "Chats/"+this.uid+ '/chatHistory/'+uid
+					let senderName = this.chatRecent[uid]['senderName']
+					updateChatDatabase(prop,recent_data,senderName)
+					console.log(`updated Firebase by moving chatrecent to chathistory`);
+					prop = 'Chats/'+this.uid+'/chatRecent/'+uid
+					console.log(`updated Firebase by removing chatrecent chat`);
+					deleteChatRecent(prop)
+
 				},
 				update_mail(name){
+					this.display_mailbody= "flex"
 					this.senderName = this.chatRecent[name]['senderName'];
 					this.body = this.chatRecent[name]['content'];
 					this.mailDesign = this.chatRecent[name]['mailDesign'];
@@ -259,19 +266,29 @@
 				},
 				display_chat(name){
 					this.display = "inline-flex";
+					this.display_mailbody= "flex"
 					this.chats =  this.chatHistory[name]["mails"];
+					let c_chat = this.chats[Object.keys(this.chats)[0]]
+					
+					//Update body design
+					this.body = c_chat['content']
+					this.mailDesign = c_chat['mailDesign']
+
+					console.log();
 					// console.log(this.chats);
 				},
 				open_chat(idx){
 					// console.log(idx);
 					// console.log(this.chats[idx])
+					this.display_mailbody= "flex"
 					this.body = this.chats[idx]['content'];
+					this.mailDesign = this.chats[idx]['mailDesign']
 				},
 				close(){
 					this.display = "none";
 				},
-				compose(){
-					alert("ABC")
+				change_image(imageinput){
+					console.log(imageinput)
 				}
 			}
 

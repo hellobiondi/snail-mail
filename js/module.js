@@ -20,24 +20,31 @@ const auth = getAuth(app);
 
 const db = getDatabase(app);
 
-export function sendMailDatabase(receiveruid,newMail){
+export function sendMailDatabase(prop,data){
   // take in variable and update the values 
   const db = getDatabase();
-  var prop = 'Chats/'+receiveruid+"/chatRecent/"
-  update(ref(db,prop,),{
-    newMail
-  });
+  // var prop = 'Chats/'+receiveruid+"/chatRecent/"
+  update(ref(db,prop,),
+    data
+  );
+  console.log('Successfully update database')
 }
 
-export function updateChatDatabase(prop,sender,datetime,content) {
+export function updateChatDatabase(prop,data,senderName) {
   const db = getDatabase();
-  push(ref(db, prop + '/chatHistory/'+sender+'/mails'), {
-    datetime,content
-  });
+  push(ref(db, prop+'/mails/'), 
+    data
+  );
+  update(ref(db,prop),
+    {senderName}
+  );
+}
 
+export function deleteChatRecent(prop){
   // delete of chat recent, uncomment when final testing
-  // set(ref(db, prop + '/chatRecent/'+sender ),null
-  // );
+  set(ref(db, prop),
+  null
+  );
 }
 
 /*just in case if yall can't do async, can use sessionStorage to test first*/
