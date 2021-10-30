@@ -20,6 +20,15 @@ const auth = getAuth(app);
 
 const db = getDatabase(app);
 
+export function sendMailDatabase(receiveruid,newMail){
+  // take in variable and update the values 
+  const db = getDatabase();
+  var prop = 'Chats/'+receiveruid+"/chatRecent/"
+  update(ref(db,prop,),{
+    newMail
+  });
+}
+
 export function updateChatDatabase(prop,sender,datetime,content) {
   const db = getDatabase();
   push(ref(db, prop + '/chatHistory/'+sender+'/mails'), {

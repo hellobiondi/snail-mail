@@ -142,7 +142,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="card col-md-8 d-flex m-auto">   
-                        <img class="card-img img-fluid m-auto opacity-50" style="border-radius:20px;height:400px;" v-bind:src="'./img/postcard/'+mail_design">
+                        <img class="card-img img-fluid m-auto opacity-50" style="border-radius:20px;height:400px;" v-bind:src="'./img/postcard/'+mailDesign">
                         <div class="card-img-overlay overflow-auto">
                             <p class="word m-4">
                                 {{ body }}  
@@ -185,30 +185,31 @@
 <script src="./js/moment.js"></script>
 
 <script type="module">
-	import {readFromDatabase} from "./js/module.js";
+	import {readFromDatabase, sendMailDatabase} from "./js/module.js";
     
     // To be replaced with code from my WAMP 
-	var uid = 'HuiRu';
+	var uid = '123';
 
 	Vue.createApp(
 		{
 			data(){
 				return {
-					// data_base should be updated via axios method
-					database: '',
-					name: uid,
+					// get uid
+					uid: uid,
 					chatrecent: '',
 					chathistory: '',
 					chats: [],
 					body: "Dear",
 					mail_name: uid,
 					display:'none',
-                    mail_design:'postcard.jpg',
+					
+                    mailDesign:'postcard.jpg',
                     data:'',
 					friends:[],
 					postcards: ["postcard.jpg","postcard1.jpg","postcard2.jpg","postcard3.jpg","postcard4.jpg","postcard5.jpg","postcard6.jpg","postcard7.jpg","postcard8.jpg"],
 					reply: "",
 					towho:'',
+					receiverUid:'',
 				}	
 			},
 			computed:{
@@ -237,15 +238,30 @@
 			},
 			methods: {
 				//TO:DO cal distance
-				delaymail(uid1,uid2){
+				delaymail(uid,receiver){
 					//return a delay time 
 				},
                 send(friend){
 					//update database with values of chat recent to data
 					this.towho = this.data[document.getElementById("to").value]['name'];
-					let receiver = document.getElementById("to").value
+					this.receiverUid = document.getElementById("to").value
 					console.log(this.towho);
-                    console.log(`${this.mail_design} with ${this.body} from ${document.getElementById("to").value}`)
+					let senderName = this.data[this.uid]['name']
+					
+					// newMail is a object to be send to chat recent of receiveruid
+					// next to test, update new data as data object directly into db
+
+					var newMail = new Object()
+					newMail[this.uid] = {
+						"senderName":senderName,
+						"datetime":"fixdate",
+						"mailDesign":this.mailDesign,
+						"content":this.body,
+					}
+					console.log(newMail);
+					sendMailDatabase(this.receiverUid,newMail);
+
+                    // console.log(`${this.mailDesign} with ${this.body} from ${document.getElementById("to").value}`)
                 },
 
                 save_draft(){
@@ -254,7 +270,7 @@
 
                 discard(){
                     this.body = "";
-                    this.mail_design = 'postcard.jpg';
+                    this.mailDesign = 'postcard.jpg';
                     
                 },
 
@@ -269,7 +285,7 @@
 					alert("ABC")
 				},
                 update_design(imagesrc){
-                    this.mail_design = imagesrc
+                    this.mailDesign = imagesrc
                 }
 
 			}
