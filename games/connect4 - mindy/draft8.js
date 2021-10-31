@@ -1,27 +1,38 @@
-import { loginGoogle, readFromDatabase, writeToDatabase } from "./../../js/module.js";
-// import {readFromDatabase} from "./module.js";
-// import {pushToDatabase} from "./module.js";
+// import { loginGoogle, readFromDatabase, writeToDatabase } from "./../../js/module.js";
+// import { loginGoogle, readFromDatabase, writeToDatabase, isUserSignedIn} from "./../js/module.js";
+import {readFromDatabase, writeToDatabase, isUserSignedIn} from "./../js/module.js";
 
-document.getElementById("loginGoogle").addEventListener("click", loginGoogle);
-console.log(sessionStorage.currentUser);
-var uid = sessionStorage.currentUser;
-var dataList = {};
-
+async function getData(){
+    var uid = await isUserSignedIn();
+    var property =  "users/" + uid;
+    sessionStorage.setItem("uid", uid);
+    var data = await readFromDatabase(property);
+    console.log(data);
+    for (var item in data){
+        sessionStorage.setItem(item, data[item]);
+    }
+}
+getData();
+console.log(sessionStorage);
+var uid = sessionStorage.uid;
+var email = sessionStorage.email;
+var name = sessionStorage.name;
+// var dataList = {};
 // if inside is empty, will becomes first player
 async function initializePlayer() {
-    var prop = "users/" + uid;
-    var data = await readFromDatabase(prop);
-    console.log(data); // {email: 'bokzmmindy@gmail.com', name: 'bok mindy', profile_picture: 'https://lh3.googleusercontent.com/a/AATXAJztuF0yzXyjB2lcv656YraWU00docU31bqpqWTN=s96-c'}
-    dataList["email"] = data.email;
-    dataList["name"] = data.name;
-    dataList["profile_picture"] = data.profile_picture;
-    dataList["friends"] = data.friends
+    //var prop = "users/" + uid;
+    // var data = await readFromDatabase(prop);
+    // console.log(data); // {email: 'bokzmmindy@gmail.com', name: 'bok mindy', profile_picture: 'https://lh3.googleusercontent.com/a/AATXAJztuF0yzXyjB2lcv656YraWU00docU31bqpqWTN=s96-c'}
+    // dataList["email"] = data.email;
+    // dataList["name"] = data.name;
+    // dataList["profile_picture"] = data.profile_picture;
+    // dataList["friends"] = data.friends
     // console.log(dataList)fr
-    writeToDatabase('games/connect4/game0001/players/1', `${dataList["email"]}`)
+    writeToDatabase('games/connect4/game0001/players/1', `${email}`)
     startGame();
 }
 initializePlayer();
-console.log(dataList)
+// console.log(dataList)
 
 // async function getPlayer(){
 //     var property =  "games/connect4/game0001/currentPlayer";
@@ -64,7 +75,7 @@ async function startGame() {
     var UID2 = 'bkLfaqpZH7TfCuXvajP3lbbmJBx2';
 
     console.log(typeof (dataList));
-    var player1 = dataList["name"];
+    var player1 = name;
     var player2 = '1125';
 
     // Selectors
