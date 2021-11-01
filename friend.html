@@ -42,8 +42,8 @@
 			var userFriends = userObject.friends;
 			var userPic = userObject.profile_picture;
 
-			document.getElementById("userName").value = userName;
-			document.getElementById("userBio").value = userBio;
+			document.getElementById("userName").innerText = userName;
+			document.getElementById("userBio").innerText = userBio;
 			document.getElementById("userPic").src = userPic;
 			document.getElementById("userAvatarPic").src = userPic;
 			//console.log(userFriends);
@@ -125,28 +125,22 @@
 					<div class="col-12">
 						<img id="userPic" class="rounded-circle profile-pic">
 					</div>
-					<div class="col-12 py-2">
-						<button class="btn button-light" id="signout">Sign Out</button>
-					</div>
 				</div>
 			</div>
 			<div class="col-lg-8 col-sm-12 profile-card">
 				<h1 class="col-12 py-4 px-4">About</h1>
 				<div class="col-12 px-4">
-					<div class="input-group mb-3">
-						<span class="input-group-text">Name:</span>
-						<input id="userName" type="text" class="form-control" disabled>
+					<div class="mb-3">
+						Name: <span id="userName"></span>
 					</div>
 				</div>
 				<div class="col-12 px-4">
-					<div class="input-group mb-3">
-						<span class="input-group-text">Bio</span>
-						<textarea id="userBio" type="text" class="form-control" disabled></textarea>
+					<div class="mb-3">
+						Bio: <span id="userBio"></span>
 					</div>
-					<div class="col-12 pb-3 text-end">
-						<button id="editAbout" class="btn button-light">Edit Profile</button>
-						<button id="saveAbout" class="btn button-light">Save Changes</button>
-					</div>
+				</div>
+				<div class="col-12 pb-3 text-end">
+					<button id="sendMail" class="btn button-light">Send him a mail</button>
 				</div>
 			</div>
 		</div>
@@ -155,53 +149,14 @@
 				<h1 class="col-12 py-4 px-4">Address</h1>
 				<div class="row px-4">
 					<div class="col-6">
-						<div class="input-group">
-							<span class="input-group-text">Postal Code</span>
-							<input id="postalCode" type="text" aria-label="postalCode" class="form-control"
-								value="188065" disabled>
-						</div>
+						<span>Postal Code: 188065</span>
 					</div>
 					<div class="col-6">
-						<div class="input-group">
-							<span class="input-group-text">Country Code</span>
-							<input id="countryCode" type="text" aria-label="countryCode" class="form-control"
-								value="Singapore" disabled>
-						</div>
-					</div>
-					<div class="col-12 pt-3 text-end">
-						<button id="editAddress" class="btn button-light">Edit Address</button>
+						<span>Country Code: Singapore</span>
 					</div>
 					<div class="col-12 py-4">
 						<div id="map"></div>
 					</div>
-				</div>
-			</div>
-		</div>
-
-
-		<div class="row my-5 profile-card">
-			<div class="col-12">
-				<h1 class="col-12 py-4 px-4">Settings</h1>
-				<div class="row px-4 mb-3">
-					<label for="inputPassword" class="col-sm-2 col-form-label">Current Password: </label>
-					<div class="col-sm-4">
-						<input type="password" class="form-control" id="currentPassword">
-					</div>
-				</div>
-				<div class="row px-4 mb-3">
-					<label for="inputPassword" class="col-sm-2 col-form-label">New Password: </label>
-					<div class="col-sm-4">
-						<input type="password" class="form-control" id="newPassword">
-					</div>
-				</div>
-				<div class="row px-4 mb-3">
-					<label for="inputPassword" class="col-sm-2 col-form-label">Confirm New Password: </label>
-					<div class="col-sm-4">
-						<input type="password" class="form-control" id="confirmNewPassword">
-					</div>
-				</div>
-				<div class="col-12 py-3 text-center">
-					<button id="editAbout" class="btn button-light">Change Password</button>
 				</div>
 			</div>
 		</div>

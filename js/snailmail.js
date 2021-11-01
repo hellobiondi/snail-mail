@@ -41,6 +41,8 @@ function initMap() {
     });
 });*/
 
+
+
 function loadFriends() {
     $('#friendsList').owlCarousel({
         items: 4,

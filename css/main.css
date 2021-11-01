@@ -301,3 +301,8 @@ img{
 .cover-container {
     max-width: 42em;
 }
+
+
+#saveAbout{
+    display: none;
+}

@@ -180,6 +180,13 @@ export function updateToDatabase(key,data){
   console.log("successfully update data!");
 }
 
+export function updateUsername(key,data){
+  const changes = {};
+  changes['/name/'] = data;
+  update(ref(db,key),changes);
+  console.log("successfully update data!");
+}
+
 export function isUserSignedIn(){
   return new Promise(resolve=>{onAuthStateChanged(auth, (user) => {
     if (user) {
