@@ -1,6 +1,6 @@
 // import { loginGoogle, readFromDatabase, writeToDatabase } from "./../../js/module.js";
 // import { loginGoogle, readFromDatabase, writeToDatabase, isUserSignedIn} from "./../js/module.js";
-import {readFromDatabase, writeToDatabase, isUserSignedIn} from "./../js/module.js";
+import {readFromDatabase, writeToDatabase, isUserSignedIn} from "./../../js/module.js";
 
 async function getData(){
     var uid = await isUserSignedIn();
@@ -53,7 +53,7 @@ async function startGame() {
 
     
 
-    // test upddate db
+    // test update db
     console.log("testing");
     // writeToDatabase("games/connect4/game0001/allmoves", "0,1/0,2");
     // writeToDatabase("games/connect4/game0001/lastmove", "6,9");
@@ -91,8 +91,6 @@ async function startGame() {
     console.log(currentPlayer + 'hello');
     playerTurn.textContent = `${player1}'s turn`
 
-    var temp = "";
-
     Array.prototype.forEach.call(tableCell, (cell) => {
         cell.addEventListener('click', changeColor);
         // Set all slots to white for new game.
@@ -104,15 +102,25 @@ async function getGameBoard(){
     return data;
 }
 var gameBoard = await getGameBoard();
-var gameBoardList = gameBoard.split(',');
+console.log(gameBoard);
+
+if (gameBoard != null) {
+    var gameBoardList = gameBoard.split(',');
 gameBoardList.pop();
 console.log(gameBoardList);
+setGameBoard();
+}
+
+else {
+    gameBoard ='';
+}
+
 
 function setGameBoard() {
     var counter = 0;
     for (var move of gameBoardList) {
         var slot = document.getElementById(`${move}`);
-        console.log(slot);
+        //console.log(slot);
         if (counter % 2 == 0) {
             slot.style.backgroundColor = '#f88796';
         }
@@ -124,7 +132,7 @@ function setGameBoard() {
         
     }
 }
-setGameBoard();
+
     function changeColor(e) { //the event
         // Get clicked column index
         let column = e.target.cellIndex;
@@ -134,8 +142,9 @@ setGameBoard();
             if (tableRow[i].children[column].style.backgroundColor == 'white') {
                 row.push(tableRow[i].children[column]);
                 writeToDatabase("games/connect4/game0001/lastmove", `${row[0].id}`);
-                    temp += `${row[0].id}` + ",";
-                    writeToDatabase("games/connect4/game0001/allmoves", temp);
+                console.log(gameBoard);
+                    gameBoard += `${row[0].id}` + ",";
+                    writeToDatabase("games/connect4/game0001/allmoves", gameBoard);
                     console.log(row[0].id);
                 if (currentPlayer === 1) {
                     row[0].style.backgroundColor = player1Color;
