@@ -28,8 +28,11 @@ async function initializePlayer() {
     // dataList["profile_picture"] = data.profile_picture;
     // dataList["friends"] = data.friends
     // console.log(dataList)fr
-    writeToDatabase('games/connect4/game0001/players/1', `${email}`)
+
     startGame();
+    console.log(email + "email");
+
+
 }
 initializePlayer();
 // console.log(dataList)
@@ -87,8 +90,11 @@ async function startGame() {
 
     var property = "games/connect4/game0001/currentPlayer";
     var currentPlayer = await readFromDatabase(property);
+    var currentEmails = await readFromDatabase('games/connect4/game0001/players/')
+    console.log(currentEmails[1]);
     //var currentPlayer = getPlayer();
-    console.log(currentPlayer + ' currentPlayer');
+    console.log(currentPlayer + ' currentPlayer')
+    console.log(typeof currentPlayer + ' currentPlayer type');
 
     if (currentPlayer == 1) {
         playerTurn.style.color = player1Color;
@@ -100,12 +106,17 @@ async function startGame() {
         playerTurn.textContent = `${player2}'s turn`;
     }
 
+    if (email === currentEmails[currentPlayer]) {
+        Array.prototype.forEach.call(tableCell, (cell) => {
+            cell.addEventListener('click', changeColor);
+            // Set all slots to white for new game.
+            cell.style.backgroundColor = 'white';
+        });
+    }
 
-    Array.prototype.forEach.call(tableCell, (cell) => {
-        cell.addEventListener('click', changeColor);
-        // Set all slots to white for new game.
-        cell.style.backgroundColor = 'white';
-    });
+
+
+
     async function getGameBoard() {
         var prop = "games/connect4/game0001/allmoves"; // hardcoded game0001 for now
         var data = await readFromDatabase(prop);
@@ -158,6 +169,10 @@ async function startGame() {
                 console.log(row[0].id);
                 if (currentPlayer === 1) {
                     row[0].style.backgroundColor = player1Color;
+                    Array.prototype.forEach.call(tableCell, (cell) => {
+                        cell.removeEventListener('click', changeColor);
+                        // Set all slots to white for new game.
+                    });
                     //ow[0].style.backgroundImage = player1Img; //red
 
                     if (horizontalCheck() || verticalCheck() || diagonalCheck() || diagonalCheck2()) {
@@ -182,12 +197,13 @@ async function startGame() {
                         });
                         return alert(`${player1} WINS!!`);
                     }
-                    
+
                     else if (drawCheck()) {
                         playerTurn.textContent = 'DRAW!';
                         return alert('DRAW!');
                     } else {
                         playerTurn.style.color = player2Color;
+                        
                         playerTurn.textContent = `${player2}'s turn`;
                         writeToDatabase("games/connect4/game0001/currentPlayer", 2);
                         return currentPlayer = 2;
@@ -195,6 +211,10 @@ async function startGame() {
 
                 } else {
                     row[0].style.backgroundColor = player2Color;
+                    Array.prototype.forEach.call(tableCell, (cell) => {
+                        cell.removeEventListener('click', changeColor);
+                        // Set all slots to white for new game.
+                    });
                     //row[0].style.backgroundImage = player2Img;
                     if (horizontalCheck() || verticalCheck() || diagonalCheck() || diagonalCheck2()) {
                         playerTurn.textContent = `${player2} WINS!!`;
