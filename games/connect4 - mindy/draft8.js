@@ -1,6 +1,6 @@
 // import { loginGoogle, readFromDatabase, writeToDatabase } from "./../../js/module.js";
-// import { loginGoogle, readFromDatabase, writeToDatabase, isUserSignedIn} from "./../js/module.js";
 import {readFromDatabase, writeToDatabase, isUserSignedIn} from "./../../js/module.js";
+//import {readFromDatabase, writeToDatabase, isUserSignedIn} from "./../../js/module.js";
 
 async function getData(){
     var uid = await isUserSignedIn();
@@ -133,7 +133,7 @@ function setGameBoard() {
     }
 }
 
-    function changeColor(e) { //the event
+async function changeColor(e) { //the event
         // Get clicked column index
         let column = e.target.cellIndex;
         let row = [];
@@ -153,6 +153,23 @@ function setGameBoard() {
                     if (horizontalCheck() || verticalCheck() || diagonalCheck() || diagonalCheck2()) {
                         playerTurn.textContent = `${player1} WINS!!`;
                         playerTurn.style.color = player1Color;
+                        gameBoard = "";
+                        writeToDatabase("games/connect4/game0001/allmoves", gameBoard);
+                        writeToDatabase("games/connect4/game0001/lastmove", "");
+                        var prop_temp = "games/connect4/game0001/win";
+                        var winStr = await readFromDatabase(prop_temp);
+                        console.log(winStr);
+                        var winLi = winStr.split(',');
+                        console.log(winLi); 
+                        winLi[0] = Number(winLi[0]) + 1; 
+                        var outputStr = winLi.join(','); 
+                        console.log(outputStr);
+                        writeToDatabase(prop_temp, outputStr);
+
+                        //writeToDatabase("games/connect4/game0001/lastmove", "");
+                        tableSlot.forEach(slot => {
+                            slot.style.backgroundColor = 'white';
+                        });
                         return alert(`${player1} WINS!!`);
                     } else if (drawCheck()) {
                         playerTurn.textContent = 'DRAW!';
@@ -168,6 +185,22 @@ function setGameBoard() {
                     if (horizontalCheck() || verticalCheck() || diagonalCheck() || diagonalCheck2()) {
                         playerTurn.textContent = `${player2} WINS!!`;
                         playerTurn.style.color = player2Color;
+                        gameBoard = "";
+                        writeToDatabase("games/connect4/game0001/allmoves", gameBoard);
+                        writeToDatabase("games/connect4/game0001/lastmove", "");
+                        var prop_temp = "games/connect4/game0001/win";
+                        var winStr = await readFromDatabase(prop_temp);
+                        console.log(winStr);
+                        var winLi = winStr.split(',');
+                        console.log(winLi); 
+                        winLi[1] = Number(winLi[1]) + 1; 
+                        var outputStr = winLi.join(','); 
+                        console.log(outputStr);
+                        writeToDatabase(prop_temp, outputStr);
+                        //writeToDatabase("games/connect4/game0001/lastmove", "");
+                        tableSlot.forEach(slot => {
+                            slot.style.backgroundColor = 'white';
+                        });
                         return alert(`${player2} WINS!!`);
                     } else if (drawCheck()) {
                         playerTurn.textContent = 'DRAW!';
