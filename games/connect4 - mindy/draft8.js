@@ -98,9 +98,9 @@ async function startGame() {
     const reset = document.querySelector('.reset');
 
     //var property = "games/connect4/game0001/currentPlayer";
-    var property = "games/connect4/" + `${gameID}` + "/currentPlayer";
+    var property = "games/" + `${gameID}` + "/currentPlayer";
     var currentPlayer = await readFromDatabase(property);
-    var currentUIDs = await readFromDatabase("games/connect4/" + `${gameID}` + "/players")
+    var currentUIDs = await readFromDatabase("games/" + `${gameID}` + "/players")
     var player1 = currentUIDs[1];
     var player2 = currentUIDs[2];
 
@@ -131,7 +131,7 @@ async function startGame() {
 
 
     async function getGameBoard() {
-        var prop = "games/connect4/" + `${gameID}` + "/allmoves"; // hardcoded game0001 for now
+        var prop = "games/" + `${gameID}` + "/allmoves"; // hardcoded game0001 for now
         var data = await readFromDatabase(prop);
         return data;
     }
@@ -175,10 +175,10 @@ async function startGame() {
         for (var i = 5; i > -1; i--) {
             if (tableRow[i].children[column].style.backgroundColor == 'white') {
                 row.push(tableRow[i].children[column]);
-                writeToDatabase("games/connect4/" + `${gameID}` + "/lastmove", `${row[0].id}`);
+                writeToDatabase("games/" + `${gameID}` + "/lastmove", `${row[0].id}`);
                 console.log(gameBoard);
                 gameBoard += `${row[0].id}` + ",";
-                writeToDatabase("games/connect4/" + `${gameID}` + "/allmoves", gameBoard);
+                writeToDatabase("games/" + `${gameID}` + "/allmoves", gameBoard);
                 console.log(row[0].id);
                 if (currentPlayer === 1) {
                     row[0].style.backgroundColor = player1Color;
@@ -192,9 +192,9 @@ async function startGame() {
                         playerTurn.textContent = `${player1} WINS!!`;
                         playerTurn.style.color = player1Color;
                         gameBoard = "";
-                        writeToDatabase("games/connect4/" + `${gameID}` + "/allmoves", gameBoard);
-                        writeToDatabase("games/connect4/" + `${gameID}` + "/lastmove", "");
-                        var prop_temp = "games/connect4/" + `${gameID}` + "/win";
+                        writeToDatabase("games/" + `${gameID}` + "/allmoves", gameBoard);
+                        writeToDatabase("games/" + `${gameID}` + "/lastmove", "");
+                        var prop_temp = "games/" + `${gameID}` + "/win";
                         var winStr = await readFromDatabase(prop_temp);
                         console.log(winStr);
                         var winLi = winStr.split(',');
@@ -218,7 +218,7 @@ async function startGame() {
                         playerTurn.style.color = player2Color;
 
                         playerTurn.textContent = `${player2}'s turn`;
-                        writeToDatabase("games/connect4/" + `${gameID}` + "/currentPlayer", 2);
+                        writeToDatabase("games/" + `${gameID}` + "/currentPlayer", 2);
                         return currentPlayer = 2;
                     }
 
@@ -233,9 +233,9 @@ async function startGame() {
                         playerTurn.textContent = `${player2} WINS!!`;
                         playerTurn.style.color = player2Color;
                         gameBoard = "";
-                        writeToDatabase("games/connect4/" + `${gameID}` + "/allmoves", gameBoard);
-                        writeToDatabase("games/connect4/" + `${gameID}` + "/lastmove", "");
-                        var prop_temp = "games/connect4/" + `${gameID}` + "/win";
+                        writeToDatabase("games/" + `${gameID}` + "/allmoves", gameBoard);
+                        writeToDatabase("games/" + `${gameID}` + "/lastmove", "");
+                        var prop_temp = "games/" + `${gameID}` + "/win";
                         var winStr = await readFromDatabase(prop_temp);
                         console.log(winStr);
                         var winLi = winStr.split(',');
@@ -255,7 +255,7 @@ async function startGame() {
                     } else {
                         playerTurn.style.color = player1Color;
                         playerTurn.textContent = `${player1}'s turn`;
-                        writeToDatabase("games/connect4/" + `${gameID}` + "/currentPlayer", 1);
+                        writeToDatabase("games/" + `${gameID}` + "/currentPlayer", 1);
                         return currentPlayer = 1;
                     }
                 }
