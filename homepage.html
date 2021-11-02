@@ -41,6 +41,8 @@
 			var userName = userObject.name;
 			var userPic = userObject.profile_picture;
 			var userFriends = userObject.friends;
+			var userActiveGamesObj = userObject.activeGames;
+			//showActiveGamesList(userActiveGamesObj);
 			showFriendList(userFriends);
 			document.getElementById("userName").innerHTML = userName;
 			document.getElementById("userAvatarPic").src = userPic;
@@ -72,7 +74,27 @@
 			document.getElementById("friendsList").appendChild(outerDiv);
 		}
 
+		/*function showActiveGamesList(userActiveGamesObj){
+			//console.log(userActiveGamesObj);
+			for(let[key,value] of Object.entries(userActiveGamesObj)){
+				console.log(key);
 
+				let gameID = key;
+				let gameType = key.slice(0,2);
+				let gameFriend = value;
+				
+				let imgSrc = "";
+				if(gameType == "c4"){
+					let imgSrc = "./img/connect4.jpeg";
+				}
+
+				if(gameType == "hm"){
+					let imgSrc = "./img/hangman.jpeg";
+				}
+				
+			}
+
+		}*/
 
 		async function showFriendList(userFriends){
 			const userFriendArray = userFriends.split(",");
@@ -80,11 +102,6 @@
 			if(result){
 				loadFriends();
 			}
-			/*for (let friendUid of userFriendArray){
-				var property =  "users/" + friendUid;
-				var data = await readFromDatabase(property);
-				setFriendData(data);
-			}*/
 		}
 
 		//Get the list of user's friends
@@ -107,14 +124,6 @@
 
 		getData();
 
-		/*if (sessionStorage.getItem("currentUser")) {
-			console.log(sessionStorage.getItem("currentUser"));
-			var userData = readUser(sessionStorage.getItem("currentUser"));
-			var img = sessionStorage.getItem("profilePicture")
-			console.log(img);
-			document.getElementById("test").src = img;
-			document.getElementById("signout").addEventListener("click", signOutUser());
-		}*/
 	</script>
 	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -170,13 +179,7 @@
 				<h1 class="py-5 px-4">Your Friends</h1>
 			</div>
 			<div class="col-12 pb-5">
-				<div id="friendsList" class="owl-carousel owl-theme" align="center">
-					<div class="item grow px-4">
-						<a href="#"><img src="img/huiru.jpeg" class="rounded-circle">
-							<div class="text-warning" align="center">Hui Ru</div>
-						</a>
-					</div>
-				</div>
+				<div id="friendsList" class="owl-carousel owl-theme" align="center"></div>
 			</div>
 		</div>
 

@@ -34,7 +34,7 @@
 <body>
 	<script src="./js/module.js" type="module"></script>
 	<script type="module">
-		import { isUserSignedIn, readFromDatabase } from './js/module.js';
+		import { isUserSignedIn, readFromDatabase, updateToDatabase } from './js/module.js';
 
 		//Set User Login Data after their data is returned from Google API
 		function setUserData(userObject) {
@@ -45,33 +45,79 @@
 			document.getElementById("userAvatarPic").src = userPic;
 		}
 
-		//Create and set each Friend's data
-		function setFriendData(FriendUid) {
-			var userName = FriendUid.name;
-			var userPic = FriendUid.profile_picture;
-
-			var outerDiv = document.createElement("div");
-			outerDiv.classList.add("item", "grow", "px-4");
-
-			var a = document.createElement("a");
-			a.setAttribute("href", "#")
-			var img = document.createElement("img");
-			img.setAttribute("src", userPic);
-			img.classList.add("rounded-circle");
-
-			var innerDiv = document.createElement("div");
-			innerDiv.classList.add("text-warning");
-			innerDiv.setAttribute("align", "center");
-			var text = document.createTextNode(userName);
-
-			innerDiv.appendChild(text);
-			a.appendChild(img);
-			a.appendChild(innerDiv);
-			outerDiv.appendChild(a);
-			document.getElementById("friendsList").appendChild(outerDiv);
+		async function findTotalGames(){
+			var property = "games/totalGames";
+			var data = await readFromDatabase(property);
+			return data
 		}
 
+		
 
+		//Create and set each Friend's data
+		
+		function setFriendData(friendData,friendUid) {
+			var uid = sessionStorage.getItem('uid');
+			async function startConnect4Game(){
+				//console.log("73: " + uid +"<br>"+ friendUid);
+				let totalGames = await findTotalGames();
+				let gameID = "game" + (Number(totalGames) + 1).toString();
+
+				// Update to user
+				//console.log("users/"+uid+"/activeGames/",{[friendUid]: gameID});
+				updateToDatabase("users/"+uid+"/activeGames/",{[friendUid]: gameID});
+				
+				// Update to friend
+				updateToDatabase("users/"+friendUid+"/activeGames/",{[uid]: gameID});
+
+				// Update to game
+				var test = {"allmoves": "",
+							"currentPlayer": 1, 
+							"lastmove": "", 
+							"players": "",
+							"win": "0,0"}	
+				updateToDatabase("games/"+gameID+"/",test);
+				updateToDatabase("games/"+gameID+"/players",{1: uid});
+				updateToDatabase("games/"+gameID+"/players",{2: friendUid});
+				updateToDatabase("games/",{totalGames: (Number(totalGames) + 1).toString()})
+				/*updateToDatabase("games/"+gameID+"/",[
+													{allmoves: ""}, 
+													{currentPlayer: 1}, 
+													{lastmove: ""}, 
+													{players: [
+																{1: uid},
+																{2: friendUid}
+													]}, 
+													{win: "0,0"}
+												]);*/
+
+			}
+
+			var userName = friendData.name;
+			var userPic = friendData.profile_picture;
+			
+			let outerDiv = document.createElement("div");
+			outerDiv.className = "col-4";
+
+			let img = document.createElement("img");
+			img.setAttribute("src",userPic);
+			img.classList.add("img-fluid","rounded");
+			img.style.width = "100px";
+			img.style.height = "100px";
+
+			img.addEventListener("click", startConnect4Game);
+			//img.setAttribute("id", friendUid);
+			//document.getElementById(friendUid).addEventListener("click", console.log("huat"));
+			let link = document.createElement("a");
+			link.setAttribute("href","./games/connect4/draft8.html?oppID="+friendUid);
+
+			//link.addEventListener("click", startConnect4Game(uid,friendUid));
+
+			let linkName = document.createTextNode(userName);
+			link.appendChild(img);
+			link.appendChild(linkName);
+			outerDiv.appendChild(link);
+			document.getElementById("modalFriends").appendChild(outerDiv);
+		}
 
 		async function showFriendList(userFriends) {
 			const userFriendArray = userFriends.split(",");
@@ -79,11 +125,6 @@
 			if (result) {
 				loadFriends();
 			}
-			/*for (let friendUid of userFriendArray){
-				var property =  "users/" + friendUid;
-				var data = await readFromDatabase(property);
-				setFriendData(data);
-			}*/
 		}
 
 		//Get the list of user's friends
@@ -91,7 +132,7 @@
 			for (let friendUid of userFriendArray) {
 				var property = "users/" + friendUid;
 				var data = await readFromDatabase(property);
-				setFriendData(data);
+				setFriendData(data,friendUid);
 			}
 			return true;
 		}
@@ -99,21 +140,13 @@
 		//Get User Login Data
 		async function getData() {
 			var uid = await isUserSignedIn();
+			sessionStorage.setItem('uid', uid);
 			var property = "users/" + uid;
 			var data = await readFromDatabase(property);
 			setUserData(data);
 		}
 
 		getData();
-
-		/*if (sessionStorage.getItem("currentUser")) {
-			console.log(sessionStorage.getItem("currentUser"));
-			var userData = readUser(sessionStorage.getItem("currentUser"));
-			var img = sessionStorage.getItem("profilePicture")
-			console.log(img);
-			document.getElementById("test").src = img;
-			document.getElementById("signout").addEventListener("click", signOutUser());
-		}*/
 	</script>
 	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -153,34 +186,59 @@
 				<h1 class="py-5 px-4">Games</h1>
 			</div>
 			<div class="row">
-				<div class="col-sm-6 col-12 pb-5">
+				<h2 class="px-4">
+					Multiplayer Games
+				</h2>
+				<div class="col-12 pb-5">
 					<div class="card">
 						<img src="./img/connect4.jpeg" class="card-img-top" alt="...">
 						<div class="card-body">
 							<h2 class="card-title">Connect 4</h2>
 							<p class="card-text mt-5 gameCardText">
-								A two-player connection board game, in which the players choose a color and then take 
-								turns dropping colored discs into a seven-column, six-row vertically suspended grid. <br/> <br/>
+								A two-player connection board game, in which the players choose a color and then take
+								turns dropping colored discs into a seven-column, six-row vertically suspended grid.
+								<br /> <br />
 								The first player to connect 4 in a row is the winner of the game.
 							</p>
-							<a href="#" class="btn button-light">Play Connect 4</a>
+							<button type="button" class="btn button-light" data-bs-toggle="modal" data-bs-target="#gameModal">Play Connect 4</a>
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-6 col-12 pb-5">
+			</div>
+			<div class="row">
+				<h2 class="px-4">
+					Singleplayer Games
+				</h2>
+				<div class="col-12 pb-5">
 					<div class="card">
 						<img src="./img/hangman.jpeg" class="card-img-top" alt="...">
 						<div class="card-body">
 							<h2 class="card-title">Hangman</h2>
 							<p class="card-text mt-5 gameCardText">
-								OA guessing gam where one player thinks of a word, phrase or sentence and the other(s) 
+								OA guessing gam where one player thinks of a word, phrase or sentence and the other(s)
 								tries to guess it by suggesting letters within a certain number of guesses.
-								<br/> <br/>
-								The game ends when guessing player completes/guess the word or when the other player 
+								<br /> <br />
+								The game ends when guessing player completes/guess the word or when the other player
 								completes the diagram of the hanged man.
 							</p>
 							<a href="#" class="btn button-light">Play Hangman</a>
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="gameModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="gameModalLabel">Choose who to play with</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body text-center">
+						<div id="modalFriends" class="row"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 					</div>
 				</div>
 			</div>

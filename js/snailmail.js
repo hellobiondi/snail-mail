@@ -82,7 +82,7 @@ $(document).ready(function () {
         pagination: false,
         itemsDesktop: [1199, 3],
         itemsDesktopSmall: [979, 3],
-        loop:true,
+        loop:false,
         margin:10,
         responsiveClass:true,
         responsive:{
@@ -102,3 +102,15 @@ $(document).ready(function () {
         }
     });
 });
+
+
+
+const notification = document.getElementById("notification-container");
+
+function showNotification(){
+    notification.classList.add('show');
+    
+    setTimeout(() =>{
+        notification.classList.remove('show');
+    },2000);
+}
