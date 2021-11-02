@@ -18,6 +18,17 @@
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
 
+	<!-- Fonts Gugi -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+
+	<!-- Fonts Crete Round -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Crete+Round&display=swap" rel="stylesheet">
+
+
 	<!-- Owl -->
 	<link rel="stylesheet" href="owlcarousel/css/owl.carousel.min.css">
 	<link rel="stylesheet" href="owlcarousel/css/owl.theme.default.min.css">
@@ -26,7 +37,7 @@
 
 
 	<!-- using Google Map-->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnUQJTmjrMkcN6j9ZEl1-yVDMfJf5DbiY"></script>
 
 	<style>
@@ -61,7 +72,7 @@
 </head>
 
 <body>
-	<!-- using Navbar -->
+	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="homepage.html">
@@ -105,11 +116,11 @@
 				<h3 class="d-flex homeRow me-auto">Choose your design</h3>
 			</div>
 			<div class="col-12 pb-5">
-				<div class="owl-carousel owl-theme">
+				<div class="owl-carousel owl-theme" id="postDesigns">
 					<div class="item grow px-2" v-for='imagesrc in postcards' >
 						<input type="radio" class="btn-check" name="btnradio" v-bind:id="imagesrc" autocomplete="off">
 						<label @click=update_design(imagesrc) class="btn my-1 mx-4 btn-outline-secondary" v-bind:for="imagesrc">
-							<img class="p-0 img-fluid m-auto" style="max-height:100px;" v-bind:src="'./img/postcard/'+imagesrc">
+							<img class="p-0 img-fluid m-auto" style="height:100px;" v-bind:src="'./img/postcard/'+imagesrc">
 						</label>
 					</div>
 				</div>
@@ -202,6 +213,7 @@
 <script src="https://unpkg.com/vue@next"></script>
 <script type="module" src="./js/module.js"></script>
 <script src="./js/moment.js"></script>
+<script src="./js/snailmail.js"></script>
 
 <script type="module">
 	import {readFromDatabase, sendMailDatabase,isUserSignedIn} from "./js/module.js";
@@ -234,8 +246,8 @@
 				initialise:async function getdb(){
 					//TO:DO getuid from session
 					//Current uid is default user Mindy
-					// this.uid = 'xPXLbo2TisUWL2n99rF3rOPzFHs2'
-					this.uid = await isUserSignedIn();
+					this.uid = 'xPXLbo2TisUWL2n99rF3rOPzFHs2'
+					// this.uid = await isUserSignedIn();
 					console.log(this.uid)
 
 					// 
@@ -256,31 +268,31 @@
 					}
 
 					// Prepare caurousel
-					// $(document).ready(function(){
-					// 	$(".owl-carousel").owlCarousel({
-					// 	items: 4,
-					// 	autoPlay: 1, //Set AutoPlay to 3 seconds
-					// 	stopOnHover: true,
-					// 	pagination: false,
-					// 	itemsDesktop: [1199, 3],
-					// 	itemsDesktopSmall: [979, 3],
-					// 	loop:true,
-					// 	margin:10,
-					// 	responsiveClass:true,
-					// 	responsive:{
-					// 		0:{
-					// 			items:2,
-					// 		},
-					// 		600:{
-					// 			items:3,
-					// 		},
-					// 		1000:{
-					// 			items:5,
-					// 			loop:false
-					// 		}
-					// 	}
-					// 	});
-					// });
+					$(document).ready(function(){
+					$(".owl-carousel").owlCarousel({
+						items: 4,
+						autoPlay: 1, //Set AutoPlay to 3 seconds
+						stopOnHover: true,
+						pagination: false,
+						itemsDesktop: [1199, 3],
+						itemsDesktopSmall: [979, 3],
+						loop:true,
+						margin:10,
+						responsiveClass:true,
+						responsive:{
+							0:{
+								items:2,
+							},
+							600:{
+								items:3,
+							},
+							1000:{
+								items:5,
+								loop:false
+							}
+						}
+					});
+				});
 					return "done";
 				}
 			},
@@ -303,7 +315,7 @@
 						var received_date = moment().add(delay, 'days').format("DD-MM-YY hh:mm");
 					}
 					console.log("Mail will be received on " + received_date);
-					console.log(received_date)
+					// console.log(received_date)
 					
 					// console.log(moment(received_date).format("DD-MM-YY hh:mm"))
 					return received_date;
@@ -312,13 +324,13 @@
 					//update database with values of chat recent to data
 					this.towho = this.data[document.getElementById("to").value]['name'];
 					this.receiverUid = document.getElementById("to").value
-					console.log(this.towho);
+					// console.log(this.towho);
 					let senderName = this.data[this.uid]['name']
 					
 					// newMail is a object to be send to chat recent of receiveruid
 					// next to test, update new data as data object directly into db
 					var received_date = await this.delaymail(this.uid,this.receiverUid)
-					console.log(received_date)
+					// console.log(received_date)
 					
 					var chatRecent = new Object()
 					chatRecent[this.uid] = {
@@ -327,7 +339,7 @@
 						"mailDesign":this.mailDesign,
 						"content":this.body,
 					}
-					console.log(chatRecent);
+					// console.log(chatRecent);
 					var prop = 'Chats/'+this.receiverUid+'/chatRecent/';
 					sendMailDatabase(prop,chatRecent);
 

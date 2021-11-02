@@ -18,6 +18,17 @@
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
 
+	<!-- Fonts Gugi -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+
+	<!-- Fonts Crete Round -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Crete+Round&display=swap" rel="stylesheet">
+
+
 	<!-- Owl -->
 	<link rel="stylesheet" href="owlcarousel/css/owl.carousel.min.css">
 	<link rel="stylesheet" href="owlcarousel/css/owl.theme.default.min.css">
@@ -56,7 +67,7 @@
 </head>
 
 <body>
-	<!-- using Navbar -->
+	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="homepage.html">
@@ -97,6 +108,9 @@
 		<div class="d-none">
 			{{initalise}}
 		</div>
+		<div>
+			{{}}
+		</div>
 		<div class="row profile-card mt-5 px-5 pb-2">
 			<div class="row-md ">
 				<h3 class="homeRow"> Recently Received:</h3>
@@ -118,39 +132,29 @@
 
 			<div class="row justify-content-center m-0 mb-2">
 
-				<div class="card col-11 p-3 m-auto">
+				<div class="card col-11 p-3 m-auto" v-bind:style="{display:display}" >
 					<div class="row">
 						<h5 class="card-title word">Mailbox</h5>
 						<button type="button" class="btn-close position-absolute p-3 top-0 end-0" @click="close()" aria-label="Close"></button>		
 					</div>
 					
-					<div class="owl-carousel owl-theme">
-						<div class="item grow px-2" v-for="(content,idx) in chats">
+					<div class="owl-carousel owl-theme" id="mailsCarousel">
+						<div class="item grow px-2"  v-for="(content,idx) in chats">
 							<p class="m-auto word">
-								{{content['datetime']}}
+								{{content.datetime}}
 							</p>
 							<a href="#mail-header" class="m-auto" @click=open_chat(idx)>
-								<img class="m-0 p-2 img-fluid" style="height:100px;" src="./img/closedEnvelope.png">
+								<img class="m-0 p-2 img-fluid" style="height:10vh;" src="./img/closedEnvelope.png">
 							</a>
 						</div>
 					</div>
 					
-					<div class="row">
-						<div class="col" v-for="(content,idx) in chats">
-							<p class="m-auto word">
-								{{content['datetime']}}
-							</p>
-							<a href="#mail-header" class="m-auto" @click=open_chat(idx)>
-								<img class="m-0 p-2 img-fluid" style="height:100px;" src="./img/closedEnvelope.png">
-							</a>
-						</div>
-					</div>
 				</div>
 
 			</div>
 			
-
-			<div id="mail_chat" class="row justify-content-center m-0">
+			<!-- Old chat history -->
+			<!-- <div id="mail_chat" class="row justify-content-center m-0">
 				<div class='card col-11 p-0 m-auto' v-bind:style="{display:display}" >
 					<img class='card-img img-fluid m-auto' style="border-radius:20px;max-height:400px;" src="img/mailboxbg.jpg">
 					<div class="card-img-overlay overflow-auto">
@@ -166,7 +170,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 			<div class="row justify-content-center m-0">
 				<div class="card col-11 p-0 m-auto" >
@@ -223,7 +227,7 @@
 
 <script type="module">
 	// DATABASE TESTING
-	import {readFromDatabase, updateChatDatabase, deleteChatRecent} from "./js/module.js";
+	import {readFromDatabase, updateChatDatabase, deleteChatRecent, isUserSignedIn} from "./js/module.js";
     // To be replaced with code from my WAMP 
 
 	Vue.createApp(
@@ -251,9 +255,10 @@
 				initalise:async function getdb(){
 					//TO:DO getuid from session
 					// default user is Sun Jun for now 
-					this.uid = await isUserSignedIn();
+					// this.uid = await isUserSignedIn();
 					// for testing
-					// this.uid = "buQzuVZ7Q3gngsZwD832sBsaOm32"
+					this.uid = "buQzuVZ7Q3gngsZwD832sBsaOm32"
+					console.log(this.uid)
 					
 					var prop = "Chats/"+ this.uid;
 					var data = await readFromDatabase(prop);
@@ -263,6 +268,7 @@
 					// console.log(data);
 					this.database = data;
 					this.username = data["name"];
+
 					this.chatRecent = data["chatRecent"];
 					this.chatHistory = data["chatHistory"];
 					
@@ -273,42 +279,15 @@
 						for (const [key,value] of Object.entries(this.chatRecent)){
 							var mailDTString = value['datetime'];
 							var mailReceive = moment(mailDTString,"lll");
-							console.log(currentdate.isBefore(mailReceive));
-							console.log(currentdate)
-							console.log(mailReceive)
+							// console.log(currentdate.isBefore(mailReceive));
+							// console.log(currentdate)
+							// console.log(mailReceive)
 							if (currentdate.isBefore(mailReceive)){
 								console.log(this.chatRecent[key]);
 								delete this.chatRecent[key];
 							}
 						}
 					}
-					loadrecent()
-					// Prepare owlcaruosel
-					// $(document).ready(function(){
-					// 	$(".owl-carousel").owlCarousel({
-					// 		items: 4,
-					// 		autoPlay: 1, //Set AutoPlay to 3 seconds
-					// 		stopOnHover: true,
-					// 		pagination: false,
-					// 		itemsDesktop: [1199, 3],
-					// 		itemsDesktopSmall: [979, 3],
-					// 		loop:true,
-					// 		margin:10,
-					// 		responsiveClass:true,
-					// 		responsive:{
-					// 			0:{
-					// 				items:2,
-					// 			},
-					// 			600:{
-					// 				items:3,
-					// 			},
-					// 			1000:{
-					// 				items:5,
-					// 				loop:false
-					// 			}
-					// 		}
-					// 	});
-					// });
 					
 					return "done";
 				},
@@ -339,7 +318,7 @@
 					this.mailDesign = this.chatRecent[name]['mailDesign'];
 					this.display = 'none';
 				},
-				display_chat(name){
+				async display_chat(name){
 					this.display = "inline-flex";
 					this.display_mailbody= "flex"
 					this.chats =  this.chatHistory[name]["mails"];
@@ -348,6 +327,8 @@
 					//Update body design
 					this.body = c_chat['content']
 					this.mailDesign = c_chat['mailDesign']
+					await this.$nextTick();
+					loadRecentMails();
 
 					console.log();
 					// console.log(this.chats);
