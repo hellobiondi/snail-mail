@@ -78,8 +78,7 @@ async function startGame() {
     var UID2 = 'bkLfaqpZH7TfCuXvajP3lbbmJBx2';
 
     console.log(typeof (dataList));
-    var player1 = name;
-    var player2 = '1125';
+
 
     // Selectors
     var tableRow = document.getElementsByTagName('tr');
@@ -91,6 +90,9 @@ async function startGame() {
     var property = "games/connect4/game0001/currentPlayer";
     var currentPlayer = await readFromDatabase(property);
     var currentEmails = await readFromDatabase('games/connect4/game0001/players/')
+    var player1 = currentEmails[1];
+    var player2 = currentEmails[2];
+
     console.log(currentEmails[1]);
     //var currentPlayer = getPlayer();
     console.log(currentPlayer + ' currentPlayer')
@@ -203,7 +205,7 @@ async function startGame() {
                         return alert('DRAW!');
                     } else {
                         playerTurn.style.color = player2Color;
-                        
+
                         playerTurn.textContent = `${player2}'s turn`;
                         writeToDatabase("games/connect4/game0001/currentPlayer", 2);
                         return currentPlayer = 2;
