@@ -24,16 +24,31 @@
 
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
-	
+
 	<!-- Vue -->
 	<script src="https://unpkg.com/vue@next"></script>
-	
+
 </head>
 
 <body>
 	<script src="./js/module.js" type="module"></script>
 	<script type="module">
 		import { isUserSignedIn, readFromDatabase, signOutUser, updateToDatabase } from './js/module.js';
+		import { getImages, uploadImages } from './js/storage_module.js';
+
+		document.getElementById("upload").addEventListener("click", uploadImage);
+		async function uploadImage() {
+			var uid = await isUserSignedIn();
+			var file = document.getElementById("img").files[0];
+			//console.log(file);
+			var upload = await uploadImages(uid, file);
+			//console.log(upload);
+			var url = await getImages(upload);
+			//console.log(url);
+			var prop = "users/" + uid;
+			var dt = { profile_picture: url };
+			updateToDatabase(prop, dt);
+		}
 
 		function getUserName(userObject) {
 			var userName = userObject.name;
@@ -66,20 +81,20 @@
 
 		//Save Changes and update value on firebase
 		document.getElementById("saveAbout").addEventListener("click", function () {
-			
+
 			let newUsername = document.getElementById("userName").value;
 			let newUserBio = document.getElementById("userBio").value;
 
 			let uid = sessionStorage.getItem('uid');
-			updateToDatabase("users/"+uid,{name: newUsername});
-			updateToDatabase("users/"+uid,{bio: newUserBio});	
+			updateToDatabase("users/" + uid, { name: newUsername });
+			updateToDatabase("users/" + uid, { bio: newUserBio });
 
-			document.getElementById("userName").setAttribute("disabled",true);
-			document.getElementById("userBio").setAttribute("disabled",true);
+			document.getElementById("userName").setAttribute("disabled", true);
+			document.getElementById("userBio").setAttribute("disabled", true);
 
-			document.getElementById("userName").setAttribute("disabled",true);
-			document.getElementById("userBio").setAttribute("disabled",true);
-			
+			document.getElementById("userName").setAttribute("disabled", true);
+			document.getElementById("userBio").setAttribute("disabled", true);
+
 			document.getElementById("editAbout").style.display = "inline";
 			document.getElementById("saveAbout").style.display = "none";
 
@@ -93,7 +108,8 @@
 				<img src="./img/snailLogo.PNG" alt="" class="d-inline-block align-text-center">
 				<span class="brand">SNAIL MAIL</span>
 			</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+				aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
@@ -124,7 +140,8 @@
 						<img id="userPic" class="rounded-circle profile-pic">
 					</div>
 					<div class="col-12 py-2">
-						<input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
+						<input type="file" id="img" name="img" accept="image/png, image/jpeg">
+						<button class="btn button-light" id="upload">Upload Image</button>
 						<button class="btn button-light" id="signout">Sign Out</button>
 					</div>
 				</div>
@@ -171,34 +188,6 @@
 					<div class="col-12 py-4">
 						<div id="map"></div>
 					</div>
-				</div>
-			</div>
-		</div>
-
-
-		<div class="row my-5 profile-card">
-			<div class="col-12">
-				<h1 class="col-12 py-4 px-4">Settings</h1>
-				<div class="row px-4 mb-3">
-					<label for="inputPassword" class="col-sm-2 col-form-label">Current Password: </label>
-					<div class="col-sm-8">
-						<input type="password" class="form-control" id="currentPassword">
-					</div>
-				</div>
-				<div class="row px-4 mb-3">
-					<label for="inputPassword" class="col-sm-2 col-form-label">New Password: </label>
-					<div class="col-sm-8">
-						<input type="password" class="form-control" id="newPassword">
-					</div>
-				</div>
-				<div class="row px-4 mb-3">
-					<label for="inputPassword" class="col-sm-2 col-form-label">Confirm New Password: </label>
-					<div class="col-sm-8">
-						<input type="password" class="form-control" id="confirmNewPassword">
-					</div>
-				</div>
-				<div class="col-12 py-3 text-center">
-					<button id="editAbout" class="btn button-light">Change Password</button>
 				</div>
 			</div>
 		</div>
