@@ -7,6 +7,15 @@ async function getData() {
     var property = "users/" + uid;
     sessionStorage.setItem("uid", uid);
     var data = await readFromDatabase(property);
+
+    const queryString = window.location.search;
+    console.log(queryString);
+    const urlParams = new URLSearchParams(queryString);
+    const oppID = urlParams.get('oppID');
+    console.log(oppID);
+
+    //var gameID = await readFromDatabase("users/"+oppID);
+
     console.log(data);
     console.log(data["activeGames"]);
     console.log(Object.keys(data["activeGames"])); // --> list
@@ -16,6 +25,9 @@ async function getData() {
     for (var item in data) {
         sessionStorage.setItem(item, data[item]);
     }
+    var gameID = await readFromDatabase("users/" + uid + "/activeGames/" + oppID);
+    console.log(gameID);
+
 }
 getData();
 console.log(sessionStorage);
@@ -24,6 +36,9 @@ var email = sessionStorage.email;
 var name = sessionStorage.name;
 var opponentID = sessionStorage.opponentID;
 var gameID = sessionStorage.gameID;
+
+
+
 console.log(name);
 console.log(opponentID);
 console.log(gameID);
