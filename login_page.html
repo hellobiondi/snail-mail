@@ -346,12 +346,22 @@
 	<script src="./js/login_page.js"></script>
 	<script type="module" src="./js/module.js"></script>
 	<script type="module">
-		import { loginGoogle, loginEmail, registerWithEmail, writeToDatabase } from "./js/module.js";
-        //import {codeAddress} from "./js/cal_dist.js";
+		import { loginGoogle, loginEmail, registerWithEmail, writeToDatabase,readFromDatabase } from "./js/module.js";
+        import {codeAddress} from "./js/cal_dist.js";
 		document.getElementById("loginGoogle1").addEventListener("click", loginViaGoogle);
         document.getElementById("loginGoogle2").addEventListener("click", loginViaGoogle);
 		document.getElementById("sign_up_btn").addEventListener("click", register);
 		document.getElementById("sign_in_btn").addEventListener("click", login);
+
+		async function updateTotalUsers(){
+			var prop = "users";
+			var users = await readFromDatabase(prop);
+			var users_list = Object.keys(users);
+			console.log(users_list.toString());
+			sessionStorage.setItem('totalusers',users_list.toString())
+		}
+
+		updateTotalUsers();
 
 		async function register() {
 			var name = document.getElementById("name").value;
@@ -385,7 +395,7 @@
 		}
 
         async function loginViaGoogle(){
-            console.log("logining via google");
+            //console.log("logining via google");
             var data = await loginGoogle();
 
             if(data){
@@ -438,6 +448,8 @@
             var user_postal_code = document.getElementById("postal_code").value;
             var user_country = document.getElementById("country").value;
             var bio = "The world does not know who is he/she yet! :)";
+			var activeGames = false;
+			var friends = false;
             if(user_postal_code==" "){
                 alert("postal code is required!");
             }else{
@@ -454,7 +466,7 @@
                     var user_country = document.getElementById("country").value;
 
                     var prop = "users/" + uid;
-                    var dt = {bio:bio,name:user_name,email:user_email,profile_picture:profile_pic,address:{postalCode:user_postal_code,country:user_country}};
+                    var dt = {bio:bio,name:user_name,email:user_email,profile_picture:profile_pic,activeGames:activeGames,friends:friends,address:{postalCode:user_postal_code,country:user_country}};
                     await writeToDatabase(prop,dt);
                     window.location.href="./homepage.html";
                 }else{
