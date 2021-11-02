@@ -1,14 +1,14 @@
 // import { loginGoogle, readFromDatabase, writeToDatabase } from "./../../js/module.js";
-import {readFromDatabase, writeToDatabase, isUserSignedIn} from "./../../js/module.js";
+import { readFromDatabase, writeToDatabase, isUserSignedIn } from "./../../js/module.js";
 //import {readFromDatabase, writeToDatabase, isUserSignedIn} from "./../../js/module.js";
 
-async function getData(){
+async function getData() {
     var uid = await isUserSignedIn();
-    var property =  "users/" + uid;
+    var property = "users/" + uid;
     sessionStorage.setItem("uid", uid);
     var data = await readFromDatabase(property);
     console.log(data);
-    for (var item in data){
+    for (var item in data) {
         sessionStorage.setItem(item, data[item]);
     }
 }
@@ -51,7 +51,7 @@ async function startGame() {
     //var tempProp = "games/connect4/game0001/currentPlayer";
     // var data = await readFromDatabase(tempProp);
 
-    
+
 
     // test update db
     console.log("testing");
@@ -85,56 +85,65 @@ async function startGame() {
     var tableSlot = document.querySelectorAll('.slot');
     const reset = document.querySelector('.reset');
 
-    var property =  "games/connect4/game0001/currentPlayer";
+    var property = "games/connect4/game0001/currentPlayer";
     var currentPlayer = await readFromDatabase(property);
     //var currentPlayer = getPlayer();
-    console.log(currentPlayer + 'hello');
-    playerTurn.style.color = player1Color;
-    playerTurn.textContent = `${player1}'s turn`
+    console.log(currentPlayer + ' currentPlayer');
+
+    if (currentPlayer == 1) {
+        playerTurn.style.color = player1Color;
+        playerTurn.textContent = `${player1}'s turn`;
+    }
+
+    else {
+        playerTurn.style.color = player2Color;
+        playerTurn.textContent = `${player2}'s turn`;
+    }
+
 
     Array.prototype.forEach.call(tableCell, (cell) => {
         cell.addEventListener('click', changeColor);
         // Set all slots to white for new game.
         cell.style.backgroundColor = 'white';
     });
-async function getGameBoard(){
-    var prop = "games/connect4/game0001/allmoves"; // hardcoded game0001 for now
-    var data = await readFromDatabase(prop);
-    return data;
-}
-var gameBoard = await getGameBoard();
-console.log(gameBoard);
-
-if (gameBoard != null) {
-    var gameBoardList = gameBoard.split(',');
-gameBoardList.pop();
-console.log(gameBoardList);
-setGameBoard();
-}
-
-else {
-    gameBoard ='';
-}
-
-
-function setGameBoard() {
-    var counter = 0;
-    for (var move of gameBoardList) {
-        var slot = document.getElementById(`${move}`);
-        //console.log(slot);
-        if (counter % 2 == 0) {
-            slot.style.backgroundColor = '#f88796';
-        }
-
-        else {
-            slot.style.backgroundColor = '#fbb74c';
-        }
-        counter++;
-        
+    async function getGameBoard() {
+        var prop = "games/connect4/game0001/allmoves"; // hardcoded game0001 for now
+        var data = await readFromDatabase(prop);
+        return data;
     }
-}
+    var gameBoard = await getGameBoard();
+    console.log(gameBoard);
 
-async function changeColor(e) { //the event
+    if (gameBoard != null) {
+        var gameBoardList = gameBoard.split(',');
+        gameBoardList.pop();
+        console.log(gameBoardList);
+        setGameBoard();
+    }
+
+    else {
+        gameBoard = '';
+    }
+
+
+    function setGameBoard() {
+        var counter = 0;
+        for (var move of gameBoardList) {
+            var slot = document.getElementById(`${move}`);
+            //console.log(slot);
+            if (counter % 2 == 0) {
+                slot.style.backgroundColor = '#f88796';
+            }
+
+            else {
+                slot.style.backgroundColor = '#fbb74c';
+            }
+            counter++;
+
+        }
+    }
+
+    async function changeColor(e) { //the event
         // Get clicked column index
         let column = e.target.cellIndex;
         let row = [];
@@ -144,9 +153,9 @@ async function changeColor(e) { //the event
                 row.push(tableRow[i].children[column]);
                 writeToDatabase("games/connect4/game0001/lastmove", `${row[0].id}`);
                 console.log(gameBoard);
-                    gameBoard += `${row[0].id}` + ",";
-                    writeToDatabase("games/connect4/game0001/allmoves", gameBoard);
-                    console.log(row[0].id);
+                gameBoard += `${row[0].id}` + ",";
+                writeToDatabase("games/connect4/game0001/allmoves", gameBoard);
+                console.log(row[0].id);
                 if (currentPlayer === 1) {
                     row[0].style.backgroundColor = player1Color;
                     //ow[0].style.backgroundImage = player1Img; //red
@@ -161,9 +170,9 @@ async function changeColor(e) { //the event
                         var winStr = await readFromDatabase(prop_temp);
                         console.log(winStr);
                         var winLi = winStr.split(',');
-                        console.log(winLi); 
-                        winLi[0] = Number(winLi[0]) + 1; 
-                        var outputStr = winLi.join(','); 
+                        console.log(winLi);
+                        winLi[0] = Number(winLi[0]) + 1;
+                        var outputStr = winLi.join(',');
                         console.log(outputStr);
                         writeToDatabase(prop_temp, outputStr);
 
@@ -172,12 +181,15 @@ async function changeColor(e) { //the event
                             slot.style.backgroundColor = 'white';
                         });
                         return alert(`${player1} WINS!!`);
-                    } else if (drawCheck()) {
+                    }
+                    
+                    else if (drawCheck()) {
                         playerTurn.textContent = 'DRAW!';
                         return alert('DRAW!');
                     } else {
                         playerTurn.style.color = player2Color;
                         playerTurn.textContent = `${player2}'s turn`;
+                        writeToDatabase("games/connect4/game0001/currentPlayer", 2);
                         return currentPlayer = 2;
                     }
 
@@ -194,9 +206,9 @@ async function changeColor(e) { //the event
                         var winStr = await readFromDatabase(prop_temp);
                         console.log(winStr);
                         var winLi = winStr.split(',');
-                        console.log(winLi); 
-                        winLi[1] = Number(winLi[1]) + 1; 
-                        var outputStr = winLi.join(','); 
+                        console.log(winLi);
+                        winLi[1] = Number(winLi[1]) + 1;
+                        var outputStr = winLi.join(',');
                         console.log(outputStr);
                         writeToDatabase(prop_temp, outputStr);
                         //writeToDatabase("games/connect4/game0001/lastmove", "");
@@ -210,6 +222,7 @@ async function changeColor(e) { //the event
                     } else {
                         playerTurn.style.color = player1Color;
                         playerTurn.textContent = `${player1}'s turn`;
+                        writeToDatabase("games/connect4/game0001/currentPlayer", 1);
                         return currentPlayer = 1;
                     }
                 }
@@ -284,7 +297,6 @@ async function changeColor(e) { //the event
         tableSlot.forEach(slot => {
             slot.style.backgroundColor = 'white';
         });
-        playerTurn.style.color = 'black';
         return (currentPlayer === 1 ? playerTurn.textContent = `${player1}'s turn` : playerTurn.textContent = `${player2}'s turn`);
     });
 }
