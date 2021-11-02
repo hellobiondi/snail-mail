@@ -89,6 +89,7 @@ async function startGame() {
     var currentPlayer = await readFromDatabase(property);
     //var currentPlayer = getPlayer();
     console.log(currentPlayer + 'hello');
+    playerTurn.style.color = player1Color;
     playerTurn.textContent = `${player1}'s turn`
 
     Array.prototype.forEach.call(tableCell, (cell) => {
@@ -175,6 +176,7 @@ async function changeColor(e) { //the event
                         playerTurn.textContent = 'DRAW!';
                         return alert('DRAW!');
                     } else {
+                        playerTurn.style.color = player2Color;
                         playerTurn.textContent = `${player2}'s turn`;
                         return currentPlayer = 2;
                     }
@@ -206,6 +208,7 @@ async function changeColor(e) { //the event
                         playerTurn.textContent = 'DRAW!';
                         return alert('DRAW!');
                     } else {
+                        playerTurn.style.color = player1Color;
                         playerTurn.textContent = `${player1}'s turn`;
                         return currentPlayer = 1;
                     }
