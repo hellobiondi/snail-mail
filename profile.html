@@ -103,7 +103,11 @@
 			let newUserBio = document.getElementById("userBio").value;
 
 			let uid = sessionStorage.getItem('uid');
-			let update1 = await updateToDatabase("users/" + uid, { name: newUsername });
+			//let update1 = await updateToDatabase("users/" + uid, { name: newUsername });
+			
+
+			//updated by huiru
+			let update1 = await updateToDatabase("users/" + uid, { name: newUsername, bio: newUserBio });
 			console.log(update1);
 			//updateToDatabase("users/" + uid, { name: newUsername });
 			//updateToDatabase("users/" + uid, { bio: newUserBio });
@@ -197,8 +201,8 @@
 					</div>
 					<div class="col-12 pb-3 text-end">
 						<button id="editAbout" class="btn button-light-outline button-small">Edit Profile</button>
-						<button id="cancelAbout" class="btn button-light button-small me-3">Cancel</button>
-						<button id="saveAbout" class="btn button-save button-small">Save Changes</button>
+						<button id="cancelAbout" class="btn button-light button-small me-3" style="display: none;">Cancel</button>
+						<button id="saveAbout" class="btn button-save button-small" style="display: none;">Save Changes</button>
 					</div>
 				</div>
 			</div>

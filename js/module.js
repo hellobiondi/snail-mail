@@ -173,14 +173,21 @@ export async function registerWithEmail(email, pwd, username) {
 	});
 }
 
-/*export async function writeToDatabase(key, data){
+export async function writeToDatabase(key, data){
   return new Promise(resolve => {set(ref(db, key), data).then((result)=>{
-	console.log("successfully added to database!");
-	resolve(result);
-  });});
+    console.log("successfully added to database!");
+    resolve(true);
+  }).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode+" "+errorMessage);
+    resolve(false);
+  });
+});
   
-}*/
+}
 
+/*
 export async function writeToDatabase(key, data) {
 	return new Promise(resolve => {
 		set(ref(db, key), data).then((result) => {
@@ -193,7 +200,7 @@ export async function writeToDatabase(key, data) {
 			resolve(false);
 		});
 	});
-}
+}*/
 
 /*export function updateToDatabase(key,data){
   update(ref(db,key),data);
