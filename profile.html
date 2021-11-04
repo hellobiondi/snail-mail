@@ -33,13 +33,14 @@
 <body>
 	<script src="./js/module.js" type="module"></script>
 	<script type="module">
+		//Import firebase functions from module.js
 		import { isUserSignedIn, readFromDatabase, signOutUser, updateToDatabase } from './js/module.js';
 		import { getImages, uploadImages } from './js/storage_module.js';
 
-		document.getElementById("upload").addEventListener("click", uploadImage);
+		//Function: to change the user's profile picutre
 		async function uploadImage() {
 			var uid = await isUserSignedIn();
-			var file = document.getElementById("img").files[0];
+			var file = document.getElementById("newImg").files[0];
 			//console.log(file);
 			var upload = await uploadImages(uid, file);
 			//console.log(upload);
@@ -50,6 +51,21 @@
 			updateToDatabase(prop, dt);
 		}
 
+
+		function readFile(input){
+			let output = "<p>"+input.files[0]["name"]+"</p>"
+			output = output + "<button class='btn button-light' id='upload'>Upload new image</button>";
+			
+			if(input.files[0]){
+				document.getElementById("fileChosen").innerHTML = output;
+				document.getElementById("upload").addEventListener("click", uploadImage);
+			}
+		}
+
+		//document.getElementById("newImg").addEventListener("onchange", readFile(this));
+
+
+		//Display signed in user's information 
 		function getUserName(userObject) {
 			var userName = userObject.name;
 			var userEmail = userObject.email;
@@ -68,6 +84,8 @@
 			//console.log(userFriends);
 		}
 
+
+		//Function: Get signed in user data from firebase
 		async function getData() {
 			var uid = await isUserSignedIn();
 			sessionStorage.setItem('uid', uid);
@@ -79,15 +97,21 @@
 
 		getData();
 
-		//Save Changes and update value on firebase
-		document.getElementById("saveAbout").addEventListener("click", function () {
-
+		//Function: Get new user about information and update to firebase
+		document.getElementById("saveAbout").addEventListener("click", async function () {
 			let newUsername = document.getElementById("userName").value;
 			let newUserBio = document.getElementById("userBio").value;
 
 			let uid = sessionStorage.getItem('uid');
-			updateToDatabase("users/" + uid, { name: newUsername });
-			updateToDatabase("users/" + uid, { bio: newUserBio });
+			let update1 = await updateToDatabase("users/" + uid, { name: newUsername });
+			console.log(update1);
+			//updateToDatabase("users/" + uid, { name: newUsername });
+			//updateToDatabase("users/" + uid, { bio: newUserBio });
+
+			
+			/*if(updateToProfileDatabase("users/" + uid, { name: newUsername }) && updateToProfileDatabase("users/" + uid, { bio: newUserBio })){
+				showNotification();
+			}*/		
 
 			document.getElementById("userName").setAttribute("disabled", true);
 			document.getElementById("userBio").setAttribute("disabled", true);
@@ -96,9 +120,8 @@
 			document.getElementById("userBio").setAttribute("disabled", true);
 
 			document.getElementById("editAbout").style.display = "inline";
+			document.getElementById("cancelAbout").style.display = "none";
 			document.getElementById("saveAbout").style.display = "none";
-
-			//showNotification();
 		});
 	</script>
 	<!-- Navigation Bar-->
@@ -136,13 +159,26 @@
 		<div class="row">
 			<div class="col-lg-4 col-sm-12">
 				<div class="row text-center">
-					<div class="col-12">
-						<img id="userPic" class="rounded-circle profile-pic">
+					<div class="col-12 profilepic">
+						<img id="userPic" class="rounded-circle profile-pic profilepic__image">
+						<div class="profilepic__content">
+							<span class="profilepic__icon"><i class="fas fa-camera"></i></span>
+							<input type="file" accept="image/png, image/jpeg, image/jpg" id="newImg" class="profilepic__text hidden" style="opacity: 0;" name="img"> 
+							<label class="newImgLabel" for="newImg">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+									<path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+								  </svg>
+								  <br/>
+								Upload new avatar
+							</label>
+						  </div>
 					</div>
+				</div>
+				<div class="row">
 					<div class="col-12 py-2">
-						<input type="file" id="img" name="img" accept="image/png, image/jpeg">
-						<button class="btn button-light" id="upload">Upload Image</button>
-						<button class="btn button-light" id="signout">Sign Out</button>
+						<span id="fileChosen"></span>
+						<!--<input type="file" id="img" name="img" accept="image/png, image/jpeg">-->
+						<!--<button class="btn" id="upload">Change Profile Picture</button>-->
 					</div>
 				</div>
 			</div>
@@ -160,8 +196,9 @@
 						<textarea id="userBio" type="text" class="form-control" disabled></textarea>
 					</div>
 					<div class="col-12 pb-3 text-end">
-						<button id="editAbout" class="btn button-light">Edit Profile</button>
-						<button id="saveAbout" class="btn button-light">Save Changes</button>
+						<button id="editAbout" class="btn button-light-outline button-small">Edit Profile</button>
+						<button id="cancelAbout" class="btn button-light button-small me-3">Cancel</button>
+						<button id="saveAbout" class="btn button-save button-small">Save Changes</button>
 					</div>
 				</div>
 			</div>
@@ -191,29 +228,45 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-12">
+				<button class="btn button-light" id="signout">Sign Out</button>
+			</div>
+		</div>
 	</div>
 
 
-	<div class="notification-container" id="notification-container">
+	<div class="notification-container bg-success text-light d-none fade-in-notification" id="notification-container">
 		<p>Info updated successfully.</p>
 	</div>
-	<script>
-		//Trigger input field to be editable and change button to save changes
-		document.getElementById("editAbout").addEventListener("click", function () {
-			document.getElementById("userName").removeAttribute("disabled");
-			document.getElementById("userBio").removeAttribute("disabled");
-			document.getElementById("editAbout").style.display = "none";
-			document.getElementById("saveAbout").style.display = "inline";
-		});
-
-		document.getElementById("editAddress").addEventListener("click", function () {
-			document.getElementById("postalCode").removeAttribute("disabled");
-			document.getElementById("countryCode").removeAttribute("disabled");
-		});
-	</script>
 
 	<!-- Javascript -->
-	<script src="./js/snailmail.js"></script>
+	<script type="text/Javascript" src="./js/snailmail.js"></script>
+	
+	<script>
+		//Trigger input field to be editable and change button to save changes
+		
+	
+		/*document.getElementById("editAddress").addEventListener("click", function () {
+			document.getElementById("postalCode").removeAttribute("disabled");
+			document.getElementById("countryCode").removeAttribute("disabled");
+		});*/
+
+		//document.getElementById("newImg").addEventListener("onChange",readFile(this));
+
+		/*function readFile(input){
+			let output = "<p>"+input.files[0]["name"]+"</p>"
+			output = output + "<button class='btn button-light' id='upload'>Upload new image</button>";
+			
+			if(input.files[0]){
+				document.getElementById("fileChosen").innerHTML = output;
+				document.getElementById("upload").addEventListener("click", uploadImage);
+			}
+		}*/
+		
+		//showNotification();
+	</script>
+
 
 	<!-- Google Map API -->
 	<script async

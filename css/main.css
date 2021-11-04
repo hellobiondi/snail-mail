@@ -193,13 +193,18 @@ h4 span {
     background: #FFFFFF;
     color: #000000;
     font-size: 20px;
-    line-height: 120px;
     text-align: center;
     width: 100%;
     height: 100%;
     border-radius: 30px;
     padding: 0px;
 }
+
+.speech-text{
+    line-height: 30px;
+    padding: 5px;
+}
+
 .speech-bubble:after {
     content: '';
     position: absolute;
@@ -253,17 +258,86 @@ h4 span {
    }
 /***************************** End profile.html *****************************/
 
-.button-light{
-    background-color: #6EB6CF;
-    color: #FFFFFF;
-    border-radius: 10px;
-    font-family: 'Crete Round', serif;
+
+/* Custom Buttons */
+/* Small Buttons */
+.button-small{
+    font-size: 25px;
+}
+
+/* Large Buttons */
+.button-large{
     font-size: 30px;
 }
 
-.button-light:hover{
+/* Jumbo Buttons */
+.button-jumbo{
+    font-size: 40px;
+}
+
+/* Themed Buttons */
+.button-light{
+    background-color: #6EB6CF;
     color: #FFFFFF;
+    outline-style: solid;
+    outline-color: #6EB6CF;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-light:hover{
     background-color: #5495B0;
+    color: #FFFFFF;
+}
+
+/* Themed Outline Buttons */
+.button-light-outline{
+    background-color: #FFFFFF;
+    color: #6EB6CF;
+    outline-style: solid;
+    outline-color: #6EB6CF;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-light-outline:hover{
+    background-color: #ececec;
+    color: #5495B0;
+}
+
+
+/* Save Buttons */
+.button-save{
+    background-color: #62bb4c;
+    color: #FFFFFF;
+    outline-style: solid;
+    outline-color: #62bb4c;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-save:hover{
+    background-color: #59aa45;
+    outline-style: solid;
+    outline-color: #59aa45;
+    color: #FFFFFF;
+}
+
+/* Cancel Buttons */
+.button-cancel{
+    background-color: #f8f8f8;
+    color: #FFFFFF;
+    outline-style: solid;
+    outline-color: #62bb4c;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-cancel:hover{
+    background-color: #59aa45;
+    outline-style: solid;
+    outline-color: #59aa45;
+    color: #FFFFFF;
 }
 
 
@@ -302,20 +376,116 @@ img{
     max-width: 42em;
 }
 
+#cancelAbout{
+    display: none;
+}
 
 #saveAbout{
     display: none;
 }
 
+/* Notification of Success */
 
 .notification-container {
-    background-color: rgba(0, 0, 0, 0.3);
     border-radius: 10px 10px 0 0;
-    padding: 15px 20px;
-    position: absolute;
-    bottom: -50px;
-    transition: transform 0.3s ease-in-out;
+    padding: 15px 15px 10px 15px;
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    bottom: 0px;
+    /*transition-duration: 5s;*/
+    /*transition-timing-function: ease-in-out;*/
   }
 
+  .fade-in-notification {
+    animation: fadeIn linear 2s;
+    -webkit-animation: fadeIn linear 2s;
+    -moz-animation: fadeIn linear 2s;
+    -o-animation: fadeIn linear 2s;
+    -ms-animation: fadeIn linear 2s;
+  }
 
+  @keyframes fadeIn {
+    0% { opacity: 0 }
+    100% { opacity: 1 }
+  }
   
+  @-moz-keyframes fadeIn {
+    0%,100% { opacity: 0 }
+  50% { opacity: 1 }
+  }
+  
+  @-webkit-keyframes fadeIn {
+    0%,100% { opacity: 0 }
+  50% { opacity: 1 }
+  }
+  
+  @-o-keyframes fadeIn {
+    0%,100% { opacity: 0 }
+  50% { opacity: 1 }
+  }
+  
+  @-ms-keyframes fadeIn {
+    0%,100% { opacity: 0 }
+  50% { opacity: 1 }
+  }
+
+/* Profile Picture */
+.profilepic {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #111;
+    margin: auto;
+    padding-left: 0;
+  }
+  
+  .profilepic:hover .profilepic__content {
+    opacity: 1;
+  }
+  
+  .profilepic:hover .profilepic__image {
+    opacity: .5;
+  }
+  
+  .profilepic__image {
+    object-fit: cover;
+    opacity: 1;
+    transition: opacity .2s ease-in-out;
+    padding-left: 0;
+    margin-left: 0;
+    width: 250px;
+    height: 250px;
+  }
+  
+  .profilepic__content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    opacity: 0;
+    transition: opacity .2s ease-in-out;
+  }
+  
+  .profilepic__icon {
+    color: white;
+    padding-bottom: 8px;
+  }
+  
+  .fas {
+    font-size: 20px;
+  }
+  
+  .profilepic__text {
+    font-size: 12px;
+    width: 50%;
+    text-align: center;
+  }

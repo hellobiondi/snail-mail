@@ -10,6 +10,28 @@ function initMap() {
     const marker = new google.maps.Marker({ position: userLocation, map: map, });
 }
 
+const notification = document.getElementById("notification-container");
+//console.log(notification);
+
+function showNotification(){
+    notification.classList.remove("d-none");
+    setTimeout(() =>{
+        notification.classList.add('d-none');
+    },3000);
+    //console.log("Notification works");
+}
+
+
+//Profile.html: Enable user to update their about information
+document.getElementById("editAbout").addEventListener("click", function () {
+    const userNameInput = document.getElementById("userName").value;
+    const userBioInput = document.getElementById("userBio").value;
+    document.getElementById("userName").removeAttribute("disabled");
+    document.getElementById("userBio").removeAttribute("disabled");
+    document.getElementById("editAbout").style.display = "none";
+    document.getElementById("cancelAbout").style.display = "inline";
+    document.getElementById("saveAbout").style.display = "inline";
+});
 
 /*$(document).ready(function () {
     $('#friendsList').owlCarousel({
@@ -102,15 +124,3 @@ $(document).ready(function () {
         }
     });
 });
-
-
-
-const notification = document.getElementById("notification-container");
-
-function showNotification(){
-    notification.classList.add('show');
-    
-    setTimeout(() =>{
-        notification.classList.remove('show');
-    },2000);
-}

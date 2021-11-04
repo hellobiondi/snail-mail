@@ -44,7 +44,7 @@ console.log(opponentID);
 console.log(gameID);
 // var dataList = {};
 // if inside is empty, will becomes first player
-
+async function initializePlayer() {
     //var prop = "users/" + uid;
     // var data = await readFromDatabase(prop);
     // console.log(data); // {email: 'bokzmmindy@gmail.com', name: 'bok mindy', profile_picture: 'https://lh3.googleusercontent.com/a/AATXAJztuF0yzXyjB2lcv656YraWU00docU31bqpqWTN=s96-c'}
@@ -57,6 +57,9 @@ console.log(gameID);
     startGame();
     console.log(email + "email");
 
+
+}
+initializePlayer();
 // console.log(dataList)
 
 // async function getPlayer(){
@@ -113,30 +116,10 @@ async function startGame() {
     var property = "games/" + `${gameID}` + "/currentPlayer";
     var currentPlayer = await readFromDatabase(property);
     var currentUIDs = await readFromDatabase("games/" + `${gameID}` + "/players")
-    var oppName = await readFromDatabase("users/" + `${opponentID}` + "/name");
-    console.log(oppName);
-    
-    // var player1UID = currentUIDs[1];
-    // var player2UID = currentUIDs[2];
-    
-    console.log(opponentID);
+    var player1 = currentUIDs[1];
+    var player2 = currentUIDs[2];
 
-    if (currentUIDs[1] == uid) {
-        var player1 = name;
-        var player2 = oppName;
-    }
-
-    else {
-        var player2 = name;
-        var player1 = oppName;
-    }
-
-
-
-    
-    var player2
-
-    console.log(currentUIDs);
+    console.log(currentUIDs[1]);
     //var currentPlayer = getPlayer();
     console.log(currentPlayer + ' currentPlayer')
     console.log(typeof currentPlayer + ' currentPlayer type');

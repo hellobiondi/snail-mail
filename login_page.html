@@ -46,21 +46,26 @@
 			</div>
 		</div>
 		<div class="d-none mt-1 row justify-content-center" id="aftSignUp">
-			<div class="col-lg-6 p-2 text-center selected"><p class="fs-4 mt-2">Address are required</p></div>
+			<div class="col-lg-6 col-6 p-2 text-center selected"><p class="fs-4 mt-2">Address are required</p></div>
 		</div>
 		<div class="my-0 row justify-content-center">
 			<div class="d-none col-lg-6 p-4" id="signInBox">
 				Email:<input type="email" class="form-control" id="email"><br>
 				Password:<input type="password" class="form-control" id="password">
-				<!--<div class="d-flex justify-content-end">
+				<div class="d-flex justify-content-between">
 					<div id="text">
-						<p class="d-inline-block" id="resetPwd">Forgot password?</p>
+						<input class="form-check-input" type="checkbox" name="inlineRadioOptions" id="remember_me"
+							value="true">
+						<p class="d-inline" for="remember_me">Remember me</p>
+					</div> 
+					<div id="text">
+						<p class="d-inline-block">Forgot password?</p>
 					</div>
-				</div>-->
+				</div>
 				<br>
 				<br>
 				<div class="text-center">
-					<button class="btn btn-light px-5 button-light" id="sign_in_btn">Sign In</button>
+					<button class="btn btn-light px-5 button-light w-75" id="sign_in_btn">Sign In</button>
 				</div>
 				<br>
 				<h4><span>OR</span></h4>
@@ -77,7 +82,7 @@
 				<br>
 				<br>
 				<div class="text-center">
-					<button class="btn btn-light px-5 button-light" id="sign_up_btn">Sign Up</button>
+					<button class="btn btn-light px-5 button-light w-75" id="sign_up_btn">Sign Up</button>
 				</div>
 				<br>
 				<h4><span>OR</span></h4>
@@ -332,7 +337,7 @@
 				</select>
 				<br>
 				<div class="text-center">
-					<button class="btn btn-light px-5 button-light" id="complete">Complete</button>
+					<button class="btn btn-light px-5 button-light w-75" id="complete">Complete</button>
 				</div>
 			</div>
 		</div>
@@ -341,22 +346,12 @@
 	<script src="./js/login_page.js"></script>
 	<script type="module" src="./js/module.js"></script>
 	<script type="module">
-		import { loginGoogle, loginEmail, registerWithEmail, writeToDatabase,readFromDatabase } from "./js/module.js";
-        import {codeAddress} from "./js/cal_dist.js";
+		import { loginGoogle, loginEmail, registerWithEmail, writeToDatabase } from "./js/module.js";
+        //import {codeAddress} from "./js/cal_dist.js";
 		document.getElementById("loginGoogle1").addEventListener("click", loginViaGoogle);
         document.getElementById("loginGoogle2").addEventListener("click", loginViaGoogle);
 		document.getElementById("sign_up_btn").addEventListener("click", register);
 		document.getElementById("sign_in_btn").addEventListener("click", login);
-
-		async function updateTotalUsers(){
-			var prop = "users";
-			var users = await readFromDatabase(prop);
-			var users_list = Object.keys(users);
-			console.log(users_list.toString());
-			sessionStorage.setItem('totalusers',users_list.toString())
-		}
-
-		//updateTotalUsers();
 
 		async function register() {
 			var name = document.getElementById("name").value;
@@ -390,7 +385,7 @@
 		}
 
         async function loginViaGoogle(){
-            //console.log("logining via google");
+            console.log("logining via google");
             var data = await loginGoogle();
 
             if(data){
@@ -426,25 +421,23 @@
                     document.getElementById("signUpBox").classList.add("d-none");
                 }
                 
-			if(!document.getElementById("signInBox").classList.contains("d-none")){
-				document.getElementById("signInBox").classList.add("d-none");
-			}
-			
-			document.getElementById("addressBox").classList.remove("d-none");
+                if(!document.getElementById("signInBox").classList.contains("d-none")){
+                    document.getElementById("signInBox").classList.add("d-none");
+                }
+                
+                document.getElementById("addressBox").classList.remove("d-none");
 
-			document.getElementById("aftSignUp").classList.remove("d-none");
+                document.getElementById("aftSignUp").classList.remove("d-none");
 
-			document.getElementById("bfrSignUp").classList.add("d-none");
+                document.getElementById("bfrSignUp").classList.add("d-none");
 
-			document.getElementById("complete").addEventListener("click",complete);
+                document.getElementById("complete").addEventListener("click",complete);
         }
 
         async function complete(){
             var user_postal_code = document.getElementById("postal_code").value;
             var user_country = document.getElementById("country").value;
             var bio = "The world does not know who is he/she yet! :)";
-			var activeGames = false;
-			var friends = false;
             if(user_postal_code==" "){
                 alert("postal code is required!");
             }else{
@@ -461,11 +454,8 @@
                     var user_country = document.getElementById("country").value;
 
                     var prop = "users/" + uid;
-                    var dt = {bio:bio,name:user_name,email:user_email,profile_picture:profile_pic,activeGames:activeGames,friends:friends,address:{postalCode:user_postal_code,country:user_country}};
+                    var dt = {bio:bio,name:user_name,email:user_email,profile_picture:profile_pic,address:{postalCode:user_postal_code,country:user_country}};
                     await writeToDatabase(prop,dt);
-					var prop = "Chats/" + uid;
-					var dt = {name:user_name};
-					await writeToDatabase(prop,dt);
                     window.location.href="./homepage.html";
                 }else{
                     alert("Please enter a valid address");

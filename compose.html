@@ -17,29 +17,6 @@
 	
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
-
-	<!-- Fonts Gugi -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
-
-	<!-- Fonts Crete Round -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Crete+Round&display=swap" rel="stylesheet">
-
-
-	<!-- Owl -->
-	<link rel="stylesheet" href="owlcarousel/css/owl.carousel.min.css">
-	<link rel="stylesheet" href="owlcarousel/css/owl.theme.default.min.css">
-	<script src="owlcarousel/js/jquery.min.js"></script>
-	<script src="owlcarousel/js/owl.carousel.min.js"></script>
-
-
-	<!-- using Google Map-->
-	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnUQJTmjrMkcN6j9ZEl1-yVDMfJf5DbiY"></script>
-
 	<style>
 		.homeRow{
 			padding-bottom: 10px;
@@ -72,7 +49,7 @@
 </head>
 
 <body>
-	<!-- Navigation Bar-->
+	<!-- using Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="homepage.html">
@@ -106,54 +83,48 @@
 	
 	<div id=app class="container">
 		<div class="d-none"> {{initialise}} </div>
-
 		<div class="btn position-fixed bottom-0 end-0 px-3">
-			<img class="rounded-circle btn-outline-light img-fluid" @click=compose() style="height: 60px;" src="img/compose.png">
+			<img class="rounded-circle btn-outline-light img-fluid" @click=compose() style="height: 100px;" src="img/compose.png">
 		</div>
 
-		<div class="row profile-card my-5">
-			<div class="col-12 px-5">
-				<h3 class="d-flex homeRow me-auto">Choose your design</h3>
-			</div>
-			<div class="col-12 pb-5">
-				<div class="owl-carousel owl-theme" id="postDesigns">
-					<div class="item grow px-2" v-for='imagesrc in postcards' >
-						<input type="radio" class="btn-check" name="btnradio" v-bind:id="imagesrc" autocomplete="off">
-						<label @click=update_design(imagesrc) class="btn my-1 mx-4 btn-outline-secondary" v-bind:for="imagesrc">
-							<img class="p-0 img-fluid m-auto" style="height:100px;" v-bind:src="'./img/postcard/'+imagesrc">
-						</label>
-					</div>
-				</div>
-			</div>
-		</div>
+        <div class="row-md d-inline-flex" id="mail-header">
+            <div class='col-3 profile-card my-5 pb-2 mx-3 overflow-auto' style="height:500px;border-top-right-radius:1px;border-bottom-right-radius:1px;">
+                <div class="row d-flex text-center mx-1">
+                    <h3 class="text-center homeRow"> Choose your design </h3>
+                </div>
 
-		<div class="row profile-card my-5" id="mail-header">
-            <div class="col-12 px-5">
+                <div class="btn-group-vertical" role="group" aria-label="Basic radio toggle button group">
+                    <div v-for='imagesrc in postcards'>
+                        <input type="radio" class="btn-check" name="btnradio" v-bind:id="imagesrc" autocomplete="off">
+                        <label @click=update_design(imagesrc) class="btn my-1 mx-4 btn-outline-secondary" v-bind:for="imagesrc">
+                            <img class="p-0 img-fluid m-auto" v-bind:src="'./img/postcard/'+imagesrc">
+                        </label>
+                    </div>
+                  </div>
+            </div>
+
+            <div class="col-8 profile-card my-5 px-5" style="border-top-left-radius:1px;border-bottom-left-radius:1px;">
                 <div class="row-md d-flex">
                     <h3 class="d-flex homeRow me-auto"> Write Your Mail</h3>
                     <button type="button" class="my-auto me-2 btn button-light fs-5" @click="save_draft()" aria-label="savedraft">Save</button>                        
                     <button type="button" class="my-auto btn button-light fs-5" @click="discard()" aria-label="discard">Discard</button>                       
                 </div>
                 <div class="row-md d-flex">
-                    <div class="col-lg-1 col-sm-2 col-2">
-						<label class="col-form-label fw-bold">To:</label>
-					</div>
-					<div class="col-lg-11 col-sm-10 col-10">
-						<select class="form-select" id="to">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label fw-bold">To:</label>
+                    <div class="col-sm-10">
+                        <select class="form-select" id="to" aria-label="Default select example">
                             <option disabled>Select who to send</option>
                             <option v-for="friend in friends"
 							:selected="friend == reply"
 							v-bind:value=friend>{{this.data[friend]['name']}}</option>
                         </select>
-					</div>
+                    </div>
                 </div>
                 <div class ="row-md d-flex">
-					<div class="col-12">
-						<div class="m-auto">
-							<label for="exampleFormControlTextarea1" class="form-label fw-bold">Content</label>
-							<textarea v-model.lazy:value="body" class="form-control" id="exampleFormControlTextarea1" rows="10" cols="100"></textarea>
-						</div>
-					</div>
+                    <div class="m-auto">
+                        <label for="exampleFormControlTextarea1" class="form-label fw-bold">Content</label>
+                        <textarea v-model.lazy:value="body" class="form-control" id="exampleFormControlTextarea1" rows="10" cols="100"></textarea>
+                    </div>
                 </div>
                 <div class="row-md d-flex my-4">
                     <button type="submit" class="me-auto my-auto btn button-light fs-5" @click="send()" data-bs-toggle="modal" data-bs-target="#send" aria-label="Reply">Send</button>                        
@@ -161,7 +132,6 @@
                 </div>
             </div>
         </div>
-		<div class="pb-1"></div>
 
         <div class="modal fade" id="preview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
@@ -187,7 +157,7 @@
               </div>
             </div>
 		</div>
-		
+
 		<div class="modal" id="send" tabindex="-1">
 			<div class="modal-dialog">
 			  <div class="modal-content">
@@ -213,11 +183,10 @@
 <script src="https://unpkg.com/vue@next"></script>
 <script type="module" src="./js/module.js"></script>
 <script src="./js/moment.js"></script>
-<script src="./js/snailmail.js"></script>
 
 <script type="module">
-	import {readFromDatabase, sendMailDatabase,isUserSignedIn} from "./js/module.js";
-	import {calculateDist} from "./js/cal_dist.js";
+	import {readFromDatabase, sendMailDatabase} from "./js/module.js";
+    
     // To be replaced with code from my WAMP 
 
 	Vue.createApp(
@@ -245,108 +214,53 @@
 			computed:{
 				initialise:async function getdb(){
 					//TO:DO getuid from session
-					//Current uid is default user Mindy
-					this.uid = 'xPXLbo2TisUWL2n99rF3rOPzFHs2'
-					// this.uid = await isUserSignedIn();
-					console.log(this.uid)
-
+					//Current uid is default user Gadman Tang
+					this.uid = '76G9Xa7eszPHMFltAzdF46CluQn1'
+					
 					// 
 					this.data = await readFromDatabase('users');
-					
+
 					// To be deleted once i can get from db 
 					// console.log(this.data[this.uid]['friends'])
 
 					// To be deleted once i can get from db
 					this.friends = this.data[this.uid]['friends']
 					// var friends = "7iX2SI5PDNfLwvQzlyXetSY5Vem1,123";
-					
+
 					this.friends = this.friends.split(",");
 					// console.log(this.friends);
 
 					for (let fren of this.friends){
 						// console.log(this.data[fren]['name'])
 					}
-
-					// Prepare caurousel
-					$(document).ready(function(){
-					$(".owl-carousel").owlCarousel({
-						items: 4,
-						autoPlay: 1, //Set AutoPlay to 3 seconds
-						stopOnHover: true,
-						pagination: false,
-						itemsDesktop: [1199, 3],
-						itemsDesktopSmall: [979, 3],
-						loop:true,
-						margin:10,
-						responsiveClass:true,
-						responsive:{
-							0:{
-								items:2,
-							},
-							600:{
-								items:3,
-							},
-							1000:{
-								items:5,
-								loop:false
-							}
-						}
-					});
-				});
 					return "done";
 				}
 			},
 			methods: {
 				//TO:DO cal distance
-				async delaymail(user,receiver){
+				delaymail(uid,receiver){
 					//return a delay time 
-					
-					var user_address = this.data[user]['address']['postalCode'] + "," + this.data[user]['address']['country'];
-					var receiver_address = this.data[receiver]['address']['postalCode'] + "," + this.data[receiver]['address']['country'];
-					var delay = await calculateDist(user_address,receiver_address);
-					// Add delay if delay is 0 as km is less thn 500km 
-					if (delay === 0){
-						var received_date = moment().add(2, 'hours').format("lll");
-						//for testing
-						// var received_date = moment().add(-1, 'days').format("lll");
-						
-					}
-					else{
-						var received_date = moment().add(delay, 'days').format("DD-MM-YY hh:mm");
-					}
-					console.log("Mail will be received on " + received_date);
-					// console.log(received_date)
-					
-					// console.log(moment(received_date).format("DD-MM-YY hh:mm"))
-					return received_date;
 				},
-                async send(friend){
+                send(friend){
 					//update database with values of chat recent to data
 					this.towho = this.data[document.getElementById("to").value]['name'];
 					this.receiverUid = document.getElementById("to").value
-					// console.log(this.towho);
+					console.log(this.towho);
 					let senderName = this.data[this.uid]['name']
 					
 					// newMail is a object to be send to chat recent of receiveruid
 					// next to test, update new data as data object directly into db
-					var received_date = await this.delaymail(this.uid,this.receiverUid)
-					// console.log(received_date)
-					
+
 					var chatRecent = new Object()
 					chatRecent[this.uid] = {
 						"senderName":senderName,
-						"datetime":received_date,
+						"datetime":"fixdate",
 						"mailDesign":this.mailDesign,
 						"content":this.body,
 					}
-					// console.log(chatRecent);
-					var prop = 'Chats/'+this.receiverUid+'/chatRecent/';
+					console.log(chatRecent);
+					var prop = 'Chats/'+this.receiverUid+"/chatRecent/"
 					sendMailDatabase(prop,chatRecent);
-
-					var prop = 'Chats/'+this.receiverUid
-					var data = {name:this.towho}
-					sendMailDatabase(prop,data)
-
 					console.log(`Successfully send to ${this.receiverUid}`)
                     // console.log(`${this.mailDesign} with ${this.body} from ${document.getElementById("to").value}`)
                 },
@@ -362,11 +276,9 @@
 
 				compose(){
 					alert("ABC")
-					
 				},
                 update_design(imagesrc){
                     this.mailDesign = imagesrc
-					// alert(imagesrc);
                 }
 
 			}
