@@ -398,11 +398,11 @@ img{
   }
 
   .fade-in-notification {
-    animation: fadeIn linear 2s;
-    -webkit-animation: fadeIn linear 2s;
-    -moz-animation: fadeIn linear 2s;
-    -o-animation: fadeIn linear 2s;
-    -ms-animation: fadeIn linear 2s;
+    animation: fadeIn linear 0.5s;
+    -webkit-animation: fadeIn linear 0.5s;
+    -moz-animation: fadeIn linear 0.5s;
+    -o-animation: fadeIn linear 0.5s;
+    -ms-animation: fadeIn linear 0.5s;
   }
 
   @keyframes fadeIn {
@@ -411,23 +411,23 @@ img{
   }
   
   @-moz-keyframes fadeIn {
-    0%,100% { opacity: 0 }
-  50% { opacity: 1 }
+    0% { opacity: 0 }
+    100% { opacity: 1 }
   }
   
   @-webkit-keyframes fadeIn {
-    0%,100% { opacity: 0 }
-  50% { opacity: 1 }
+    0% { opacity: 0 }
+    100% { opacity: 1 }
   }
   
   @-o-keyframes fadeIn {
-    0%,100% { opacity: 0 }
-  50% { opacity: 1 }
+    0% { opacity: 0 }
+    100% { opacity: 1 }
   }
   
   @-ms-keyframes fadeIn {
-    0%,100% { opacity: 0 }
-  50% { opacity: 1 }
+    0% { opacity: 0 }
+    100% { opacity: 1 }
   }
 
 /* Profile Picture */

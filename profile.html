@@ -98,24 +98,22 @@
 		getData();
 
 		//Function: Get new user about information and update to firebase
-		document.getElementById("saveAbout").addEventListener("click", async function () {
+		document.getElementById("saveAbout").addEventListener("click", async function() {
 			let newUsername = document.getElementById("userName").value;
 			let newUserBio = document.getElementById("userBio").value;
 
 			let uid = sessionStorage.getItem('uid');
-			//let update1 = await updateToDatabase("users/" + uid, { name: newUsername });
-			
-
+		
 			//updated by huiru
-			let update1 = await updateToDatabase("users/" + uid, { name: newUsername, bio: newUserBio });
-			console.log(update1);
-			//updateToDatabase("users/" + uid, { name: newUsername });
-			//updateToDatabase("users/" + uid, { bio: newUserBio });
+			let updateAboutStatus = await updateToDatabase("users/" + uid, { name: newUsername, bio: newUserBio });
+			if(updateAboutStatus){
+				document.getElementById("notificationContent").innerText = "Your Name and Biography has been successfully updated!";
+			}else{
+				document.getElementById("notificationContent").innerText = "Oh no! An error occurred!";
+			}
 
+			showNotification();
 			
-			/*if(updateToProfileDatabase("users/" + uid, { name: newUsername }) && updateToProfileDatabase("users/" + uid, { bio: newUserBio })){
-				showNotification();
-			}*/		
 
 			document.getElementById("userName").setAttribute("disabled", true);
 			document.getElementById("userBio").setAttribute("disabled", true);
@@ -201,8 +199,8 @@
 					</div>
 					<div class="col-12 pb-3 text-end">
 						<button id="editAbout" class="btn button-light-outline button-small">Edit Profile</button>
-						<button id="cancelAbout" class="btn button-light button-small me-3" style="display: none;">Cancel</button>
-						<button id="saveAbout" class="btn button-save button-small" style="display: none;">Save Changes</button>
+						<button id="cancelAbout" class="btn button-light button-small me-3">Cancel</button>
+						<button id="saveAbout" class="btn button-save button-small">Save Changes</button>
 					</div>
 				</div>
 			</div>
@@ -241,7 +239,7 @@
 
 
 	<div class="notification-container bg-success text-light d-none fade-in-notification" id="notification-container">
-		<p>Info updated successfully.</p>
+		<p id="notificationContent"></p>
 	</div>
 
 	<!-- Javascript -->
