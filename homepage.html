@@ -42,22 +42,26 @@
 			var userPic = userObject.profile_picture;
 			var userFriends = userObject.friends;
 			var userActiveGamesObj = userObject.activeGames;
-			//showActiveGamesList(userActiveGamesObj);
+			console.log(userActiveGamesObj);
+			for(let key in userActiveGamesObj){
+				console.log(key);
+				console.log(userActiveGamesObj[key]);
+			}
 			showFriendList(userFriends);
 			document.getElementById("userName").innerHTML = userName;
 			document.getElementById("userAvatarPic").src = userPic;
 		}
 
 		//Create and set each Friend's data
-		function setFriendData(FriendUid){
-			var userName = FriendUid.name;
-			var userPic = FriendUid.profile_picture;
+		function setFriendData(friendUid,friendObj){
+			var userName = friendObj.name;
+			var userPic = friendObj.profile_picture;
 
 			var outerDiv = document.createElement("div");
 			outerDiv.classList.add("item", "grow", "px-4");
 			
 			var a = document.createElement("a");
-			a.setAttribute("href", "#")
+			a.setAttribute("href", "./friend.html?friendID="+friendUid)
 			var img = document.createElement("img");
 			img.setAttribute("src", userPic);
 			img.classList.add("rounded-circle");
@@ -109,7 +113,7 @@
 			for (let friendUid of userFriendArray){
 				var property =  "users/" + friendUid;
 				var data = await readFromDatabase(property);
-				setFriendData(data);
+				setFriendData(friendUid,data);
 			}
 			return true;
 		}
@@ -123,6 +127,29 @@
 		}
 
 		getData();
+
+		async function getNewFriend(){
+			let uid = await isUserSignedIn();
+			let userFriendsString = await readFromDatabase("users/"+uid+"/friends"); //String of user's friends
+			let allUsers = Object.keys(await readFromDatabase("users")); //Object of all user keys in DB
+			let userFriendsArray = userFriendsString.split(",");
+			let potentialFriendsArray = [];
+
+			for(let i in allUsers){
+				if((allUsers[i] != uid) && !(userFriendsArray.includes(allUsers[i]))){
+					potentialFriendsArray.push(allUsers[i]);
+				}
+			}
+			let totalPotFriends = potentialFriendsArray.length; 
+			let randomInt = Math.floor(Math.random() * totalPotFriends);
+			let newFriendUid = potentialFriendsArray[randomInt];
+			console.log(newFriendUid);
+		}
+
+		getNewFriend();
+		//var result = await getNewFriend();
+		//console.log(result);
+
 
 	</script>
 	<!-- Navigation Bar-->

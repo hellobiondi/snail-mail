@@ -28,6 +28,9 @@
 	<!-- Vue -->
 	<script src="https://unpkg.com/vue@next"></script>
 
+	<!-- Axios -->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 </head>
 
 <body>
@@ -41,28 +44,41 @@
 		async function uploadImage() {
 			var uid = await isUserSignedIn();
 			var file = document.getElementById("newImg").files[0];
-			//console.log(file);
+			console.log(file);
 			var upload = await uploadImages(uid, file);
 			//console.log(upload);
 			var url = await getImages(upload);
 			//console.log(url);
 			var prop = "users/" + uid;
 			var dt = { profile_picture: url };
-			updateToDatabase(prop, dt);
+			let updateImageStatus = await updateToDatabase(prop, dt);
+			if(updateImageStatus){
+				getData();
+				document.getElementById("fileChosen").innerHTML = "";
+				document.getElementById("notificationContent").innerText = "Your Profile Picture has been successfully updated!";
+				document.getElementById("notification-container").classList.add("bg-success");
+			}else{
+				document.getElementById("notificationContent").innerText = "Oh no! An error occurred!";
+				document.getElementById("notification-container").classList.add("bg-danger");
+			}
+
+			showNotification();
 		}
 
-
 		function readFile(input){
-			let output = "<p>"+input.files[0]["name"]+"</p>"
-			output = output + "<button class='btn button-light' id='upload'>Upload new image</button>";
-			
-			if(input.files[0]){
-				document.getElementById("fileChosen").innerHTML = output;
-				document.getElementById("upload").addEventListener("click", uploadImage);
+			if(input){
+				let output = "<p>"+input.files[0]["name"]+"</p>"
+				output = output + "<button class='btn button-light' id='upload'>Upload new image</button>";
+				if(input.files[0]){
+					document.getElementById("fileChosen").innerHTML = output;
+					document.getElementById("upload").addEventListener("click", uploadImage);
+				}
 			}
 		}
 
-		//document.getElementById("newImg").addEventListener("onchange", readFile(this));
+		document.getElementById("newImg").addEventListener("change", function(){
+			readFile(this);
+		});
 
 
 		//Display signed in user's information 
@@ -75,8 +91,11 @@
 			var userFriends = userObject.friends;
 			var userPic = userObject.profile_picture;
 
-			document.getElementById("userName").value = userName;
-			document.getElementById("userBio").value = userBio;
+			let userAddress = encodeURI(userPostalCode+" "+userCountry);
+			getUserAddress(userAddress);
+
+			document.getElementById("userName").defaultValue = userName;
+			document.getElementById("userBio").defaultValue = userBio;
 			document.getElementById("countryCode").value = userCountry;
 			document.getElementById("postalCode").value = userPostalCode;
 			document.getElementById("userPic").src = userPic;
@@ -91,36 +110,46 @@
 			sessionStorage.setItem('uid', uid);
 			var property = "users/" + uid;
 			var data = await readFromDatabase(property);
-			//console.log(data);
 			getUserName(data);
 		}
 
+		//Trigger getData() to get signed in user's information
 		getData();
 
 		//Function: Get new user about information and update to firebase
 		document.getElementById("saveAbout").addEventListener("click", async function() {
 			let newUsername = document.getElementById("userName").value;
 			let newUserBio = document.getElementById("userBio").value;
-
 			let uid = sessionStorage.getItem('uid');
 		
-			//updated by huiru
 			let updateAboutStatus = await updateToDatabase("users/" + uid, { name: newUsername, bio: newUserBio });
+			document.getElementById("notification-container").classList.remove("bg-success","bg-danger")
 			if(updateAboutStatus){
 				document.getElementById("notificationContent").innerText = "Your Name and Biography has been successfully updated!";
+				document.getElementById("notification-container").classList.add("bg-success");
 			}else{
 				document.getElementById("notificationContent").innerText = "Oh no! An error occurred!";
+				document.getElementById("notification-container").classList.add("bg-danger");
 			}
 
 			showNotification();
-			
 
 			document.getElementById("userName").setAttribute("disabled", true);
 			document.getElementById("userBio").setAttribute("disabled", true);
+			document.getElementById("editAbout").style.display = "inline";
+			document.getElementById("cancelAbout").style.display = "none";
+			document.getElementById("saveAbout").style.display = "none";
+		});
 
+		////Function: Cancel update and revert input fields to original values and disabled
+		document.getElementById("cancelAbout").addEventListener("click",  function() {
+			var oldUsername = document.getElementById("userName").defaultValue;
+			var oldUserBio = document.getElementById("userBio").defaultValue;
+
+			document.getElementById("userName").value = oldUsername;
+			document.getElementById("userBio").value = oldUserBio;
 			document.getElementById("userName").setAttribute("disabled", true);
 			document.getElementById("userBio").setAttribute("disabled", true);
-
 			document.getElementById("editAbout").style.display = "inline";
 			document.getElementById("cancelAbout").style.display = "none";
 			document.getElementById("saveAbout").style.display = "none";
@@ -176,8 +205,8 @@
 						  </div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-12 py-2">
+				<div class="row pb-3">
+					<div class="col-12 py-2 text-center">
 						<span id="fileChosen"></span>
 						<!--<input type="file" id="img" name="img" accept="image/png, image/jpeg">-->
 						<!--<button class="btn" id="upload">Change Profile Picture</button>-->
@@ -238,12 +267,9 @@
 	</div>
 
 
-	<div class="notification-container bg-success text-light d-none fade-in-notification" id="notification-container">
+	<div class="notification-container text-light d-none fade-in-notification" id="notification-container">
 		<p id="notificationContent"></p>
 	</div>
-
-	<!-- Javascript -->
-	<script type="text/Javascript" src="./js/snailmail.js"></script>
 	
 	<script>
 		//Trigger input field to be editable and change button to save changes
@@ -269,10 +295,12 @@
 		//showNotification();
 	</script>
 
+	<!-- Javascript -->
+	<script type="text/Javascript" src="./js/snailmail.js"></script>
 
 	<!-- Google Map API -->
 	<script async
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8lhtpvwx2mVd3s9LZn4SHdmWupn0zhXc&callback=initMap&libraries=&v=weekly"></script>
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8lhtpvwx2mVd3s9LZn4SHdmWupn0zhXc&libraries=&v=weekly"></script>
 
 	<!-- Bootstrap JS File -->
 	<script src="./bootstrap/js/bootstrap.min.js"></script>

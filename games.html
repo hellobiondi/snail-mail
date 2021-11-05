@@ -51,10 +51,7 @@
 			return data
 		}
 
-		
-
 		//Create and set each Friend's data
-		
 		function setFriendData(friendData,friendUid) {
 			var uid = sessionStorage.getItem('uid');
 			async function startConnect4Game(){
@@ -111,10 +108,11 @@
 			link.setAttribute("href","./games/connect4/draft8.html?oppID="+friendUid);
 
 			//link.addEventListener("click", startConnect4Game(uid,friendUid));
-
+			let p = document.createElement("p");
 			let linkName = document.createTextNode(userName);
+			p.appendChild(linkName);
 			link.appendChild(img);
-			link.appendChild(linkName);
+			link.appendChild(p);
 			outerDiv.appendChild(link);
 			document.getElementById("modalFriends").appendChild(outerDiv);
 		}

@@ -1,13 +1,45 @@
-function initMap() {
+function initMap(userLat,userLng) {
     // The location of user
-    const userLocation = { lat: 1.3521, lng: 103.8198 };
-
+    const userLocation = {lat: userLat, lng: userLng}
     // The map, centered at user
     const map = new google.maps.Map(document.getElementById("map"),
-        { zoom: 11, center: userLocation, });
+        { mapTypeId: "terrain", zoom: 15, center: userLocation });
 
     // The marker, positioned at user
-    const marker = new google.maps.Marker({ position: userLocation, map: map, });
+    //const marker = new google.maps.Marker({ position: userLocation, map: map, });
+    const circle = new google.maps.Circle({
+        map: map,
+        radius: 400,
+        fillColor: "#6EB6CF",
+        strokeColor: "#5898ad",
+        strokeWeight: 3,
+        map,
+        center: userLocation
+    });
+}
+
+function getFullAddress(data) {
+    var addr = data["results"][0]["formatted_address"];
+    var loc = getLatLng(data);
+    return {addr, loc};
+}
+
+function getLatLng(data) {
+    var location = data["results"][0]["geometry"]["location"];
+    return location;
+}
+
+function getUserAddress(address){
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?address="+ address +"&key=AIzaSyC8lhtpvwx2mVd3s9LZn4SHdmWupn0zhXc";
+    axios.get(url)
+        .then(response => {   
+            //console.log(response.data);
+            var info = getFullAddress(response.data);
+            initMap(info.loc.lat,info.loc.lng);
+        })
+        .catch(error => {
+            console.log(error);
+        });
 }
 
 const notification = document.getElementById("notification-container");
@@ -24,8 +56,6 @@ function showNotification(){
 
 //Profile.html: Enable user to update their about information
 document.getElementById("editAbout").addEventListener("click", function () {
-    const userNameInput = document.getElementById("userName").value;
-    const userBioInput = document.getElementById("userBio").value;
     document.getElementById("userName").removeAttribute("disabled");
     document.getElementById("userBio").removeAttribute("disabled");
     document.getElementById("editAbout").style.display = "none";

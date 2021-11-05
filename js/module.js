@@ -262,3 +262,13 @@ export function signOutUser() {
 	});
 
 }
+
+export async function lol(userID,friendsObj){
+	var property =  "users";
+	var allUsers = await readFromDatabase(property);
+	for(let eachUserID in allUsers){
+		console.log(eachUserID);
+	}
+
+	//return Object.keys(allUsers);
+}

@@ -27,7 +27,9 @@
 	
 	<!-- Vue -->
 	<script src="https://unpkg.com/vue@next"></script>
-	
+
+	<!-- Axios -->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
@@ -35,58 +37,48 @@
 	<script type="module">
 		import { isUserSignedIn, readFromDatabase, signOutUser, updateUsername } from './js/module.js';
 
-		function getUserName(userObject) {
+		function setUserData(userObject){
+			var userPic = userObject.profile_picture;
+			document.getElementById("userAvatarPic").src = userPic;
+		}
+		
+
+		function setFriendData(userObject) {
 			var userName = userObject.name;
 			var userEmail = userObject.email;
 			var userBio = userObject.bio;
+			var userCountry = userObject.address.country;
+			var userPostalCode = userObject.address.postalCode;
 			var userFriends = userObject.friends;
 			var userPic = userObject.profile_picture;
 
+			let userAddress = encodeURI(userPostalCode+" "+userCountry);
+			getUserAddress(userAddress);
+			//console.log(addressJSON);
+
 			document.getElementById("userName").innerText = userName;
 			document.getElementById("userBio").innerText = userBio;
+			document.getElementById("country").innerText = userCountry;
 			document.getElementById("userPic").src = userPic;
-			document.getElementById("userAvatarPic").src = userPic;
 			//console.log(userFriends);
 		}
 
 		async function getData() {
 			var uid = await isUserSignedIn();
-			sessionStorage.setItem('uid', uid);
-			var property = "users/" + uid;
-			var data = await readFromDatabase(property);
-			//console.log(data);
-			getUserName(data);
+			if(uid){
+				let queryString = window.location.search;
+				let urlParams = new URLSearchParams(queryString);
+				let friendID = urlParams.get('friendID');
+				let userProperty = "users/" + uid;
+				let friendProperty = "users/" + friendID;
+				var userData = await readFromDatabase(userProperty);
+				var friendData = await readFromDatabase(friendProperty);
+				setUserData(userData);
+				setFriendData(friendData);
+			}
 		}
 
 		getData();
-
-		//Save Changes and update value on firebase
-		document.getElementById("saveAbout").addEventListener("click", function () {
-			
-			let newUsername = document.getElementById("userName").value;
-			let newUserBio = document.getElementById("userBio").value;
-
-			let uid = sessionStorage.getItem('uid');
-			updateUsername("users/"+uid,newUsername);
-			//console.log("users/"+uid+"/name");
-
-			document.getElementById("userName").setAttribute("disabled",true);
-			document.getElementById("userBio").setAttribute("disabled",true);
-
-			document.getElementById("userName").setAttribute("disabled",true);
-			document.getElementById("userBio").setAttribute("disabled",true);
-			
-			document.getElementById("editAbout").style.display = "inline";
-			document.getElementById("saveAbout").style.display = "none";
-		});
-		/*if (sessionStorage.getItem("currentUser")) {
-			console.log(sessionStorage.getItem("currentUser"));
-			var userData = readUser(sessionStorage.getItem("currentUser"));
-			var img = sessionStorage.getItem("profilePicture")
-			console.log(img);
-			document.getElementById("test").src = img;
-			document.getElementById("signout").addEventListener("click", signOutUser());
-		}*/
 	</script>
 	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -140,7 +132,7 @@
 					</div>
 				</div>
 				<div class="col-12 pb-3 text-end">
-					<button id="sendMail" class="btn button-light">Send him a mail</button>
+					<button id="sendMail" class="btn button-light">Send a mail</button>
 				</div>
 			</div>
 		</div>
@@ -148,11 +140,10 @@
 			<div class="col-12">
 				<h1 class="col-12 py-4 px-4">Address</h1>
 				<div class="row px-4">
-					<div class="col-6">
-						<span>Postal Code: 188065</span>
-					</div>
-					<div class="col-6">
-						<span>Country Code: Singapore</span>
+					<div class="col-12">
+						<h5>
+							Country: <span id="country"></span>
+						</h5>
 					</div>
 					<div class="col-12 py-4">
 						<div id="map"></div>
@@ -163,20 +154,6 @@
 	</div>
 
 	<script>
-		//Trigger input field to be editable and change button to save changes
-		document.getElementById("editAbout").addEventListener("click", function () {
-			document.getElementById("userName").removeAttribute("disabled");
-			document.getElementById("userBio").removeAttribute("disabled");
-			document.getElementById("editAbout").style.display = "none";
-			document.getElementById("saveAbout").style.display = "inline";
-		});
-
-		
-
-		document.getElementById("editAddress").addEventListener("click", function () {
-			document.getElementById("postalCode").removeAttribute("disabled");
-			document.getElementById("countryCode").removeAttribute("disabled");
-		});
 	</script>
 
 	<!-- Javascript -->
@@ -184,7 +161,7 @@
 
 	<!-- Google Map API -->
 	<script async
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8lhtpvwx2mVd3s9LZn4SHdmWupn0zhXc&callback=initMap&libraries=&v=weekly"></script>
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8lhtpvwx2mVd3s9LZn4SHdmWupn0zhXc&libraries=&v=weekly"></script>
 
 	<!-- Bootstrap JS File -->
 	<script src="./bootstrap/js/bootstrap.min.js"></script>
