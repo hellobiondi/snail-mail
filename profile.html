@@ -24,46 +24,136 @@
 
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
-	<style>
 
-	</style>
+	<!-- Vue -->
+	<script src="https://unpkg.com/vue@next"></script>
+
+	<!-- Axios -->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 </head>
 
 <body>
-	<script src="./testing/module.js" type="module"></script>
+	<script src="./js/module.js" type="module"></script>
 	<script type="module">
-		import { isUserSignedIn, readFromDatabase, signOutUser } from './testing/module.js';
+		//Import firebase functions from module.js
+		import { isUserSignedIn, readFromDatabase, signOutUser, updateToDatabase } from './js/module.js';
+		import { getImages, uploadImages } from './js/storage_module.js';
 
+		//Function: to change the user's profile picutre
+		async function uploadImage() {
+			var uid = await isUserSignedIn();
+			var file = document.getElementById("newImg").files[0];
+			console.log(file);
+			var upload = await uploadImages(uid, file);
+			//console.log(upload);
+			var url = await getImages(upload);
+			//console.log(url);
+			var prop = "users/" + uid;
+			var dt = { profile_picture: url };
+			let updateImageStatus = await updateToDatabase(prop, dt);
+			if(updateImageStatus){
+				getData();
+				document.getElementById("fileChosen").innerHTML = "";
+				document.getElementById("notificationContent").innerText = "Your Profile Picture has been successfully updated!";
+				document.getElementById("notification-container").classList.add("bg-success");
+			}else{
+				document.getElementById("notificationContent").innerText = "Oh no! An error occurred!";
+				document.getElementById("notification-container").classList.add("bg-danger");
+			}
+
+			showNotification();
+		}
+
+		function readFile(input){
+			if(input){
+				let output = "<p>"+input.files[0]["name"]+"</p>"
+				output = output + "<button class='btn button-light' id='upload'>Upload new image</button>";
+				if(input.files[0]){
+					document.getElementById("fileChosen").innerHTML = output;
+					document.getElementById("upload").addEventListener("click", uploadImage);
+				}
+			}
+		}
+
+		document.getElementById("newImg").addEventListener("change", function(){
+			readFile(this);
+		});
+
+
+		//Display signed in user's information 
 		function getUserName(userObject) {
 			var userName = userObject.name;
 			var userEmail = userObject.email;
+			var userBio = userObject.bio;
+			var userCountry = userObject.address.country;
+			var userPostalCode = userObject.address.postalCode;
+			var userFriends = userObject.friends;
 			var userPic = userObject.profile_picture;
 
-			document.getElementById("userName").value = userName;
-			document.getElementById("userBio").value = userEmail;
+			let userAddress = encodeURI(userPostalCode+" "+userCountry);
+			getUserAddress(userAddress);
+
+			document.getElementById("userName").defaultValue = userName;
+			document.getElementById("userBio").defaultValue = userBio;
+			document.getElementById("countryCode").value = userCountry;
+			document.getElementById("postalCode").value = userPostalCode;
 			document.getElementById("userPic").src = userPic;
 			document.getElementById("userAvatarPic").src = userPic;
-			console.log(userPic);
+			//console.log(userFriends);
 		}
 
+
+		//Function: Get signed in user data from firebase
 		async function getData() {
 			var uid = await isUserSignedIn();
+			sessionStorage.setItem('uid', uid);
 			var property = "users/" + uid;
 			var data = await readFromDatabase(property);
-			console.log(data);
 			getUserName(data);
 		}
 
+		//Trigger getData() to get signed in user's information
 		getData();
 
-		/*if (sessionStorage.getItem("currentUser")) {
-			console.log(sessionStorage.getItem("currentUser"));
-			var userData = readUser(sessionStorage.getItem("currentUser"));
-			var img = sessionStorage.getItem("profilePicture")
-			console.log(img);
-			document.getElementById("test").src = img;
-			document.getElementById("signout").addEventListener("click", signOutUser());
-		}*/
+		//Function: Get new user about information and update to firebase
+		document.getElementById("saveAbout").addEventListener("click", async function() {
+			let newUsername = document.getElementById("userName").value;
+			let newUserBio = document.getElementById("userBio").value;
+			let uid = sessionStorage.getItem('uid');
+		
+			let updateAboutStatus = await updateToDatabase("users/" + uid, { name: newUsername, bio: newUserBio });
+			document.getElementById("notification-container").classList.remove("bg-success","bg-danger")
+			if(updateAboutStatus){
+				document.getElementById("notificationContent").innerText = "Your Name and Biography has been successfully updated!";
+				document.getElementById("notification-container").classList.add("bg-success");
+			}else{
+				document.getElementById("notificationContent").innerText = "Oh no! An error occurred!";
+				document.getElementById("notification-container").classList.add("bg-danger");
+			}
+
+			showNotification();
+
+			document.getElementById("userName").setAttribute("disabled", true);
+			document.getElementById("userBio").setAttribute("disabled", true);
+			document.getElementById("editAbout").style.display = "inline";
+			document.getElementById("cancelAbout").style.display = "none";
+			document.getElementById("saveAbout").style.display = "none";
+		});
+
+		////Function: Cancel update and revert input fields to original values and disabled
+		document.getElementById("cancelAbout").addEventListener("click",  function() {
+			var oldUsername = document.getElementById("userName").defaultValue;
+			var oldUserBio = document.getElementById("userBio").defaultValue;
+
+			document.getElementById("userName").value = oldUsername;
+			document.getElementById("userBio").value = oldUserBio;
+			document.getElementById("userName").setAttribute("disabled", true);
+			document.getElementById("userBio").setAttribute("disabled", true);
+			document.getElementById("editAbout").style.display = "inline";
+			document.getElementById("cancelAbout").style.display = "none";
+			document.getElementById("saveAbout").style.display = "none";
+		});
 	</script>
 	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -82,7 +172,7 @@
 						<a class="nav-link active" aria-current="page" href="chat.html">Mails</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" aria-current="page" href="#">Games</a>
+						<a class="nav-link" aria-current="page" href="games.html">Games</a>
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto nav-flex-icons justify-content-end avatar-button">
@@ -100,11 +190,26 @@
 		<div class="row">
 			<div class="col-lg-4 col-sm-12">
 				<div class="row text-center">
-					<div class="col-12">
-						<img id="userPic" class="rounded-circle profile-pic">
+					<div class="col-12 profilepic">
+						<img id="userPic" class="rounded-circle profile-pic profilepic__image">
+						<div class="profilepic__content">
+							<span class="profilepic__icon"><i class="fas fa-camera"></i></span>
+							<input type="file" accept="image/png, image/jpeg, image/jpg" id="newImg" class="profilepic__text hidden" style="opacity: 0;" name="img"> 
+							<label class="newImgLabel" for="newImg">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+									<path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+								  </svg>
+								  <br/>
+								Upload new avatar
+							</label>
+						  </div>
 					</div>
-					<div class="col-12 py-2">
-						<button class="btn button-light" id="signout">Sign Out</button>
+				</div>
+				<div class="row pb-3">
+					<div class="col-12 py-2 text-center">
+						<span id="fileChosen"></span>
+						<!--<input type="file" id="img" name="img" accept="image/png, image/jpeg">-->
+						<!--<button class="btn" id="upload">Change Profile Picture</button>-->
 					</div>
 				</div>
 			</div>
@@ -116,13 +221,15 @@
 						<input id="userName" type="text" class="form-control" disabled>
 					</div>
 				</div>
-				<div class="col-12 px-4 text-end">
+				<div class="col-12 px-4">
 					<div class="input-group mb-3">
 						<span class="input-group-text">Bio</span>
 						<textarea id="userBio" type="text" class="form-control" disabled></textarea>
 					</div>
 					<div class="col-12 pb-3 text-end">
-						<button id="editAbout" class="btn button-light">Edit Profile</button>
+						<button id="editAbout" class="btn button-light-outline button-small">Edit Profile</button>
+						<button id="cancelAbout" class="btn button-light button-small me-3">Cancel</button>
+						<button id="saveAbout" class="btn button-save button-small">Save Changes</button>
 					</div>
 				</div>
 			</div>
@@ -131,18 +238,16 @@
 			<div class="col-12">
 				<h1 class="col-12 py-4 px-4">Address</h1>
 				<div class="row px-4">
-					<div class="col-6">
+					<div class="col-12 pb-4 col-md-6">
 						<div class="input-group">
 							<span class="input-group-text">Postal Code</span>
-							<input id="postalCode" type="text" aria-label="postalCode" class="form-control"
-								value="188065" disabled>
+							<input id="postalCode" type="text" aria-label="postalCode" class="form-control" disabled>
 						</div>
 					</div>
-					<div class="col-6">
+					<div class="col-12 pb-4 col-md-6">
 						<div class="input-group">
 							<span class="input-group-text">Country Code</span>
-							<input id="countryCode" type="text" aria-label="countryCode" class="form-control"
-								value="Singapore" disabled>
+							<input id="countryCode" type="text" aria-label="countryCode" class="form-control" disabled>
 						</div>
 					</div>
 					<div class="col-12 pt-3 text-end">
@@ -154,55 +259,48 @@
 				</div>
 			</div>
 		</div>
-
-
-		<div class="row my-5 profile-card">
+		<div class="row">
 			<div class="col-12">
-				<h1 class="col-12 py-4 px-4">Settings</h1>
-				<div class="row px-4 mb-3">
-					<label for="inputPassword" class="col-sm-2 col-form-label">Current Password: </label>
-					<div class="col-sm-4">
-						<input type="password" class="form-control" id="inputPassword">
-					</div>
-				</div>
-				<div class="row px-4 mb-3">
-					<label for="inputPassword" class="col-sm-2 col-form-label">New Password: </label>
-					<div class="col-sm-4">
-						<input type="password" class="form-control" id="inputPassword">
-					</div>
-				</div>
-				<div class="row px-4 mb-3">
-					<label for="inputPassword" class="col-sm-2 col-form-label">Confirm New Password: </label>
-					<div class="col-sm-4">
-						<input type="password" class="form-control" id="inputPassword">
-					</div>
-				</div>
-				<div class="col-12 py-3 text-center">
-					<button id="editAbout" class="btn button-light">Change Password</button>
-				</div>
+				<button class="btn button-light" id="signout">Sign Out</button>
 			</div>
 		</div>
 	</div>
 
-	<script>
-		document.getElementById("editAbout").addEventListener("click", function () {
-			document.getElementById("userName").removeAttribute("disabled");
-			document.getElementById("userBio").removeAttribute("disabled");
-			document.getElementById("editAbout").innerHTML = "Save";
-		});
 
-		document.getElementById("editAddress").addEventListener("click", function () {
+	<div class="notification-container text-light d-none fade-in-notification" id="notification-container">
+		<p id="notificationContent"></p>
+	</div>
+	
+	<script>
+		//Trigger input field to be editable and change button to save changes
+		
+	
+		/*document.getElementById("editAddress").addEventListener("click", function () {
 			document.getElementById("postalCode").removeAttribute("disabled");
 			document.getElementById("countryCode").removeAttribute("disabled");
-		});
+		});*/
+
+		//document.getElementById("newImg").addEventListener("onChange",readFile(this));
+
+		/*function readFile(input){
+			let output = "<p>"+input.files[0]["name"]+"</p>"
+			output = output + "<button class='btn button-light' id='upload'>Upload new image</button>";
+			
+			if(input.files[0]){
+				document.getElementById("fileChosen").innerHTML = output;
+				document.getElementById("upload").addEventListener("click", uploadImage);
+			}
+		}*/
+		
+		//showNotification();
 	</script>
 
 	<!-- Javascript -->
-	<script src="./js/snailmail.js"></script>
+	<script type="text/Javascript" src="./js/snailmail.js"></script>
 
 	<!-- Google Map API -->
 	<script async
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8lhtpvwx2mVd3s9LZn4SHdmWupn0zhXc&callback=initMap&libraries=&v=weekly"></script>
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8lhtpvwx2mVd3s9LZn4SHdmWupn0zhXc&libraries=&v=weekly"></script>
 
 	<!-- Bootstrap JS File -->
 	<script src="./bootstrap/js/bootstrap.min.js"></script>

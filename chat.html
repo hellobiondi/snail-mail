@@ -30,6 +30,20 @@
 		.word{
 			color:black;
 		}
+		::-webkit-scrollbar {
+			width: 12px;
+		}
+
+		::-webkit-scrollbar-track {
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+			border-radius: 10px;
+		}
+
+		::-webkit-scrollbar-thumb {
+			border-radius: 10px;
+			background-color: #E7ECF4;
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+		}
 	</style>
 	
 </head>
@@ -38,9 +52,9 @@
 	<!-- using Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="index.html">
+			<a class="navbar-brand" href="homepage.html">
 				<img src="./img/snailLogo.PNG" alt="" class="d-inline-block align-text-center">
-				<span class="brand">SNÄIL MÄIL</span>
+				<span class="brand">SNAIL MAIL</span>
 			</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
 				aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,13 +63,19 @@
 			<div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="about.html">About Us</a>
+						<a class="nav-link active" aria-current="page" href="chat.html">Chats</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#">Features</a>
+						<a class="nav-link" aria-current="page" href="games.html">Games</a>
 					</li>
 				</ul>
-				<button class="btn btn-lg btn-custom btn-outline-light" type="submit">Log In / Sign Up</button>
+				<ul class="navbar-nav ml-auto nav-flex-icons justify-content-end avatar-button">
+					<li class="nav-item avatar">
+						<a class="nav-link" href="profile.html">
+							<img id="userAvatarPic" class="rounded-circle z-depth-0" alt="avatar image">
+						</a>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</nav>
@@ -63,13 +83,12 @@
 	
 	<div id=app class="container">
 		<div class="btn position-fixed bottom-0 end-0 px-3">
-			<img class="rounded-circle btn-outline-light img-fluid" @click=compose() style="height: 60px;" src="img/compose.png">
+			<a class="nav-link" href="compose.html">
+			<img class="rounded-circle btn-outline-light img-fluid" style="height: 80px;" src="img/compose.png">
+			</a>
 		</div>
 		<div class="d-none">
 			{{initalise}}
-		</div>
-		<div @click=filter()>
-			{{database}}
 		</div>
 		<div class="row profile-card mt-5 px-5 pb-2">
 			<div class="row-md ">
@@ -85,39 +104,41 @@
 			</div>
 		</div>
 
+		<div class="row profile-card mt-5 px-5 pb-2" :style={display:display_mailbody}>
+			<div class="row-md d-flex" id="mail-header">
+				<h3 class="homeRow me-auto"> Sent from {{ senderName }}</h3>
+			</div>
 
-		<div class="row-md d-flex justify-content-center" id="mail-header">
-			<h3 class="homeRow "> From - {{ senderName }}</h3>
-		</div>
-
-		<div id="mail_chat" class="row-md d-flex justify-content-center">
-			<div class='card col-sm-2 ' v-bind:style="{display:display}" >
-				<img class='.bg-image img-fluid m-auto' style="border-radius:20px;height:400px;" v-bind:src="'./img/postcard/'+mailDesign">
-				<div class="card-img-overlay overflow-auto">
-					<h5 class="card-title word">Letters History</h5>
-					<button type="button" class="btn-close position-absolute p-3 top-0 end-0" @click="close()" aria-label="Close"></button>		
-					<div class="row" v-for="(content,idx) in chats">
-						<p class="m-auto word">
-							{{content['datetime']}}
-						</p>
-						<a href="#mail-header" class="m-auto" @click=open_chat(idx)>
-							<img class="m-0 p-2 img-fluid" style="height:70px;" src="./img/closedEnvelope.png">
-						</a>
+			<div id="mail_chat" class="row-md d-flex justify-content-center">
+				<div class='card col-sm-2' v-bind:style="{display:display}" >
+					<img class='.bg-image img-fluid m-auto' style="border-radius:20px;height:400px;" src="img/mailboxbg.jpg">
+					<div class="card-img-overlay overflow-auto">
+						<h5 class="card-title word">Mailbox</h5>
+						<button type="button" class="btn-close position-absolute p-3 top-0 end-0" @click="close()" aria-label="Close"></button>		
+						<div class="row" v-for="(content,idx) in chats">
+							<p class="m-auto word">
+								{{content['datetime']}}
+							</p>
+							<a href="#mail-header" class="m-auto" @click=open_chat(idx)>
+								<img class="m-0 p-2 img-fluid" style="height:70px;" src="./img/closedEnvelope.png">
+							</a>
+						</div>
+					</div>
+				</div>
+				
+				<div class="card col-md-9" >
+					<img class="card-img img-fluid m-0  opacity-50" style="border-radius:20px;height:400px;" v-bind:src="'./img/postcard/'+mailDesign">
+					<div class="card-img-overlay overflow-auto">
+						<p class="word m-4">
+							{{ body }}
+						</p>	
 					</div>
 				</div>
 			</div>
-			
-			<div class="card col-md-8">
-				<img class="card-img img-fluid m-0  opacity-50" style="border-radius:20px;height:400px;" v-bind:src="'./img/postcard/'+mailDesign">
-				<div class="card-img-overlay overflow-auto">
-					<p class="word m-4">
-						{{ body }}
-					</p>	
-					<div class="position-absolute bottom-0 end-0">
-						<button type="button" class="btn btn-cta btn-lg px-2 m-4" @click="reply()" aria-label="Reply">Reply</button>
-					</div>
-				</div>
+			<div class="row-sm-3 d-flex m-3 justify-content-end">
+				<button type="button" class="my-auto me-3 btn button-light fs-4" @click="reply()" aria-label="Reply">Reply</button>
 			</div>
+
 		</div>
 
 		<div class="row profile-card my-5 px-5 pb-2">
@@ -152,16 +173,14 @@
 </body>
 
 <script src="https://unpkg.com/vue@next"></script>
-<script type="module" src="./testing/module.js"></script>
+<script type="module" src="./js/module.js"></script>
 <script src="./js/moment.js"></script>
+<script src="./js/chat.vue"></script>
 
 <script type="module">
 	// DATABASE TESTING
-	import {readFromDatabase, updateChatDatabase} from "./testing/module.js";
+	import {readFromDatabase, updateChatDatabase, deleteChatRecent} from "./js/module.js";
     // To be replaced with code from my WAMP 
-
-
-	var temp_note = `NIL`
 
 	Vue.createApp(
 		{
@@ -177,22 +196,26 @@
 					name: '',
 					
 					senderName:'None',
-					body: temp_note,
+					body: '',
 					mailDesign:"postcard1.jpg",
 
+					display_mailbody:'none',
 					display:'none',
 				}	
 			},
 			computed: {
 				initalise:async function getdb(){
 					//TO:DO getuid from session
+					// default user is Sun Jun for now 
 					this.uid = "123"
+					
 					var prop = "Chats/"+ this.uid;
 					var data = await readFromDatabase(prop);
 
 					//Debug
-					console.log(this.uid);
-					console.log(data);
+					// console.log(this.uid);
+					// console.log(data);
+
 					this.database = data;
 					this.username = data["name"];
 					this.chatRecent = data["chatRecent"];
@@ -200,55 +223,72 @@
 					
 					// Filter away all those mails that have not reached based on time
 					var currentdate = moment();
-					for (const [key,value] of Object.entries(this.chatRecent)){
-						var mailDTString = value['datetime'];
-						var mailReceive = moment(mailDTString,"DD-MM-YY hh:mm");
-						// console.log(currentdate.isBefore(mailReceive));
-						if (currentdate.isBefore(mailReceive)){
-							console.log(this.chatRecent[key]);
-							delete this.chatRecent[key];
+					if (this.chatRecent){
+						for (const [key,value] of Object.entries(this.chatRecent)){
+							var mailDTString = value['datetime'];
+							var mailReceive = moment(mailDTString,"DD-MM-YY hh:mm");
+							// console.log(currentdate.isBefore(mailReceive));
+							if (currentdate.isBefore(mailReceive)){
+								console.log(this.chatRecent[key]);
+								delete this.chatRecent[key];
+							}
 						}
 					}
+
 					
 					return "done";
 				},
-				filter:function(){
-					alert("ABC")
-				}
-				
 			},
 
 			methods: {
-				update_fb(name){
-					let datetime = this.chatRecent[name]['datetime']
-					let prop = "Chats/"+this.uid
-					console.log(prop);
-					console.log(name);
-					console.log(datetime);
-					console.log(this.body);
-					updateChatDatabase(prop,name,datetime,this.body)
-					console.log("updated Firebase");
+				update_fb(uid){
+					// let datetime = this.chatRecent[name]['datetime']
+					
+					// let currentMailDesign = this.chatRecent[name]['mailDesign']
+					let recent_data = this.chatRecent[uid];
+					// console.log(recent_data)
+					
+					let prop = "Chats/"+this.uid+ '/chatHistory/'+uid
+					let senderName = this.chatRecent[uid]['senderName']
+					updateChatDatabase(prop,recent_data,senderName)
+					console.log(`updated Firebase by moving chatrecent to chathistory`);
+					prop = 'Chats/'+this.uid+'/chatRecent/'+uid
+					console.log(`updated Firebase by removing chatrecent chat`);
+					deleteChatRecent(prop)
+
 				},
 				update_mail(name){
+					this.display_mailbody= "flex"
 					this.senderName = this.chatRecent[name]['senderName'];
 					this.body = this.chatRecent[name]['content'];
 					this.mailDesign = this.chatRecent[name]['mailDesign'];
+					this.display = 'none';
 				},
 				display_chat(name){
 					this.display = "inline-flex";
+					this.display_mailbody= "flex"
 					this.chats =  this.chatHistory[name]["mails"];
+					let c_chat = this.chats[Object.keys(this.chats)[0]]
+					
+					//Update body design
+					this.body = c_chat['content']
+					this.mailDesign = c_chat['mailDesign']
+
+					console.log();
 					// console.log(this.chats);
 				},
 				open_chat(idx){
 					// console.log(idx);
 					// console.log(this.chats[idx])
+					this.display_mailbody= "flex"
 					this.body = this.chats[idx]['content'];
+					this.mailDesign = this.chats[idx]['mailDesign']
 				},
 				close(){
 					this.display = "none";
 				},
-				compose(){
-					alert("ABC")
+				change_image(imageinput){
+					console.log(imageinput)
 				}
 			}
 

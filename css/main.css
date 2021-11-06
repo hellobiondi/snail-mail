@@ -16,6 +16,23 @@
     padding: 10px;
 }
 
+/***************************** Scroll Bar *****************************/
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #E7ECF4;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+/***********************End of Scroll Bar *****************************/
+
  
 body {
     /*text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);*/
@@ -40,7 +57,8 @@ img[src="img/btn_google_signin_light_normal_web@2x.png"] {
 }
 
 #signInBox,
-#signUpBox {
+#signUpBox,
+#addressBox {
     background-color: white;
     border-radius: 0% 0% 10px 10px;
 }
@@ -53,7 +71,7 @@ img[src="img/btn_google_signin_light_normal_web@2x.png"] {
 }
 
 .unselected {
-    background-color: rgba(226, 226, 226, 0.493);
+    background-color: rgba(225, 225, 225, 0.3);
     color: rgb(0, 0, 0, .2);
     cursor: pointer;
     border-radius: 10px 10px 0% 0%;
@@ -100,9 +118,9 @@ h4 span {
 }
 
 #navbarMenu > ul > li > a{
-    font-size: 30px;
+    font-size: 25px;
     color: #3d444f;
-    padding-right: 50px;
+    padding-right: 30px;
 }
 
 #navbarMenu > ul > li > a:hover{
@@ -114,7 +132,7 @@ h4 span {
     color: #385264;
     border: 3px solid #395264;
     border-radius: 10px;
-    font-size: 30px;
+    font-size: 25px;
 }
 
 #navbarMenu > ul > li > a.active{
@@ -137,8 +155,7 @@ h4 span {
 .avatar img{
     width: 60px;
     height: 60px;
-    margin-left: 10px;
-    margin-right: -30px;
+    margin-right: -13px;
 }
 
 .avatar-button a{
@@ -176,13 +193,18 @@ h4 span {
     background: #FFFFFF;
     color: #000000;
     font-size: 20px;
-    line-height: 120px;
     text-align: center;
     width: 100%;
     height: 100%;
     border-radius: 30px;
     padding: 0px;
 }
+
+.speech-text{
+    line-height: 30px;
+    padding: 5px;
+}
+
 .speech-bubble:after {
     content: '';
     position: absolute;
@@ -236,17 +258,86 @@ h4 span {
    }
 /***************************** End profile.html *****************************/
 
-.button-light{
-    background-color: #6EB6CF;
-    color: #FFFFFF;
-    border-radius: 10px;
-    font-family: 'Crete Round', serif;
+
+/* Custom Buttons */
+/* Small Buttons */
+.button-small{
+    font-size: 20px;
+}
+
+/* Large Buttons */
+.button-large{
     font-size: 30px;
 }
 
-.button-light:hover{
+/* Jumbo Buttons */
+.button-jumbo{
+    font-size: 40px;
+}
+
+/* Themed Buttons */
+.button-light{
+    background-color: #6EB6CF;
     color: #FFFFFF;
+    outline-style: solid;
+    outline-color: #6EB6CF;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-light:hover{
     background-color: #5495B0;
+    color: #FFFFFF;
+}
+
+/* Themed Outline Buttons */
+.button-light-outline{
+    background-color: #FFFFFF;
+    color: #6EB6CF;
+    outline-style: solid;
+    outline-color: #6EB6CF;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-light-outline:hover{
+    background-color: #ececec;
+    color: #5495B0;
+}
+
+
+/* Save Buttons */
+.button-save{
+    background-color: #62bb4c;
+    color: #FFFFFF;
+    outline-style: solid;
+    outline-color: #62bb4c;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-save:hover{
+    background-color: #59aa45;
+    outline-style: solid;
+    outline-color: #59aa45;
+    color: #FFFFFF;
+}
+
+/* Cancel Buttons */
+.button-cancel{
+    background-color: #f8f8f8;
+    color: #FFFFFF;
+    outline-style: solid;
+    outline-color: #62bb4c;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-cancel:hover{
+    background-color: #59aa45;
+    outline-style: solid;
+    outline-color: #59aa45;
+    color: #FFFFFF;
 }
 
 
@@ -284,3 +375,117 @@ img{
 .cover-container {
     max-width: 42em;
 }
+
+#cancelAbout{
+    display: none;
+}
+
+#saveAbout{
+    display: none;
+}
+
+/* Notification of Success */
+
+.notification-container {
+    border-radius: 10px 10px 0 0;
+    padding: 15px 15px 10px 15px;
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    bottom: 0px;
+    /*transition-duration: 5s;*/
+    /*transition-timing-function: ease-in-out;*/
+  }
+
+  .fade-in-notification {
+    animation: fadeIn linear 0.5s;
+    -webkit-animation: fadeIn linear 0.5s;
+    -moz-animation: fadeIn linear 0.5s;
+    -o-animation: fadeIn linear 0.5s;
+    -ms-animation: fadeIn linear 0.5s;
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0 }
+    100% { opacity: 1 }
+  }
+  
+  @-moz-keyframes fadeIn {
+    0% { opacity: 0 }
+    100% { opacity: 1 }
+  }
+  
+  @-webkit-keyframes fadeIn {
+    0% { opacity: 0 }
+    100% { opacity: 1 }
+  }
+  
+  @-o-keyframes fadeIn {
+    0% { opacity: 0 }
+    100% { opacity: 1 }
+  }
+  
+  @-ms-keyframes fadeIn {
+    0% { opacity: 0 }
+    100% { opacity: 1 }
+  }
+
+/* Profile Picture */
+.profilepic {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #111;
+    margin: auto;
+    padding-left: 0;
+  }
+  
+  .profilepic:hover .profilepic__content {
+    opacity: 1;
+  }
+  
+  .profilepic:hover .profilepic__image {
+    opacity: .5;
+  }
+  
+  .profilepic__image {
+    object-fit: cover;
+    opacity: 1;
+    transition: opacity .2s ease-in-out;
+    padding-left: 0;
+    margin-left: 0;
+    width: 250px;
+    height: 250px;
+  }
+  
+  .profilepic__content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    opacity: 0;
+    transition: opacity .2s ease-in-out;
+  }
+  
+  .profilepic__icon {
+    color: white;
+    padding-bottom: 8px;
+  }
+  
+  .fas {
+    font-size: 20px;
+  }
+  
+  .profilepic__text {
+    font-size: 12px;
+    width: 50%;
+    text-align: center;
+  }

@@ -32,37 +32,125 @@
 </head>
 
 <body>
-	<script src="./testing/module.js" type="module"></script>
+	<script src="./js/module.js" type="module"></script>
 	<script type="module">
-		import {isUserSignedIn, readFromDatabase} from './testing/module.js';
-	
-		function getUserName(userObject){
+		import {isUserSignedIn, readFromDatabase} from './js/module.js';
+		
+		//Set User Login Data after their data is returned from Google API
+		function setUserData(userObject){
 			var userName = userObject.name;
 			var userPic = userObject.profile_picture;
-
+			var userFriends = userObject.friends;
+			var userActiveGamesObj = userObject.activeGames;
+			console.log(userActiveGamesObj);
+			for(let key in userActiveGamesObj){
+				console.log(key);
+				console.log(userActiveGamesObj[key]);
+			}
+			showFriendList(userFriends);
 			document.getElementById("userName").innerHTML = userName;
 			document.getElementById("userAvatarPic").src = userPic;
-			console.log(userName);
 		}
 
+		//Create and set each Friend's data
+		function setFriendData(friendUid,friendObj){
+			var userName = friendObj.name;
+			var userPic = friendObj.profile_picture;
+
+			var outerDiv = document.createElement("div");
+			outerDiv.classList.add("item", "grow", "px-4");
+			
+			var a = document.createElement("a");
+			a.setAttribute("href", "./friend.html?friendID="+friendUid)
+			var img = document.createElement("img");
+			img.setAttribute("src", userPic);
+			img.classList.add("rounded-circle");
+
+			var innerDiv = document.createElement("div");
+			innerDiv.classList.add("text-warning");
+			innerDiv.setAttribute("align", "center");
+			var text = document.createTextNode(userName);
+
+			innerDiv.appendChild(text);
+			a.appendChild(img);
+			a.appendChild(innerDiv);
+			outerDiv.appendChild(a);
+			document.getElementById("friendsList").appendChild(outerDiv);
+		}
+
+		/*function showActiveGamesList(userActiveGamesObj){
+			//console.log(userActiveGamesObj);
+			for(let[key,value] of Object.entries(userActiveGamesObj)){
+				console.log(key);
+
+				let gameID = key;
+				let gameType = key.slice(0,2);
+				let gameFriend = value;
+				
+				let imgSrc = "";
+				if(gameType == "c4"){
+					let imgSrc = "./img/connect4.jpeg";
+				}
+
+				if(gameType == "hm"){
+					let imgSrc = "./img/hangman.jpeg";
+				}
+				
+			}
+
+		}*/
+
+		async function showFriendList(userFriends){
+			const userFriendArray = userFriends.split(",");
+			let result = await getFriendList(userFriendArray);
+			if(result){
+				loadFriends();
+			}
+		}
+
+		//Get the list of user's friends
+		async function getFriendList(userFriendArray){
+			for (let friendUid of userFriendArray){
+				var property =  "users/" + friendUid;
+				var data = await readFromDatabase(property);
+				setFriendData(friendUid,data);
+			}
+			return true;
+		}
+
+		//Get User Login Data
 		async function getData(){
 			var uid = await isUserSignedIn();
 			var property =  "users/" + uid;
 			var data = await readFromDatabase(property);
-			console.log(data);
-			getUserName(data);
+			setUserData(data);
 		}
 
 		getData();
 
-		/*if (sessionStorage.getItem("currentUser")) {
-			console.log(sessionStorage.getItem("currentUser"));
-			var userData = readUser(sessionStorage.getItem("currentUser"));
-			var img = sessionStorage.getItem("profilePicture")
-			console.log(img);
-			document.getElementById("test").src = img;
-			document.getElementById("signout").addEventListener("click", signOutUser());
-		}*/
+		async function getNewFriend(){
+			let uid = await isUserSignedIn();
+			let userFriendsString = await readFromDatabase("users/"+uid+"/friends"); //String of user's friends
+			let allUsers = Object.keys(await readFromDatabase("users")); //Object of all user keys in DB
+			let userFriendsArray = userFriendsString.split(",");
+			let potentialFriendsArray = [];
+
+			for(let i in allUsers){
+				if((allUsers[i] != uid) && !(userFriendsArray.includes(allUsers[i]))){
+					potentialFriendsArray.push(allUsers[i]);
+				}
+			}
+			let totalPotFriends = potentialFriendsArray.length; 
+			let randomInt = Math.floor(Math.random() * totalPotFriends);
+			let newFriendUid = potentialFriendsArray[randomInt];
+			console.log(newFriendUid);
+		}
+
+		getNewFriend();
+		//var result = await getNewFriend();
+		//console.log(result);
+
+
 	</script>
 	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -98,12 +186,12 @@
 
 	<div class="container col-xxl-10 px-4 py-1">
 		<div class="row homeRow">
-			<div class="col-12 col-sm-6 col-lg-6">
+			<div class="col-6 col-sm-6 col-lg-6">
 				<img src="./img/snail.PNG" class="d-block mx-lg-auto img-fluid w-75" alt="Snail Mail Logo">
 			</div>
-			<div class="col-sm-6 col-lg-6">
+			<div class="col-6 col-sm-6 col-lg-6">
 				<div class="speech-bubble">
-					<p>
+					<p class="speech-text">
 						How are you feeling today, <span id="userName"></span>?
 						<br/>
 						You haven't made a new friend today,
@@ -118,34 +206,7 @@
 				<h1 class="py-5 px-4">Your Friends</h1>
 			</div>
 			<div class="col-12 pb-5">
-				<div id="friendsList" class="owl-carousel owl-theme" align="center">
-					<div class="item grow px-4">
-						<a href="#"><img src="img/huiru.jpeg" class="rounded-circle">
-							<div class="text-warning" align="center">Hui Ru</div>
-						</a>
-					</div>
-					<div class="item grow px-4">
-						<a href="#">
-							<img src="img/mindy.jpeg" class="rounded-circle">
-							<div class="text-warning" align="center">Mindy</div>
-						</a>
-					</div>
-					<div class="item grow px-4">
-						<a href="#"><img src="img/biondi.jpeg" class="rounded-circle">
-							<div class="text-warning" align="center">Biondi</div>
-						</a>
-					</div>
-					<div class="item grow px-4">
-						<a href="#"><img src="img/weihern.jpeg" class="rounded-circle">
-							<div class="text-warning" align="center">Wei Hern</div>
-						</a>
-					</div>
-					<div class="item grow px-4">
-						<a href="#"><img src="img/gadman.jpeg" class="rounded-circle">
-							<div class="text-warning" align="center">Gadman</div>
-						</a>
-					</div>
-				</div>
+				<div id="friendsList" class="owl-carousel owl-theme" align="center"></div>
 			</div>
 		</div>
 
@@ -205,7 +266,6 @@
 </body>
 
 <!-- Bootstrap JS File -->
-
 <script src="./bootstrap/js/bootstrap.min.js"></script>
 
 
