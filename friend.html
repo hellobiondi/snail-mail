@@ -37,20 +37,31 @@
 	<script type="module">
 		import { isUserSignedIn, readFromDatabase, signOutUser, updateUsername } from './js/module.js';
 
-		function setUserData(userObject){
-			var userPic = userObject.profile_picture;
+		function setUserData(userObject,friendID){
+			let userPic = userObject.profile_picture;
+			let userFriends = userObject.friends;
+			let unsortedUserFriendsArray = userFriends.split(",");
+			let userFriendsArray = unsortedUserFriendsArray.slice(0,unsortedUserFriendsArray.length-1);
+
+			if((userFriendsArray[userFriendsArray.length - 1]) == friendID){
+				document.getElementById("notificationContent").innerText = "This is your newest friend!";
+				document.getElementById("notification-container").classList.add("bg-success");
+				showNotification();
+				//console.log("this one new friend");
+			}else{
+				console.log("this one old friend");
+			}
 			document.getElementById("userAvatarPic").src = userPic;
 		}
 		
-
 		function setFriendData(userObject) {
-			var userName = userObject.name;
-			var userEmail = userObject.email;
-			var userBio = userObject.bio;
-			var userCountry = userObject.address.country;
-			var userPostalCode = userObject.address.postalCode;
-			var userFriends = userObject.friends;
-			var userPic = userObject.profile_picture;
+			let userName = userObject.name;
+			let userEmail = userObject.email;
+			let userBio = userObject.bio;
+			let userCountry = userObject.address.country;
+			let userPostalCode = userObject.address.postalCode;
+			let userFriends = userObject.friends;
+			let userPic = userObject.profile_picture;
 
 			let userAddress = encodeURI(userPostalCode+" "+userCountry);
 			getUserAddress(userAddress);
@@ -63,21 +74,33 @@
 			//console.log(userFriends);
 		}
 
+		function getFriendUidURL(){
+			let queryString = window.location.search;
+			let urlParams = new URLSearchParams(queryString);
+			let friendID = urlParams.get('friendID');
+			return friendID;
+		}
+
 		async function getData() {
-			var uid = await isUserSignedIn();
+			let uid = await isUserSignedIn();
 			if(uid){
-				let queryString = window.location.search;
-				let urlParams = new URLSearchParams(queryString);
-				let friendID = urlParams.get('friendID');
+				let friendID = getFriendUidURL();
 				let userProperty = "users/" + uid;
 				let friendProperty = "users/" + friendID;
 				var userData = await readFromDatabase(userProperty);
 				var friendData = await readFromDatabase(friendProperty);
-				setUserData(userData);
+				setUserData(userData,friendID);
 				setFriendData(friendData);
 			}
 		}
 
+		function sendMailToFriend(){
+			let sendToUid = getFriendUidURL();
+			sessionStorage.setItem('sendToUid', sendToUid);
+			window.location.href = "./compose.html";
+		}
+
+		document.getElementById("sendMail").addEventListener("click",sendMailToFriend);
 		getData();
 	</script>
 	<!-- Navigation Bar-->
@@ -152,7 +175,9 @@
 			</div>
 		</div>
 	</div>
-
+	<div class="notification-container text-light d-none fade-in-notification" id="notification-container">
+		<p id="notificationContent"></p>
+	</div>
 	<script>
 	</script>
 

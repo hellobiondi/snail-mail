@@ -45,7 +45,9 @@
 			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 		}
 	</style>
-	
+	<script>
+		console.log(sessionStorage.getItem('sendToUid'));
+	</script>
 </head>
 
 <body>
@@ -80,7 +82,6 @@
 		</div>
 	</nav>
 		
-	
 	<div id=app class="container">
 		<div class="d-none"> {{initialise}} </div>
 		<div class="btn position-fixed bottom-0 end-0 px-3">

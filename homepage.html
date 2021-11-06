@@ -34,7 +34,7 @@
 <body>
 	<script src="./js/module.js" type="module"></script>
 	<script type="module">
-		import {isUserSignedIn, readFromDatabase} from './js/module.js';
+		import {isUserSignedIn, updateToDatabase, readFromDatabase} from './js/module.js';
 		
 		//Set User Login Data after their data is returned from Google API
 		function setUserData(userObject){
@@ -42,12 +42,15 @@
 			var userPic = userObject.profile_picture;
 			var userFriends = userObject.friends;
 			var userActiveGamesObj = userObject.activeGames;
-			console.log(userActiveGamesObj);
+			//console.log(userActiveGamesObj);
 			for(let key in userActiveGamesObj){
-				console.log(key);
-				console.log(userActiveGamesObj[key]);
+				//console.log(key);
+				//console.log(userActiveGamesObj[key]);
 			}
-			showFriendList(userFriends);
+			if(userFriends != ""){
+				showFriendList(userFriends);
+				document.getElementById("friendCount").innerText = userFriends.split(",").length-1;
+			}
 			document.getElementById("userName").innerHTML = userName;
 			document.getElementById("userAvatarPic").src = userPic;
 		}
@@ -101,7 +104,8 @@
 		}*/
 
 		async function showFriendList(userFriends){
-			const userFriendArray = userFriends.split(",");
+			const unsortedUserFriendArray = userFriends.split(",");
+			let userFriendArray = unsortedUserFriendArray.slice(0,unsortedUserFriendArray.length-1);
 			let result = await getFriendList(userFriendArray);
 			if(result){
 				loadFriends();
@@ -126,27 +130,37 @@
 			setUserData(data);
 		}
 
-		getData();
-
 		async function getNewFriend(){
 			let uid = await isUserSignedIn();
 			let userFriendsString = await readFromDatabase("users/"+uid+"/friends"); //String of user's friends
 			let allUsers = Object.keys(await readFromDatabase("users")); //Object of all user keys in DB
 			let userFriendsArray = userFriendsString.split(",");
 			let potentialFriendsArray = [];
-
 			for(let i in allUsers){
 				if((allUsers[i] != uid) && !(userFriendsArray.includes(allUsers[i]))){
 					potentialFriendsArray.push(allUsers[i]);
 				}
 			}
 			let totalPotFriends = potentialFriendsArray.length; 
-			let randomInt = Math.floor(Math.random() * totalPotFriends);
-			let newFriendUid = potentialFriendsArray[randomInt];
-			console.log(newFriendUid);
+			if(totalPotFriends != 0){
+				let randomInt = Math.floor(Math.random() * totalPotFriends);
+				let newFriendUid = potentialFriendsArray[randomInt];
+				let newUserFriendsString = userFriendsString + newFriendUid + ",";
+				let updateUserFriendsStatus = await updateToDatabase("users/" + uid, {friends: newUserFriendsString});
+				if(updateUserFriendsStatus){
+					console.log("new friend added!");
+					getData();
+					window.location.href = "./friend.html?friendID="+newFriendUid;
+				}else{
+					console.log("no friend's added");
+				}
+			}else{
+				console.log("No more new friends to add");
+			}
 		}
 
-		getNewFriend();
+		document.getElementById("findNewFriend").addEventListener("click",getNewFriend);
+		getData();
 		//var result = await getNewFriend();
 		//console.log(result);
 
@@ -197,13 +211,14 @@
 						You haven't made a new friend today,
 						would you like to meet someone new?
 					</p>
+					<button id="findNewFriend" class="btn button-light button-large mb-4">Find me a new friend!</button>
 				</div>
 			</div>
 		</div>
 
 		<div class="row profile-card">
 			<div class="col-12">
-				<h1 class="py-5 px-4">Your Friends</h1>
+				<h1 class="py-5 px-4">Your Friends (<span id="friendCount">0</span>)</h1>
 			</div>
 			<div class="col-12 pb-5">
 				<div id="friendsList" class="owl-carousel owl-theme" align="center"></div>
