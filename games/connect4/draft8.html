@@ -2,90 +2,103 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="draft8.css">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--bootstrap-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Hui Ru, Mindy, Biondi, Wei Hern, Gadman">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Snail Mail · Sure and Steady · Connect Four</title>
+
+    <!-- Bootstrap CSS File -->
+    <link href="./../../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fonts Gugi -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+
+    <!-- Fonts Crete Round -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crete+Round&display=swap" rel="stylesheet">
+
     <!-- Axios -->
     <script src="https://unpkg.com/axios/dist/axios.js"></script>
-    <title>Connect Four</title>
+
+    <!-- Stylesheet for Page -->
+    <link rel="stylesheet" href="draft8.css">
 
 </head>
 
 <body>
-
-    <!-- <script type="module" src="module.js"></script>
-    <script type="module">
-        import {loginGoogle} from "./module";
-        document.getElementById("loginGoogle").addEventListener("click",loginGoogle);
-    </script> -->
-    <h1>Connect Four</h1>
-
-    <h3 class="player-turn"></h3>
     <script src="./../../js/module.js" type="module"></script>
-    <!--  <script src="./../../js/module.js" type="module"></script> -->
-    <div class="game">
-        <table>
-            <tr>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-            </tr>
-            <tr>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-            </tr>
-            <tr>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-            </tr>
-            <tr>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-            </tr>
-            <tr>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-            </tr>
-            <tr>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-                <td class="slot"></td>
-            </tr>
-        </table>
+    <div class="container-fluid">
+        <div class="row mt-5 text-center">
+            <h1>Connect Four</h1>
+            <h3 class="player-turn"></h3>
+        </div>
+        <div class="row">
+            <div class="game mx-auto">
+                <table>
+                    <tr>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="reset">Reset</div>
     <script>
         var slots = document.getElementsByTagName('td');
 

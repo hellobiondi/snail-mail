@@ -2,6 +2,11 @@
 import { readFromDatabase, writeToDatabase, isUserSignedIn } from "./../../js/module.js";
 //import {readFromDatabase, writeToDatabase, isUserSignedIn} from "./../../js/module.js";
 
+async function getUsername(uid){
+    let name = await readFromDatabase("users/" + uid + "/name");
+    return name
+}
+
 function getOppID(){
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -105,15 +110,14 @@ async function startGame() {
     var img2 = document.createElement('img');
     img2.src = player2Img;
     */
-    var player1Color = '#f88796'; //red
-    var player2Color = '#fbb74c'; //yellow
+    var player1Color = '#d42b3b'; //red
+    var player2Color = '#f9c70d'; //yellow
 
     /*var UID1 = sessionStorage.getItem("uid");
     var UID2 = 'bkLfaqpZH7TfCuXvajP3lbbmJBx2';*/
     let uid = sessionStorage.getItem("uid");
     let gameID = await getGameID();
     //console.log(typeof (dataList));
-
 
     // Selectors
     var tableRow = document.getElementsByTagName('tr');
@@ -126,8 +130,11 @@ async function startGame() {
     var property = "games/" + `${gameID}` + "/currentPlayer";
     var currentPlayer = await readFromDatabase(property);
     var currentUIDs = await readFromDatabase("games/" + `${gameID}` + "/players")
-    var player1 = currentUIDs[1];
-    var player2 = currentUIDs[2];
+    //var player1 = currentUIDs[1];
+    //var player2 = currentUIDs[2];
+
+    var player1 = await getUsername(currentUIDs[1]);
+    var player2 = await getUsername(currentUIDs[2]);
 
     console.log(currentUIDs[1]);
     //var currentPlayer = getPlayer();
@@ -179,14 +186,11 @@ async function startGame() {
             var slot = document.getElementById(`${move}`);
             //console.log(slot);
             if (counter % 2 == 0) {
-                slot.style.backgroundColor = '#f88796';
-            }
-
-            else {
-                slot.style.backgroundColor = '#fbb74c';
+                slot.style.backgroundColor = '#d42b3b'; //Player 1
+            }else {
+                slot.style.backgroundColor = '#f9c70d'; //Player 2
             }
             counter++;
-
         }
     }
 
@@ -347,11 +351,4 @@ async function startGame() {
             return true;
         }
     }
-
-    reset.addEventListener('click', () => {
-        tableSlot.forEach(slot => {
-            slot.style.backgroundColor = 'white';
-        });
-        return (currentPlayer === 1 ? playerTurn.textContent = `${player1}'s turn` : playerTurn.textContent = `${player2}'s turn`);
-    });
 }
