@@ -36,15 +36,6 @@
 	<script type="module">
 		import { isUserSignedIn, readFromDatabase, updateToDatabase } from './js/module.js';
 
-		//Set User Login Data after their data is returned from Google API
-		function setUserData(userObject) {
-			var userName = userObject.name;
-			var userPic = userObject.profile_picture;
-			var userFriends = userObject.friends;
-			showFriendList(userFriends);
-			document.getElementById("userAvatarPic").src = userPic;
-		}
-
 		async function findTotalGames(){
 			var property = "games/totalGames";
 			var data = await readFromDatabase(property);
@@ -53,42 +44,35 @@
 
 		//Create and set each Friend's data
 		function setFriendData(friendData,friendUid) {
-			var uid = sessionStorage.getItem('uid');
-			async function startConnect4Game(){
-				//console.log("73: " + uid +"<br>"+ friendUid);
-				let totalGames = await findTotalGames();
-				let gameID = "game" + (Number(totalGames) + 1).toString();
+			async function startConnect4Game(userID,selectedFriendUid){
+				let userActiveGames = await readFromDatabase("users/"+userID+"/activeGames");
+				console.log("User Active Games: "+Object.keys(userActiveGames));
+				if(Object.keys(userActiveGames).includes(selectedFriendUid)){
+					console.log("Error, you have an existing game happening with this user!");						//Game exist, redirect to game			
+				}else{
+					console.log("Success, you have just started a new game with this user!");						//Game does not exist, create a new game
+					let totalGames = await findTotalGames();
+					let gameID = "game" + (Number(totalGames) + 1).toString();
 
-				// Update to user
-				//console.log("users/"+uid+"/activeGames/",{[friendUid]: gameID});
-				updateToDatabase("users/"+uid+"/activeGames/",{[friendUid]: gameID});
-				
-				// Update to friend
-				updateToDatabase("users/"+friendUid+"/activeGames/",{[uid]: gameID});
+					// Update oppID and gameID to Signed In user
+					updateToDatabase("users/"+uid+"/activeGames/",{[friendUid]: gameID});
+					
+					// Update oppID and gameID to Opponent/Friend user
+					updateToDatabase("users/"+friendUid+"/activeGames/",{[uid]: gameID});
 
-				// Update to game
-				var test = {"allmoves": "",
-							"currentPlayer": 1, 
-							"lastmove": "", 
-							"players": "",
-							"win": "0,0"}	
-				updateToDatabase("games/"+gameID+"/",test);
-				updateToDatabase("games/"+gameID+"/players",{1: uid});
-				updateToDatabase("games/"+gameID+"/players",{2: friendUid});
-				updateToDatabase("games/",{totalGames: (Number(totalGames) + 1).toString()})
-				/*updateToDatabase("games/"+gameID+"/",[
-													{allmoves: ""}, 
-													{currentPlayer: 1}, 
-													{lastmove: ""}, 
-													{players: [
-																{1: uid},
-																{2: friendUid}
-													]}, 
-													{win: "0,0"}
-												]);*/
-
+					// Update to game
+					var test = {"allmoves": "",					//Initialise a game record
+								"currentPlayer": 1, 
+								"lastmove": "", 
+								"players": "",
+								"win": "0,0"}	
+					updateToDatabase("games/"+gameID+"/",test);		//Update game record
+					updateToDatabase("games/"+gameID+"/players",{1: uid});		//Update who is player 1
+					updateToDatabase("games/"+gameID+"/players",{2: friendUid});		//Update who is player 2
+					updateToDatabase("games/",{totalGames: (Number(totalGames) + 1).toString()});
+				}
 			}
-
+			var uid = sessionStorage.getItem('uid');
 			var userName = friendData.name;
 			var userPic = friendData.profile_picture;
 			
@@ -101,9 +85,10 @@
 			img.style.width = "100px";
 			img.style.height = "100px";
 
-			img.addEventListener("click", startConnect4Game);
+			img.addEventListener("click", function(){
+				startConnect4Game(uid,friendUid);
+			});
 			//img.setAttribute("id", friendUid);
-			//document.getElementById(friendUid).addEventListener("click", console.log("huat"));
 			let link = document.createElement("a");
 			link.setAttribute("href","./games/connect4/draft8.html?oppID="+friendUid);
 
@@ -117,14 +102,6 @@
 			document.getElementById("modalFriends").appendChild(outerDiv);
 		}
 
-		async function showFriendList(userFriends) {
-			const userFriendArray = userFriends.split(",");
-			let result = await getFriendList(userFriendArray);
-			if (result) {
-				loadFriends();
-			}
-		}
-
 		//Get the list of user's friends
 		async function getFriendList(userFriendArray) {
 			for (let friendUid of userFriendArray) {
@@ -133,6 +110,24 @@
 				setFriendData(data,friendUid);
 			}
 			return true;
+		}
+
+		async function showFriendList(userFriends) {
+			let unsortedUserFriendArray = userFriends.split(",");
+			let userFriendArray = unsortedUserFriendArray.slice(0,unsortedUserFriendArray.length-1);
+			let result = await getFriendList(userFriendArray);
+			if (result) {
+				loadFriends();
+			}
+		}
+
+		//Set User Login Data after their data is returned from Google API
+		function setUserData(userObject) {
+			var userName = userObject.name;
+			var userPic = userObject.profile_picture;
+			var userFriends = userObject.friends;
+			showFriendList(userFriends);
+			document.getElementById("userAvatarPic").src = userPic;
 		}
 
 		//Get User Login Data

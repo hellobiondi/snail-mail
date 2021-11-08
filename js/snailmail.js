@@ -125,7 +125,7 @@ function loadFriends() {
     });
 }
 
-$(document).ready(function () {
+function showGameList() {
     $('#gameList').owlCarousel({
         items: 3,
         autoPlay: 3000, //Set AutoPlay to 3 seconds
@@ -153,4 +153,4 @@ $(document).ready(function () {
             }
         }
     });
-});
+};

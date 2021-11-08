@@ -2,46 +2,59 @@
 import { readFromDatabase, writeToDatabase, isUserSignedIn } from "./../../js/module.js";
 //import {readFromDatabase, writeToDatabase, isUserSignedIn} from "./../../js/module.js";
 
+function getOppID(){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const oppID = urlParams.get('oppID');
+    return oppID
+}
+
+async function getGameID(){
+    let uid = sessionStorage.getItem("uid");
+    let oppID = getOppID();
+    let gameID = await readFromDatabase("users/" + uid + "/activeGames/" + oppID);
+    return gameID;
+}
+
 async function getData() {
     var uid = await isUserSignedIn();
     var property = "users/" + uid;
     sessionStorage.setItem("uid", uid);
+    
     var data = await readFromDatabase(property);
+    sessionStorage.setItem("name",data.name);       //Set name in session
+    sessionStorage.setItem("name",data.email);      //Set email in session
 
-    const queryString = window.location.search;
-    console.log(queryString);
+    //Get opponent's ID from the URL
+    /*const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const oppID = urlParams.get('oppID');
-    console.log(oppID);
+    sessionStorage.setItem("opponentID",oppID);*/
 
     //var gameID = await readFromDatabase("users/"+oppID);
 
-    console.log(data);
-    console.log(data["activeGames"]);
-    console.log(Object.keys(data["activeGames"])); // --> list
-    sessionStorage.setItem("opponentID", Object.keys(data["activeGames"])[0]);
-    sessionStorage.setItem("gameID", Object.values(data["activeGames"])[0]);
-    console.log(Object.values(data["activeGames"])); // --> list); // --> list
-    for (var item in data) {
+    //sessionStorage.setItem("opponentID", Object.keys(data["activeGames"])[0]);
+    //sessionStorage.setItem("gameID", Object.values(data["activeGames"])[0]);
+    //console.log(Object.values(data["activeGames"])); // --> list); // --> list
+    /*for (var item in data) {
         sessionStorage.setItem(item, data[item]);
-    }
-    var gameID = await readFromDatabase("users/" + uid + "/activeGames/" + oppID);
-    console.log(gameID);
+    }*/
 
+    /*var gameID = await readFromDatabase("users/" + uid + "/activeGames/" + oppID);
+    sessionStorage.setItem("gameID", gameID);*/
 }
+
 getData();
-console.log(sessionStorage);
+
+//console.log("[Session stored Variables]", sessionStorage);
+/*var gameID = sessionStorage.gameID;
 var uid = sessionStorage.uid;
 var email = sessionStorage.email;
 var name = sessionStorage.name;
-var opponentID = sessionStorage.opponentID;
-var gameID = sessionStorage.gameID;
+var opponentID = sessionStorage.opponentID;*/
 
 
 
-console.log(name);
-console.log(opponentID);
-console.log(gameID);
 // var dataList = {};
 // if inside is empty, will becomes first player
 async function initializePlayer() {
@@ -55,9 +68,7 @@ async function initializePlayer() {
     // console.log(dataList)fr
 
     startGame();
-    console.log(email + "email");
-
-
+    //console.log(email + "email");
 }
 initializePlayer();
 // console.log(dataList)
@@ -79,10 +90,8 @@ async function startGame() {
     //var tempProp = "games/connect4/game0001/currentPlayer";
     // var data = await readFromDatabase(tempProp);
 
-
-
     // test update db
-    console.log("testing");
+    //console.log("testing");
     // writeToDatabase("games/connect4/game0001/allmoves", "0,1/0,2");
     // writeToDatabase("games/connect4/game0001/lastmove", "6,9");
     // console.log(game);
@@ -99,10 +108,11 @@ async function startGame() {
     var player1Color = '#f88796'; //red
     var player2Color = '#fbb74c'; //yellow
 
-    var UID1 = uid;
-    var UID2 = 'bkLfaqpZH7TfCuXvajP3lbbmJBx2';
-
-    console.log(typeof (dataList));
+    /*var UID1 = sessionStorage.getItem("uid");
+    var UID2 = 'bkLfaqpZH7TfCuXvajP3lbbmJBx2';*/
+    let uid = sessionStorage.getItem("uid");
+    let gameID = await getGameID();
+    //console.log(typeof (dataList));
 
 
     // Selectors
@@ -143,15 +153,13 @@ async function startGame() {
     }
 
 
-
-
     async function getGameBoard() {
-        var prop = "games/" + `${gameID}` + "/allmoves"; // hardcoded game0001 for now
+        var prop = "games/" + `${gameID}` + "/allmoves";
         var data = await readFromDatabase(prop);
         return data;
     }
     var gameBoard = await getGameBoard();
-    console.log(gameBoard);
+    console.log("This game's all moves: " + gameBoard);
 
     if (gameBoard != null) {
         var gameBoardList = gameBoard.split(',');
@@ -236,7 +244,6 @@ async function startGame() {
                         writeToDatabase("games/" + `${gameID}` + "/currentPlayer", 2);
                         return currentPlayer = 2;
                     }
-
                 } else {
                     row[0].style.backgroundColor = player2Color;
                     Array.prototype.forEach.call(tableCell, (cell) => {

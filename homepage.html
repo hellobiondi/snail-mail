@@ -26,7 +26,6 @@
 	<link rel="stylesheet" href="owlcarousel/css/owl.carousel.min.css">
 	<link rel="stylesheet" href="owlcarousel/css/owl.theme.default.min.css">
 
-
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
 </head>
@@ -36,17 +35,67 @@
 	<script type="module">
 		import {isUserSignedIn, updateToDatabase, readFromDatabase} from './js/module.js';
 		
+		//Set active game data
+		async function setActiveGameData(gameID,oppID){
+			let oppProp =  "users/" + oppID;
+			let oppData = await readFromDatabase(oppProp);
+
+			let gameProp = "games/" + gameID;
+			let gameData = await readFromDatabase(gameProp);
+
+			//Game Data 
+			let allMoves = gameData.allMoves;
+			let currentPlayer = gameData.currentPlayer;
+			let lastMove = gameData.lastMove;
+			let player1 = gameData.players[1];
+			let player2 = gameData.players[2];
+			if(((currentPlayer == 1) && (player1 == sessionStorage.getItem("uid"))) || ((currentPlayer == 2) && (player2 == sessionStorage.getItem("uid")))){
+				console.log("Signed In user's turn");
+				let oppPic = oppData.profile_picture;	//Opponent's avatar
+				let outerDiv = document.createElement("div");
+				outerDiv.classList.add("item", "grow", "px-4");
+				
+				let a = document.createElement("a");
+				a.setAttribute("href", "./games/connect4/draft8.html?oppID="+oppID)
+				a.style.textDecoration = "none";
+				let img = document.createElement("img");
+				img.setAttribute("src", "./img/connect4.jpeg");
+				img.classList.add("rounded-circle");
+
+				let innerDiv = document.createElement("div");
+				innerDiv.classList.add("text-primary");
+				innerDiv.setAttribute("align", "center");
+				let text = document.createTextNode(oppData.name);
+				
+				innerDiv.appendChild(text);
+				a.appendChild(img);
+				a.appendChild(innerDiv);
+				outerDiv.appendChild(a);
+				document.getElementById("gameList").appendChild(outerDiv);
+			}else{
+				console.log("Opponent's turn");
+			}
+		}
+
 		//Set User Login Data after their data is returned from Google API
-		function setUserData(userObject){
+		async function setUserData(userObject){
 			var userName = userObject.name;
 			var userPic = userObject.profile_picture;
 			var userFriends = userObject.friends;
 			var userActiveGamesObj = userObject.activeGames;
-			//console.log(userActiveGamesObj);
-			for(let key in userActiveGamesObj){
-				//console.log(key);
-				//console.log(userActiveGamesObj[key]);
+
+			if(userActiveGamesObj != ""){
+				for(let [oppID, gameID] of Object.entries(userActiveGamesObj)){
+					/*console.log("OpponentID: " + oppID);
+					console.log("GameID: " +gameID);*/
+					let gameResult = await setActiveGameData(gameID,oppID);
+				}
+				showGameList();
 			}
+			/*for(let key in userActiveGamesObj){
+				console.log(key);
+				console.log(userActiveGamesObj[key]);
+			}*/
 			if(userFriends != ""){
 				showFriendList(userFriends);
 				document.getElementById("friendCount").innerText = userFriends.split(",").length-1;
@@ -57,22 +106,23 @@
 
 		//Create and set each Friend's data
 		function setFriendData(friendUid,friendObj){
-			var userName = friendObj.name;
-			var userPic = friendObj.profile_picture;
+			let userName = friendObj.name;
+			let userPic = friendObj.profile_picture;
 
-			var outerDiv = document.createElement("div");
+			let outerDiv = document.createElement("div");
 			outerDiv.classList.add("item", "grow", "px-4");
 			
-			var a = document.createElement("a");
-			a.setAttribute("href", "./friend.html?friendID="+friendUid)
-			var img = document.createElement("img");
+			let a = document.createElement("a");
+			a.setAttribute("href", "./friend.html?friendID="+friendUid);
+			a.style.textDecoration = "none";
+			let img = document.createElement("img");
 			img.setAttribute("src", userPic);
 			img.classList.add("rounded-circle");
 
-			var innerDiv = document.createElement("div");
+			let innerDiv = document.createElement("div");
 			innerDiv.classList.add("text-warning");
 			innerDiv.setAttribute("align", "center");
-			var text = document.createTextNode(userName);
+			let text = document.createTextNode(userName);
 
 			innerDiv.appendChild(text);
 			a.appendChild(img);
@@ -81,30 +131,8 @@
 			document.getElementById("friendsList").appendChild(outerDiv);
 		}
 
-		/*function showActiveGamesList(userActiveGamesObj){
-			//console.log(userActiveGamesObj);
-			for(let[key,value] of Object.entries(userActiveGamesObj)){
-				console.log(key);
-
-				let gameID = key;
-				let gameType = key.slice(0,2);
-				let gameFriend = value;
-				
-				let imgSrc = "";
-				if(gameType == "c4"){
-					let imgSrc = "./img/connect4.jpeg";
-				}
-
-				if(gameType == "hm"){
-					let imgSrc = "./img/hangman.jpeg";
-				}
-				
-			}
-
-		}*/
-
 		async function showFriendList(userFriends){
-			const unsortedUserFriendArray = userFriends.split(",");
+			let unsortedUserFriendArray = userFriends.split(",");
 			let userFriendArray = unsortedUserFriendArray.slice(0,unsortedUserFriendArray.length-1);
 			let result = await getFriendList(userFriendArray);
 			if(result){
@@ -115,8 +143,8 @@
 		//Get the list of user's friends
 		async function getFriendList(userFriendArray){
 			for (let friendUid of userFriendArray){
-				var property =  "users/" + friendUid;
-				var data = await readFromDatabase(property);
+				let property =  "users/" + friendUid;
+				let data = await readFromDatabase(property);
 				setFriendData(friendUid,data);
 			}
 			return true;
@@ -125,11 +153,13 @@
 		//Get User Login Data
 		async function getData(){
 			var uid = await isUserSignedIn();
+			sessionStorage.setItem('uid', uid);
 			var property =  "users/" + uid;
 			var data = await readFromDatabase(property);
 			setUserData(data);
 		}
 
+		//Get a new random friend
 		async function getNewFriend(){
 			let uid = await isUserSignedIn();
 			let userFriendsString = await readFromDatabase("users/"+uid+"/friends"); //String of user's friends
@@ -161,10 +191,6 @@
 
 		document.getElementById("findNewFriend").addEventListener("click",getNewFriend);
 		getData();
-		//var result = await getNewFriend();
-		//console.log(result);
-
-
 	</script>
 	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -230,47 +256,7 @@
 				<h1 class="pt-5 pb-3 px-4">Your Friends Awaiting For Your Next Step...</h1>
 			</div>
 			<div class="col-12 pb-5">
-				<div id="gameList" class="owl-carousel owl-theme" align="center">
-					<div class="item card grow px-4 pt-5" style="width:15em;">
-						<img src="img/PM Lee.jpeg" class="card-img-top" alt="...">
-						<div class="card-body">
-							<h5 class="card-title">Connect 4</h5>
-							<p class="card-text">
-								Player: Kyong <br/>
-								Last Move: 15/10/2021
-							</p>
-							<a class="btn btn-lg btn-success">
-								Play Now
-							</a>
-						</div>
-					</div>
-					<div class="item card grow px-4 pt-5" style="width:15em;">
-						<img src="img/PM Lee.jpeg" class="card-img-top" alt="...">
-						<div class="card-body">
-							<h5 class="card-title">Battleship</h5>
-							<p class="card-text">
-								Player: Kyong <br/>
-								Last Move: 15/10/2021
-							</p>
-							<a class="btn btn-lg btn-success">
-								Play Now
-							</a>
-						</div>
-					</div>
-					<div class="item card grow px-4 pt-5" style="width:15em;">
-						<img src="img/PM Lee.jpeg" class="card-img-top" alt="...">
-						<div class="card-body">
-							<h5 class="card-title">Chess</h5>
-							<p class="card-text">
-								Player: Kyong <br/>
-								Last Move: 15/10/2021
-							</p>
-							<a class="btn btn-lg btn-success">
-								Play Now
-							</a>
-						</div>
-					</div>
-				</div>
+				<div id="gameList" class="owl-carousel owl-theme" align="center"></div>
 			</div>
 		</div>
 	</div>
