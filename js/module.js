@@ -247,6 +247,7 @@ export function isUserSignedIn() {
 				// ...
 			} else {
 				console.log("Please login again");
+				window.location.href = "./index.html"; //redirect non-logged in users back to index.html
 			}
 		});
 	});

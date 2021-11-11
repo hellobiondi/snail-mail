@@ -73,7 +73,7 @@
 				outerDiv.appendChild(a);
 				document.getElementById("gameList").appendChild(outerDiv);
 			}else{
-				console.log("Opponent's turn");
+				console.log("<- Num of games that is waiting for opponent's turn");
 			}
 		}
 
@@ -86,8 +86,6 @@
 
 			if(userActiveGamesObj != ""){
 				for(let [oppID, gameID] of Object.entries(userActiveGamesObj)){
-					/*console.log("OpponentID: " + oppID);
-					console.log("GameID: " +gameID);*/
 					let gameResult = await setActiveGameData(gameID,oppID);
 				}
 				showGameList();
@@ -137,17 +135,26 @@
 			let result = await getFriendList(userFriendArray);
 			if(result){
 				loadFriends();
+			}else{
+				let defaultPara = document.createElement("p");
+				let defaultText = document.createTextNode("You have yet to make any friends");
+				defaultPara.appendChild(defaultText);
+				document.getElementById("friendsList").appendChild(defaultPara);
 			}
 		}
 
 		//Get the list of user's friends
 		async function getFriendList(userFriendArray){
-			for (let friendUid of userFriendArray){
-				let property =  "users/" + friendUid;
-				let data = await readFromDatabase(property);
-				setFriendData(friendUid,data);
+			if(userFriendArray.length > 0){
+				for (let friendUid of userFriendArray){
+					let property =  "users/" + friendUid;
+					let data = await readFromDatabase(property);
+					setFriendData(friendUid,data);
+				}
+				return true;
+			}else{
+				return false;
 			}
-			return true;
 		}
 
 		//Get User Login Data
@@ -242,7 +249,7 @@
 			</div>
 		</div>
 
-		<div class="row profile-card">
+		<div class="row profile-card mb-5">
 			<div class="col-12">
 				<h1 class="py-5 px-4">Your Friends (<span id="friendCount">0</span>)</h1>
 			</div>
@@ -256,7 +263,7 @@
 				<h1 class="pt-5 pb-3 px-4">Your Friends Awaiting For Your Next Step...</h1>
 			</div>
 			<div class="col-12 pb-5">
-				<div id="gameList" class="owl-carousel owl-theme" align="center"></div>
+				<div id="gameList" class="owl-carousel owl-theme" align="center"><span class="mt-5 text-muted">You do not have any pending games waiting for your move!</span></div>
 			</div>
 		</div>
 	</div>

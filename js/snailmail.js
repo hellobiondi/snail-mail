@@ -50,50 +50,7 @@ function showNotification(){
     setTimeout(() =>{
         notification.classList.add('d-none');
     },3000);
-    //console.log("Notification works");
 }
-
-
-//Profile.html: Enable user to update their about information
-document.getElementById("editAbout").addEventListener("click", function () {
-    document.getElementById("userName").removeAttribute("disabled");
-    document.getElementById("userBio").removeAttribute("disabled");
-    document.getElementById("editAbout").style.display = "none";
-    document.getElementById("cancelAbout").style.display = "inline";
-    document.getElementById("saveAbout").style.display = "inline";
-});
-
-/*$(document).ready(function () {
-    $('#friendsList').owlCarousel({
-        items: 4,
-        autoPlay: 3000, //Set AutoPlay to 3 seconds
-        navigation: false, // Show next and prev buttons
-        stopOnHover: true,
-        pagination: false,
-        itemsDesktop: [1199, 3],
-        itemsDesktopSmall: [979, 3],
-        loop:true,
-        margin:10,
-        responsiveClass:true,
-        responsive:{
-            0:{
-                items:1,
-                nav:true
-            },
-            600:{
-                items:3,
-                nav:false
-            },
-            1000:{
-                items:5,
-                nav:true,
-                loop:false
-            }
-        }
-    });
-});*/
-
-
 
 function loadFriends() {
     $('#friendsList').owlCarousel({
@@ -109,7 +66,7 @@ function loadFriends() {
         responsiveClass:true,
         responsive:{
             0:{
-                items:1,
+                items:2,
                 nav:true
             },
             600:{
@@ -139,7 +96,7 @@ function showGameList() {
         responsiveClass:true,
         responsive:{
             0:{
-                items:1,
+                items:2,
                 nav:true
             },
             600:{
@@ -154,3 +111,31 @@ function showGameList() {
         }
     });
 };
+
+
+//Animations: Intersection Observers API
+const appearOptions = {
+    threshold: 0,
+    rootMargin: "0px 0px -300px 0px"
+};
+
+const faders = document.querySelectorAll(".animate-fade");
+const sliders = document.querySelectorAll(".slide-in");
+const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+    entries.forEach(entry =>{
+        if(!entry.isIntersecting){
+            return;
+        }else{
+            entry.target.classList.add("appear");
+            appearOnScroll.unobserve(entry.target);
+        }
+    });
+}, appearOptions);
+
+faders.forEach(fader => {
+    appearOnScroll.observe(fader);
+})
+
+sliders.forEach(slider => {
+    appearOnScroll.observe(slider);
+});

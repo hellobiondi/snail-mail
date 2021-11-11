@@ -1,8 +1,20 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
-
 /*
  * Globals
  */
+
+body {
+    /*text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);*/
+    /*box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);*/
+    font-family: 'Crete Round', serif;
+    background-color: #E7ECF4;
+    color: #3d444f;
+}
+
+img {
+    margin-bottom: 10px;
+}
+/***************************** Start Owl Carousel *****************************/
 
 .grow {
     transition: all .2s ease-in-out;
@@ -16,34 +28,48 @@
     padding: 10px;
 }
 
-/***************************** Scroll Bar *****************************/
+/***************************** End Owl Carousel *****************************/
+
+/***************************** Start Scroll Bar *****************************/
+
 ::-webkit-scrollbar {
     width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background-color: #E7ECF4;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-}
-/***********************End of Scroll Bar *****************************/
-
- 
-body {
-    /*text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);*/
-    /*box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);*/
-    font-family: 'Crete Round', serif;
-    background-color: #E7ECF4;
-    color: #3d444f;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
-/***************************** login_page.html *****************************/
-.tabs{
+/***************************** End Scroll Bar *****************************/
+
+/***************************** Start index.html *****************************/
+
+.homeRow {
+    padding-top: 75px;
+    padding-bottom: 75px;
+    align-items: center;
+}
+
+.headerTitle {
+    color: #414F5A;
+}
+
+.cover-container {
+    max-width: 42em;
+}
+
+/***************************** End index.html *****************************/
+
+/***************************** Start login_page.html *****************************/
+
+.tabs {
     font-size: 20px;
 }
 
@@ -56,9 +82,7 @@ img[src="img/btn_google_signin_light_normal_web@2x.png"] {
     height: 50px;
 }
 
-#signInBox,
-#signUpBox,
-#addressBox {
+#signInBox, #signUpBox, #addressBox {
     background-color: white;
     border-radius: 0% 0% 10px 10px;
 }
@@ -77,8 +101,6 @@ img[src="img/btn_google_signin_light_normal_web@2x.png"] {
     border-radius: 10px 10px 0% 0%;
 }
 
-
-
 h4 {
     width: 100%;
     text-align: center;
@@ -95,39 +117,40 @@ h4 span {
 
 /***************************** End login_page.html *****************************/
 
-/***************************** Navigation Bar *****************************/
-.navbar{
+/***************************** Start Navigation Bar *****************************/
+
+.navbar {
     background-color: #6EB6CF !important;
-    padding: 10 0 10 0 ;
+    padding: 10 0 10 0;
     margin: 0px;
 }
 
-.navbar-brand{
+.navbar-brand {
     padding: 0px;
 }
 
-.brand{
+.brand {
     font-family: 'Gugi', cursive;
     margin-left: 20px;
     font-size: 35px;
     color: #385264;
 }
 
-#logo{
+#logo {
     font-family: 'Gugi', cursive;
 }
 
-#navbarMenu > ul > li > a{
+#navbarMenu>ul>li>a {
     font-size: 25px;
     color: #3d444f;
     padding-right: 30px;
 }
 
-#navbarMenu > ul > li > a:hover{
+#navbarMenu>ul>li>a:hover {
     color: white;
 }
 
-.btn-custom{
+.btn-custom {
     background-color: #E7ECF4;
     color: #385264;
     border: 3px solid #395264;
@@ -135,30 +158,32 @@ h4 span {
     font-size: 25px;
 }
 
-#navbarMenu > ul > li > a.active{
+#navbarMenu>ul>li>a.active {
     color: white;
 }
 
 /* Logo */
-.navbar img{
-    width: 80px; 
+
+.navbar img {
+    width: 80px;
     height: 80px;
     margin-left: 10px;
 }
 
 /* Profile Icon*/
-.nav-link{
+
+.nav-link {
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
-.avatar img{
+.avatar img {
     width: 60px;
     height: 60px;
     margin-right: -13px;
 }
 
-.avatar-button a{
+.avatar-button a {
     border: 3px solid #3a484e;
     border-radius: 15px;
     padding-top: 10px;
@@ -167,7 +192,7 @@ h4 span {
     text-align: center;
 }
 
-.avatar-button a:hover{
+.avatar-button a:hover {
     border: 3px solid #3a484e;
     border-radius: 15px;
     padding-top: 10px;
@@ -177,10 +202,9 @@ h4 span {
     font-weight: bolder;
 }
 
-
 /***************************** End Navigation Bar *****************************/
 
-/***************************** homepage.html *****************************/
+/***************************** Start homepage.html *****************************/
 
 .action-buttons {
     padding: auto;
@@ -200,7 +224,7 @@ h4 span {
     padding: 0px;
 }
 
-.speech-text{
+.speech-text {
     line-height: 30px;
     padding: 5px;
 }
@@ -221,12 +245,13 @@ h4 span {
 
 /***************************** End homepage.html *****************************/
 
-/***************************** about.html *****************************/
-#founders{
+/***************************** Start about.html *****************************/
+
+#founders {
     font-size: 75px;
 }
 
-.card{
+.card {
     border-radius: 20px;
 }
 
@@ -238,199 +263,30 @@ h4 span {
     padding-top: 20px;
     padding-bottom: 15px;
 }
+
 /***************************** End about.html *****************************/
 
+/***************************** Start profile.html *****************************/
 
-/***************************** profile.html *****************************/
-.profile-pic{
+.profile-pic {
     height: 250px;
     width: 250px;
 }
 
-.profile-card{
+.profile-card {
     background-color: #FFFFFF;
     border-radius: 40px;
 }
 
 #map {
-    height: 500px;  /* The height is 400 pixels */
-    width: 100%;  /* The width is the width of the web page */
-   }
-/***************************** End profile.html *****************************/
-
-
-/* Custom Buttons */
-/* Small Buttons */
-.button-small{
-    font-size: 20px;
-}
-
-/* Large Buttons */
-.button-large{
-    font-size: 30px;
-}
-
-/* Jumbo Buttons */
-.button-jumbo{
-    font-size: 40px;
-}
-
-/* Themed Buttons */
-.button-light{
-    background-color: #6EB6CF;
-    color: #FFFFFF;
-    outline-style: solid;
-    outline-color: #6EB6CF;
-    border-radius: 10px;
-    font-family: 'Crete Round', serif;
-}
-
-.button-light:hover{
-    background-color: #5495B0;
-    color: #FFFFFF;
-}
-
-/* Themed Outline Buttons */
-.button-light-outline{
-    background-color: #FFFFFF;
-    color: #6EB6CF;
-    outline-style: solid;
-    outline-color: #6EB6CF;
-    border-radius: 10px;
-    font-family: 'Crete Round', serif;
-}
-
-.button-light-outline:hover{
-    background-color: #ececec;
-    color: #5495B0;
-}
-
-
-/* Save Buttons */
-.button-save{
-    background-color: #62bb4c;
-    color: #FFFFFF;
-    outline-style: solid;
-    outline-color: #62bb4c;
-    border-radius: 10px;
-    font-family: 'Crete Round', serif;
-}
-
-.button-save:hover{
-    background-color: #59aa45;
-    outline-style: solid;
-    outline-color: #59aa45;
-    color: #FFFFFF;
-}
-
-/* Cancel Buttons */
-.button-cancel{
-    background-color: #f8f8f8;
-    color: #FFFFFF;
-    outline-style: solid;
-    outline-color: #62bb4c;
-    border-radius: 10px;
-    font-family: 'Crete Round', serif;
-}
-
-.button-cancel:hover{
-    background-color: #59aa45;
-    outline-style: solid;
-    outline-color: #59aa45;
-    color: #FFFFFF;
-}
-
-
-/* Custom default button */
-
-.btn-secondary,
-.btn-secondary:hover,
-.btn-secondary:focus {
-    color: #333;
-    text-shadow: none;
-    /* Prevent inheritance from `body` */
-}
-
-
-
-.btn-cta{
-    background-color: #ff8592;
-    color: white;
-}
-
-img{
-    margin-bottom: 10px;
-}
-
-.homeRow{
-    padding-top: 75px ;
-    padding-bottom: 75px ;
-    align-items: center;
-}
-
-.headerTitle {
-    color: #414F5A ;
-}
-
-.cover-container {
-    max-width: 42em;
-}
-
-#cancelAbout{
-    display: none;
-}
-
-#saveAbout{
-    display: none;
-}
-
-/* Notification of Success */
-
-.notification-container {
-    border-radius: 10px 10px 0 0;
-    padding: 15px 15px 10px 15px;
+    height: 500px;
+    /* The height is 400 pixels */
     width: 100%;
-    text-align: center;
-    position: fixed;
-    bottom: 0px;
-    /*transition-duration: 5s;*/
-    /*transition-timing-function: ease-in-out;*/
-  }
-
-  .fade-in-notification {
-    animation: fadeIn linear 0.5s;
-    -webkit-animation: fadeIn linear 0.5s;
-    -moz-animation: fadeIn linear 0.5s;
-    -o-animation: fadeIn linear 0.5s;
-    -ms-animation: fadeIn linear 0.5s;
-  }
-
-  @keyframes fadeIn {
-    0% { opacity: 0 }
-    100% { opacity: 1 }
-  }
-  
-  @-moz-keyframes fadeIn {
-    0% { opacity: 0 }
-    100% { opacity: 1 }
-  }
-  
-  @-webkit-keyframes fadeIn {
-    0% { opacity: 0 }
-    100% { opacity: 1 }
-  }
-  
-  @-o-keyframes fadeIn {
-    0% { opacity: 0 }
-    100% { opacity: 1 }
-  }
-  
-  @-ms-keyframes fadeIn {
-    0% { opacity: 0 }
-    100% { opacity: 1 }
-  }
+    /* The width is the width of the web page */
+}
 
 /* Profile Picture */
+
 .profilepic {
     position: relative;
     width: 250px;
@@ -440,17 +296,17 @@ img{
     background-color: #111;
     margin: auto;
     padding-left: 0;
-  }
-  
-  .profilepic:hover .profilepic__content {
+}
+
+.profilepic:hover .profilepic__content {
     opacity: 1;
-  }
-  
-  .profilepic:hover .profilepic__image {
+}
+
+.profilepic:hover .profilepic__image {
     opacity: .5;
-  }
-  
-  .profilepic__image {
+}
+
+.profilepic__image {
     object-fit: cover;
     opacity: 1;
     transition: opacity .2s ease-in-out;
@@ -458,9 +314,9 @@ img{
     margin-left: 0;
     width: 250px;
     height: 250px;
-  }
-  
-  .profilepic__content {
+}
+
+.profilepic__content {
     position: absolute;
     top: 0;
     right: 0;
@@ -473,19 +329,239 @@ img{
     color: white;
     opacity: 0;
     transition: opacity .2s ease-in-out;
-  }
-  
-  .profilepic__icon {
+}
+
+.profilepic__icon {
     color: white;
     padding-bottom: 8px;
-  }
-  
-  .fas {
+}
+
+.fas {
     font-size: 20px;
-  }
-  
-  .profilepic__text {
+}
+
+.profilepic__text {
     font-size: 12px;
     width: 50%;
     text-align: center;
-  }
+}
+
+#cancelAbout {
+    display: none;
+}
+
+#saveAbout {
+    display: none;
+}
+
+/***************************** End profile.html *****************************/
+
+/***************************** Start Custom Buttons *****************************/
+
+/* Small Buttons */
+.button-small {
+    font-size: 20px;
+}
+
+/* Large Buttons */
+.button-large {
+    font-size: 30px;
+}
+
+/* Jumbo Buttons */
+.button-jumbo {
+    font-size: 40px;
+}
+
+/* Themed Buttons */
+.button-light {
+    background-color: #6EB6CF;
+    color: #FFFFFF;
+    outline-style: solid;
+    outline-color: #6EB6CF;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-light:hover {
+    background-color: #5495B0;
+    color: #FFFFFF;
+}
+
+/* Themed Outline Buttons */
+.button-light-outline {
+    background-color: #FFFFFF;
+    color: #6EB6CF;
+    outline-style: solid;
+    outline-color: #6EB6CF;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-light-outline:hover {
+    background-color: #ececec;
+    color: #5495B0;
+}
+
+/* Save Buttons */
+.button-save {
+    background-color: #62bb4c;
+    color: #FFFFFF;
+    outline-style: solid;
+    outline-color: #62bb4c;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-save:hover {
+    background-color: #59aa45;
+    outline-style: solid;
+    outline-color: #59aa45;
+    color: #FFFFFF;
+}
+
+/* Cancel Buttons */
+.button-cancel {
+    background-color: #f8f8f8;
+    color: #FFFFFF;
+    outline-style: solid;
+    outline-color: #62bb4c;
+    border-radius: 10px;
+    font-family: 'Crete Round', serif;
+}
+
+.button-cancel:hover {
+    background-color: #59aa45;
+    outline-style: solid;
+    outline-color: #59aa45;
+    color: #FFFFFF;
+}
+
+/* Others */
+.btn-secondary, .btn-secondary:hover, .btn-secondary:focus {
+    color: #333;
+    text-shadow: none;
+    /* Prevent inheritance from `body` */
+}
+
+.btn-cta {
+    background-color: #ff8592;
+    color: white;
+}
+
+/***************************** End Custom Buttons *****************************/
+
+/***************************** Start Anmations *****************************/
+
+.animate-fade {
+    opacity: 0;
+    transition: opacity 250ms ease-in;
+}
+
+.animate-fade.appear {
+    opacity: 1;
+}
+
+.from-top {
+    transform: translateY(-50%);
+}
+
+.from-bottom {
+    transform: translateY(50%);
+}
+
+.from-left {
+    transform: translateX(-50%);
+}
+
+.from-right {
+    transform: translateX(50%);
+}
+
+.from-top, .from-bottom {
+    transition: opacity 250ms ease-in, transform 400ms ease-in;
+    opacity: 0;
+}
+
+.from-left, .from-right {
+    transition: opacity 250ms ease-in, transform 400ms ease-in;
+    opacity: 0;
+}
+
+.from-top.appear, .from-bottom.appear {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.from-left.appear, .from-right.appear {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/***************************** End Animations *****************************/
+
+/***************************** Start notifications *****************************/
+
+.notification-container {
+    border-radius: 10px 10px 0 0;
+    padding: 15px 15px 10px 15px;
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    bottom: 0px;
+}
+
+.fade-in-notification {
+    animation: fadeIn linear 0.5s;
+    -webkit-animation: fadeIn linear 0.5s;
+    -moz-animation: fadeIn linear 0.5s;
+    -o-animation: fadeIn linear 0.5s;
+    -ms-animation: fadeIn linear 0.5s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+@-moz-keyframes fadeIn {
+    0% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+@-o-keyframes fadeIn {
+    0% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+@-ms-keyframes fadeIn {
+    0% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+/***************************** End notifications *****************************/
