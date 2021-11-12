@@ -80,7 +80,6 @@
 				</div>
 			</div>
 			<div class="col-lg-6 p-4" id="signUpBox">
-<<<<<<< Updated upstream
 				<div>
 					<input type='hidden' class="form-control" id="check_register">
 				<div class="invalid-feedback text-center" style="font-size: large;">
@@ -103,12 +102,6 @@
 					This field cannot be empty
 				</div></div><br>
 				<div>
-=======
-				Email:<input type="email" class="form-control" id="register_email">
-				<br>
-				Preferred Name:<input type="text" class="form-control" id="name"><br>
-				Password:<input type="password" class="form-control" id="register_password"><br>
->>>>>>> Stashed changes
 				Confirm Password:<input type="password" class="form-control" id="confirm_password">
 				<div class="invalid-feedback">
 					Passwords not match!
@@ -867,11 +860,7 @@
             var user_postal_code = document.getElementById("postal_code").value;
             var user_country = document.getElementById("country").value;
             var bio = "The world does not know who is he/she yet! :)";
-<<<<<<< Updated upstream
             if(user_postal_code==""){
-=======
-            if(user_postal_code==" "){
->>>>>>> Stashed changes
                 alert("postal code is required!");
             }else{
                 var checkAddress = await codeAddress(user_postal_code + ", " + user_country);
