@@ -82,7 +82,7 @@ img[src="img/btn_google_signin_light_normal_web@2x.png"] {
     height: 50px;
 }
 
-#signInBox, #signUpBox, #addressBox {
+#signInBox, #signUpBox, #addressBox, #updateBox {
     background-color: white;
     border-radius: 0% 0% 10px 10px;
 }

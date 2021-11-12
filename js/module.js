@@ -57,26 +57,6 @@ export function readToDatabase(prop) {
 
 /*call it in async function*/
 export function readFromDatabase(prop) {
-	/*call this function in this way:
-	retrieve chatHistory 
-	  - prop = "Chats/"+ uid +"/chatHistory" to get the whole list of chatHistory the user has
-	  
-	retrieve chatRecent 
-	  - prop = "Chats/" + uid + "/chatRecent" to get the whole list of chatRecent including those havent received by the user
-	  - do check the currentDate with the expected_received_date, if >= expected, shows the mail in Recently received div box
-  
-	retrieve profile
-	  - prop = "users/" + uid
-  
-	retrieve game id
-	  - prop = "users/" + uid +"/activegames"
-	  return an object {gameid1:game1info,gameid2:game2info,...}
-  
-	retrieve games
-	  - prop = "games/gamename/" + gameID to get the info for the game of the user
-  
-	var data = readFromDatabase(prop);
-	*/
 	return new Promise(resolve => {
 		onValue(ref(db, prop), (snapshot) => {
 			const data = snapshot.val();
@@ -140,19 +120,23 @@ export async function loginGoogle() {
 	});
 }
 
-export function loginEmail(email, pwd) {
-	signInWithEmailAndPassword(auth, email, pwd)
+export async function loginEmail(email, pwd) {
+
+	return new Promise(resolve=>{signInWithEmailAndPassword(auth, email, pwd)
 		.then((result) => {
 			const user = result.user;
 			console.log("login successfully");
-			window.location.href = "./homepage.html";
+			//window.location.href = "./homepage.html";
+			resolve(user.uid);
 
 		})
 		.catch((error) => {
 			const errorCode = error.code;
 			const errorMessage = error.message;
 			console.log(errorCode + " " + errorMessage);
+			resolve(false);
 		});
+	});
 }
 
 export async function registerWithEmail(email, pwd, username) {
