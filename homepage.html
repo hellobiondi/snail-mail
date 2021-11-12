@@ -7,7 +7,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="Hui Ru, Mindy, Biondi, Wei Hern, Gadman">
 	<meta name="generator" content="Hugo 0.84.0">
-	<title><img src="./img/snail.PNG">Snail Mail · Sure and Steady</title>
+	<title>Snail Mail · Sure and Steady</title>
 
 	<!-- Bootstrap CSS File -->
 	<link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -50,6 +50,8 @@
 			let player1 = gameData.players[1];
 			let player2 = gameData.players[2];
 			if(((currentPlayer == 1) && (player1 == sessionStorage.getItem("uid"))) || ((currentPlayer == 2) && (player2 == sessionStorage.getItem("uid")))){
+				document.getElementById("gameList").removeChild(document.getElementById("defaultActiveGameMsg"));
+				
 				console.log("Signed In user's turn");
 				let oppPic = oppData.profile_picture;	//Opponent's avatar
 				let outerDiv = document.createElement("div");
@@ -90,13 +92,12 @@
 				}
 				showGameList();
 			}
-			/*for(let key in userActiveGamesObj){
-				console.log(key);
-				console.log(userActiveGamesObj[key]);
-			}*/
 			if(userFriends != ""){
+				document.getElementById("friendsList").removeChild(document.getElementById("defaultFriendListMsg"));
 				showFriendList(userFriends);
 				document.getElementById("friendCount").innerText = userFriends.split(",").length-1;
+			}else{
+				loadFriends();
 			}
 			document.getElementById("userName").innerHTML = userName;
 			document.getElementById("userAvatarPic").src = userPic;
@@ -135,11 +136,6 @@
 			let result = await getFriendList(userFriendArray);
 			if(result){
 				loadFriends();
-			}else{
-				let defaultPara = document.createElement("p");
-				let defaultText = document.createTextNode("You have yet to make any friends");
-				defaultPara.appendChild(defaultText);
-				document.getElementById("friendsList").appendChild(defaultPara);
 			}
 		}
 
@@ -244,17 +240,19 @@
 						You haven't made a new friend today,
 						would you like to meet someone new?
 					</p>
-					<button id="findNewFriend" class="btn button-light button-large mb-4">Find me a new friend!</button>
+					<button id="findNewFriend" class="btn button-light mb-4">Find me a new friend!</button>
 				</div>
 			</div>
 		</div>
 
 		<div class="row profile-card mb-5">
 			<div class="col-12">
-				<h1 class="py-5 px-4">Your Friends (<span id="friendCount">0</span>)</h1>
+				<h1 class="pt-5 pb-3 px-4">Your Friends (<span id="friendCount">0</span>)</h1>
 			</div>
 			<div class="col-12 pb-5">
-				<div id="friendsList" class="owl-carousel owl-theme" align="center"></div>
+				<div id="friendsList" class="owl-carousel owl-theme" align="center">
+					<div id="defaultFriendListMsg" class="mt-5 text-muted">You have yet to make any friends!</div>
+				</div>
 			</div>
 		</div>
 
@@ -263,7 +261,9 @@
 				<h1 class="pt-5 pb-3 px-4">Your Friends Awaiting For Your Next Step...</h1>
 			</div>
 			<div class="col-12 pb-5">
-				<div id="gameList" class="owl-carousel owl-theme" align="center"><span class="mt-5 text-muted">You do not have any pending games waiting for your move!</span></div>
+				<div id="gameList" class="owl-carousel owl-theme" align="center">
+					<div id="defaultActiveGameMsg" class="mt-5 text-muted">You do not have any pending games waiting for your move!</div>
+				</div>
 			</div>
 		</div>
 	</div>
