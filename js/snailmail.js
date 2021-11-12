@@ -61,7 +61,7 @@ function loadFriends() {
         pagination: false,
         itemsDesktop: [1199, 3],
         itemsDesktopSmall: [979, 3],
-        loop:true,
+        loop:false,
         margin:10,
         responsiveClass:true,
         responsive:{
