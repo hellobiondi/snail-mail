@@ -181,7 +181,12 @@
 				let newFriendUid = potentialFriendsArray[randomInt];
 				let newUserFriendsString = userFriendsString + newFriendUid + ",";
 				let updateUserFriendsStatus = await updateToDatabase("users/" + uid, {friends: newUserFriendsString});
-				if(updateUserFriendsStatus){
+				
+				let newFriendFriendsString = await readFromDatabase("users/"+newFriendUid+"/friends"); //String of the new friend's friends
+				let newNewFriendFriendsString = newFriendFriendsString + uid + ",";
+				let updateNewFriendFriendsStringStatus = await updateToDatabase("users/" + newFriendUid, {friends: newNewFriendFriendsString});
+
+				if(updateUserFriendsStatus && updateNewFriendFriendsStringStatus){
 					console.log("new friend added!");
 					getData();
 					window.location.href = "./friend.html?friendID="+newFriendUid;
