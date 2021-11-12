@@ -124,7 +124,7 @@ async function startGame() {
     var tableCell = document.getElementsByTagName('td');
     const playerTurn = document.querySelector('.player-turn');
     var tableSlot = document.querySelectorAll('.slot');
-    const reset = document.querySelector('.reset');
+    const reset = document.querySelector('.reset'); // remove later.
 
     //var property = "games/connect4/game0001/currentPlayer";
     var property = "games/" + `${gameID}` + "/currentPlayer";
@@ -185,11 +185,23 @@ async function startGame() {
         for (var move of gameBoardList) {
             var slot = document.getElementById(`${move}`);
             //console.log(slot);
-            if (counter % 2 == 0) {
+
+            if (currentPlayer == 1) {
+                if (counter % 2 == 0) {
                 slot.style.backgroundColor = '#d42b3b'; //Player 1
             }else {
                 slot.style.backgroundColor = '#f9c70d'; //Player 2
             }
+            }
+
+            else {
+                if (counter % 2 == 0) {
+                    slot.style.backgroundColor = '#d42b3b'; //Player 1
+                }else {
+                    slot.style.backgroundColor = '#f9c70d'; //Player 2
+                }
+            }
+            
             counter++;
         }
     }
