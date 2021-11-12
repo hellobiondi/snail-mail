@@ -1,20 +1,9 @@
 import { readFromDatabase, writeToDatabase, isUserSignedIn} from "./../../js/module.js";
 
-async function getData() {
-    var uid = await isUserSignedIn();
-    var property = "users/" + uid;
-    sessionStorage.setItem("uid", uid);
-    
-    var data = await readFromDatabase(property);
-    sessionStorage.setItem("name",data.name);       //Set name in session
-    sessionStorage.setItem("email",data.email);      //Set email in session
-}
-
-getData();
-let uid = sessionStorage.getItem("uid");
-let name = sessionStorage.getItem("name");
+let uid = await isUserSignedIn();
+let name = await readFromDatabase("users/" + uid + "/name");
 const htmlScore = document.getElementById('score');
-console.log(htmlScore.innertext);
+console.log(htmlScore.innerText);
 console.log(uid);
 console.log(name);
 
