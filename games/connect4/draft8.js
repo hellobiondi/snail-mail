@@ -2,7 +2,6 @@
 import { readFromDatabase, writeToDatabase, isUserSignedIn } from "./../../js/module.js";
 //import {readFromDatabase, writeToDatabase, isUserSignedIn} from "./../../js/module.js";
 
-
 async function getUsername(uid){
     let name = await readFromDatabase("users/" + uid + "/name");
     return name
@@ -29,8 +28,8 @@ async function getData() {
     
     var data = await readFromDatabase(property);
     sessionStorage.setItem("name",data.name);       //Set name in session
-    sessionStorage.setItem("email",data.email);      //Set email in session
-    // console.log(sessionStorage);
+    sessionStorage.setItem("name",data.email);      //Set email in session
+
     //Get opponent's ID from the URL
     /*const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -63,7 +62,7 @@ var opponentID = sessionStorage.opponentID;*/
 
 // var dataList = {};
 // if inside is empty, will becomes first player
-
+async function initializePlayer() {
     //var prop = "users/" + uid;
     // var data = await readFromDatabase(prop);
     // console.log(data); // {email: 'bokzmmindy@gmail.com', name: 'bok mindy', profile_picture: 'https://lh3.googleusercontent.com/a/AATXAJztuF0yzXyjB2lcv656YraWU00docU31bqpqWTN=s96-c'}
@@ -73,10 +72,10 @@ var opponentID = sessionStorage.opponentID;*/
     // dataList["friends"] = data.friends
     // console.log(dataList)fr
 
-    //startGame();
-    
+    startGame();
     //console.log(email + "email");
-
+}
+initializePlayer();
 // console.log(dataList)
 
 // async function getPlayer(){
@@ -91,17 +90,8 @@ var opponentID = sessionStorage.opponentID;*/
 
 // var prop = "users/" + uid;
 //import {readFromDatabase} from "./module";
-startGame();
-async function startGame() {
-    var display_score_dom = document.getElementsByClassName("display_score");
-    console.log(display_score_dom);
-    display_score_dom[0].innerHTML = sessionStorage.name; // player 1
-    var score1 = 0;
-    var score2 = 0;
-    // display_score_dom[1].innerHTML = "2" // player 2
-    display_score_dom[2].innerHTML = score1; // score 1
-    display_score_dom[3].innerHTML = score2; // score 2
 
+async function startGame() {
     //var tempProp = "games/connect4/game0001/currentPlayer";
     // var data = await readFromDatabase(tempProp);
 
@@ -134,7 +124,7 @@ async function startGame() {
     var tableCell = document.getElementsByTagName('td');
     const playerTurn = document.querySelector('.player-turn');
     var tableSlot = document.querySelectorAll('.slot');
-
+    const reset = document.querySelector('.reset'); // remove later.
 
     //var property = "games/connect4/game0001/currentPlayer";
     var property = "games/" + `${gameID}` + "/currentPlayer";
@@ -143,10 +133,8 @@ async function startGame() {
     //var player1 = currentUIDs[1];
     //var player2 = currentUIDs[2];
 
-    //var display_score_dom = document.getElementsByClassName("display_score");
     var player1 = await getUsername(currentUIDs[1]);
     var player2 = await getUsername(currentUIDs[2]);
-    display_score_dom[1].innerHTML = player2;
 
     console.log(currentUIDs[1]);
     //var currentPlayer = getPlayer();
@@ -251,9 +239,6 @@ async function startGame() {
                         var winLi = winStr.split(',');
                         console.log(winLi);
                         winLi[0] = Number(winLi[0]) + 1;
-                        score1 = winLi[0];
-                        display_score_dom[2].innerHTML = score1;
-
                         var outputStr = winLi.join(',');
                         console.log(outputStr);
                         writeToDatabase(prop_temp, outputStr);
@@ -294,8 +279,6 @@ async function startGame() {
                         var winLi = winStr.split(',');
                         console.log(winLi);
                         winLi[1] = Number(winLi[1]) + 1;
-                        score2 = winLi[1];
-                        display_score_dom[3].innerHTML = score2;
                         var outputStr = winLi.join(',');
                         console.log(outputStr);
                         writeToDatabase(prop_temp, outputStr);
