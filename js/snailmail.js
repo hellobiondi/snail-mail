@@ -112,6 +112,36 @@ function showGameList() {
     });
 };
 
+function loadRecentMails() {
+    $("#mailsCarousel").owlCarousel({
+        items: 4,
+        autoPlay: 3000, //Set AutoPlay to 3 seconds
+        navigation: false, // Show next and prev buttons
+        stopOnHover: true,
+        pagination: false,
+        itemsDesktop: [1199, 3],
+        itemsDesktopSmall: [979, 3],
+        loop:false,
+        rewind:true,
+        margin:10,
+        responsiveClass:true,
+        responsive:{
+            0:{
+                items:1,
+                nav:true
+            },
+            600:{
+                items:3,
+                nav:false
+            },
+            1000:{
+                items:5,
+                nav:true,
+                loop:false
+            }
+        }
+    });
+}
 
 //Animations: Intersection Observers API
 const appearOptions = {

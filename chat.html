@@ -7,7 +7,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="Sun Jun, Mindy, Biondi, Wei Hern, Gadman">
 	<meta name="generator" content="Hugo 0.84.0">
-	<title><img src="./img/snail.PNG">Snail Mail · Sure and Steady</title>
+	<title>Snail Mail · Sure and Steady</title>
 
 	<!-- Bootstrap CSS File -->
 	<link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -17,6 +17,24 @@
 	
 	<!-- Stylesheet for Page -->
 	<link href="./css/main.css" rel="stylesheet">
+
+	<!-- Fonts Gugi -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+
+	<!-- Fonts Crete Round -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Crete+Round&display=swap" rel="stylesheet">
+
+
+	<!-- Owl -->
+	<link rel="stylesheet" href="owlcarousel/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="owlcarousel/css/owl.theme.default.min.css">
+	<script src="owlcarousel/js/jquery.min.js"></script>
+	<script src="owlcarousel/js/owl.carousel.min.js"></script>
+	
 	<style>
 		.homeRow{
 			padding-bottom: 10px;
@@ -49,11 +67,12 @@
 </head>
 
 <body>
-	<!-- using Navbar -->
+<div id=app>
+	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="homepage.html">
-				<img src="./img/snail.PNG" alt="" class="d-inline-block align-text-center">
+				<img src="./img/snailLogo.PNG" alt="" class="d-inline-block align-text-center">
 				<span class="brand">SNAIL MAIL</span>
 			</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
@@ -72,7 +91,9 @@
 				<ul class="navbar-nav ml-auto nav-flex-icons justify-content-end avatar-button">
 					<li class="nav-item avatar">
 						<a class="nav-link" href="profile.html">
-							<img id="userAvatarPic" class="rounded-circle z-depth-0" alt="avatar image">
+							<img id="userAvatarPic" class="rounded-circle z-depth-0" 
+							v-bind:src=avatar_img
+							alt="avatar image">
 						</a>
 					</li>
 				</ul>
@@ -81,15 +102,16 @@
 	</nav>
 		
 	
-	<div id=app class="container">
-		<div class="btn position-fixed bottom-0 end-0 px-3">
+	<div class="container">
+		<div class="btn position-fixed bottom-0 end-0" style="z-index: 10;">
 			<a class="nav-link" href="compose.html">
-			<img class="rounded-circle btn-outline-light img-fluid" style="height: 80px;" src="img/compose.png">
+			<img class="rounded-circle btn-outline-light img-fluid" style="height: 6vw;" src="img/compose.png">
 			</a>
 		</div>
 		<div class="d-none">
 			{{initalise}}
 		</div>
+
 		<div class="row profile-card mt-5 px-5 pb-2">
 			<div class="row-md ">
 				<h3 class="homeRow"> Recently Received:</h3>
@@ -105,36 +127,44 @@
 		</div>
 
 		<div class="row profile-card mt-5 px-5 pb-2" :style={display:display_mailbody}>
-			<div class="row-md d-flex" id="mail-header">
+			<div class="col-12 d-flex" id="mail-header">
 				<h3 class="homeRow me-auto"> Sent from {{ senderName }}</h3>
 			</div>
 
-			<div id="mail_chat" class="row-md d-flex justify-content-center">
-				<div class='card col-sm-2' v-bind:style="{display:display}" >
-					<img class='.bg-image img-fluid m-auto' style="border-radius:20px;height:400px;" src="img/mailboxbg.jpg">
-					<div class="card-img-overlay overflow-auto">
-						<h5 class="card-title word">Mailbox</h5>
+			<div class="row justify-content-center m-0 mb-2">
+
+				<div class="card col-11 p-3 m-auto" v-bind:style="{display:display}" >
+					<div class="row">
+						<h5 class="card-title word" >Mailbox</h5>
 						<button type="button" class="btn-close position-absolute p-3 top-0 end-0" @click="close()" aria-label="Close"></button>		
-						<div class="row" v-for="(content,idx) in chats">
+					</div>
+					
+					<div class="owl-carousel owl-theme" id="mailsCarousel">
+						<div class="item grow px-2"  v-for="(content,idx) in chats">
 							<p class="m-auto word">
-								{{content['datetime']}}
+								{{content.datetime}}
 							</p>
 							<a href="#mail-header" class="m-auto" @click=open_chat(idx)>
-								<img class="m-0 p-2 img-fluid" style="height:70px;" src="./img/closedEnvelope.png">
+								<img class="m-0 p-2 img-fluid" style="height:10vh;width:16vh" src="./img/closedEnvelope.png">
 							</a>
 						</div>
 					</div>
+					
 				</div>
-				
-				<div class="card col-md-9" >
-					<img class="card-img img-fluid m-0  opacity-50" style="border-radius:20px;height:400px;" v-bind:src="'./img/postcard/'+mailDesign">
+
+			</div>
+
+			<div class="row justify-content-center m-0">
+				<div class="card col-11 p-0 m-auto" >
+					<img class="card-img img-fluid m-0  opacity-50" style="border-radius:20px;max-height:400px;" v-bind:src="'./img/postcard/'+mailDesign">
 					<div class="card-img-overlay overflow-auto">
-						<p class="word m-4">
+						<p class="word m-4" style="white-space:pre-wrap;">
 							{{ body }}
 						</p>	
 					</div>
 				</div>
 			</div>
+				
 			<div class="row-sm-3 d-flex m-3 justify-content-end">
 				<button type="button" class="my-auto me-3 btn button-light fs-4" @click="reply()" aria-label="Reply">Reply</button>
 			</div>
@@ -155,31 +185,31 @@
 			</div>
 		</div>
 
-		<div class="row profile-card my-5 px-5 pb-2">
+		<!-- <div class="row profile-card my-5 px-5 pb-2">
 			<div class="row-md d-block">
 				<h3 class="homeRow"> Drafts: </h3>
 			</div>
 			<div class="row d-inline-flex" >
-				<div class="col-2 inline" v-for='(chat ,name) in chatHistory' >
+				<div class="col-2 inline m-2" v-for='(chat ,name) in chatHistory' >
 					<h6>{{ name }}</h6>
 					<a href="#mail-header" @click="display_chat(name)">
 						<img src="./img/openenvelope.png" class="img-auto img-fluid">
 					</a>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
-	
+</div>
 </body>
 
 <script src="https://unpkg.com/vue@next"></script>
 <script type="module" src="./js/module.js"></script>
 <script src="./js/moment.js"></script>
-<script src="./js/chat.vue"></script>
+<script src="./js/snailmail.js"></script>
 
 <script type="module">
 	// DATABASE TESTING
-	import {readFromDatabase, updateChatDatabase, deleteChatRecent} from "./js/module.js";
+	import {readFromDatabase, updateChatDatabase, deleteChatRecent, isUserSignedIn} from "./js/module.js";
     // To be replaced with code from my WAMP 
 
 	Vue.createApp(
@@ -194,6 +224,7 @@
 					chatHistory: '',
 					chats: [],
 					name: '',
+					avatar_img:'',
 					
 					senderName:'None',
 					body: '',
@@ -207,40 +238,49 @@
 				initalise:async function getdb(){
 					//TO:DO getuid from session
 					// default user is Sun Jun for now 
-					this.uid = "123"
+					this.uid = await isUserSignedIn();
+					// for testing
+					this.uid = "xPXLbo2TisUWL2n99rF3rOPzFHs2"
+					console.log(this.uid)
 					
+					// set avatar img 
+					this.data = await readFromDatabase('users');
+					this.avatar_img = this.data[this.uid]['profile_picture']
+
 					var prop = "Chats/"+ this.uid;
 					var data = await readFromDatabase(prop);
 
 					//Debug
 					// console.log(this.uid);
 					// console.log(data);
-
 					this.database = data;
 					this.username = data["name"];
+
 					this.chatRecent = data["chatRecent"];
 					this.chatHistory = data["chatHistory"];
 					
 					// Filter away all those mails that have not reached based on time
 					var currentdate = moment();
+					// console.log(this.chatRecent)
 					if (this.chatRecent){
 						for (const [key,value] of Object.entries(this.chatRecent)){
 							var mailDTString = value['datetime'];
-							var mailReceive = moment(mailDTString,"DD-MM-YY hh:mm");
+							var mailReceive = moment(mailDTString,"lll");
 							// console.log(currentdate.isBefore(mailReceive));
+							// console.log(currentdate)
+							// console.log(mailReceive)
 							if (currentdate.isBefore(mailReceive)){
 								console.log(this.chatRecent[key]);
 								delete this.chatRecent[key];
 							}
 						}
 					}
-
-					
 					return "done";
 				},
 			},
 
 			methods: {
+		
 				update_fb(uid){
 					// let datetime = this.chatRecent[name]['datetime']
 					
@@ -264,18 +304,21 @@
 					this.mailDesign = this.chatRecent[name]['mailDesign'];
 					this.display = 'none';
 				},
-				display_chat(name){
+				async display_chat(name){
 					this.display = "inline-flex";
 					this.display_mailbody= "flex"
 					this.chats =  this.chatHistory[name]["mails"];
+					console.log(this.chats);
 					let c_chat = this.chats[Object.keys(this.chats)[0]]
 					
 					//Update body design
 					this.body = c_chat['content']
 					this.mailDesign = c_chat['mailDesign']
+					await this.$nextTick();
+					loadRecentMails();
 
-					console.log();
 					// console.log(this.chats);
+
 				},
 				open_chat(idx){
 					// console.log(idx);
