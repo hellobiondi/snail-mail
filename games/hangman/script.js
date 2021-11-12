@@ -1,20 +1,22 @@
-import {loginGoogle, readFromDatabase, writeToDatabase} from "./../../js/module.js";
+import { readFromDatabase, writeToDatabase, isUserSignedIn} from "./../../js/module.js";
 
-document.getElementById("loginGoogle").addEventListener("click", loginGoogle);
-console.log(sessionStorage.currentUser);
-var uid = sessionStorage.currentUser;
-var dataList = {};
-
-async function yourFunction(){
-    var prop = "users/" + uid;
-    var data = await readFromDatabase(prop);
-    console.log(data); // {email: 'bokzmmindy@gmail.com', name: 'bok mindy', profile_picture: 'https://lh3.googleusercontent.com/a/AATXAJztuF0yzXyjB2lcv656YraWU00docU31bqpqWTN=s96-c'}
-    // dataList["email"] = data.email;
-    dataList["name"] = data.name;
-    dataList["profile_picture"] = data.profile_picture;
+async function getData() {
+    var uid = await isUserSignedIn();
+    var property = "users/" + uid;
+    sessionStorage.setItem("uid", uid);
+    
+    var data = await readFromDatabase(property);
+    sessionStorage.setItem("name",data.name);       //Set name in session
+    sessionStorage.setItem("email",data.email);      //Set email in session
 }
 
-
+getData();
+let uid = sessionStorage.getItem("uid");
+let name = sessionStorage.getItem("name");
+const htmlScore = document.getElementById('score');
+console.log(htmlScore.innertext);
+console.log(uid);
+console.log(name);
 
 const wordEl = document.getElementById('word');
 const wrongLettersEl = document.getElementById('wrong-letters');
@@ -34,7 +36,12 @@ let playable = true;
 
 const correctLetters = [];
 const wrongLetters = [];
-var score = 0;
+var score = await readFromDatabase("users/" + `${uid}` + "/hangmanScore");
+if (score == null) {
+	score = 0;
+}
+htmlScore.innerText = `Score: ${score}`;
+console.log('current score', score);
 
 // Show hidden word
 function displayWord() {
@@ -54,11 +61,12 @@ function displayWord() {
 	const innerWord = wordEl.innerText.replace(/[ \n]/g, '');
 
 	if (innerWord === selectedWord) {
-		finalMessage.innerText = 'Congratulations! You won! 😃';
+		finalMessage.innerText = `Congratulations, ${name}! You won! 😃`;
 		finalMessageRevealWord.innerText = '';
 		popup.style.display = 'flex';
 		score += 1;
-		writeToDatabase("games/hangman/game0001/score0001", score);
+		writeToDatabase("users/" + `${uid}` + "/hangmanScore", score);
+		htmlScore.innerText = `Score: ${score}`;
 		playable = false;
 	}
 }
@@ -84,7 +92,7 @@ function updateWrongLettersEl() {
 
 	// Check if lost
 	if (wrongLetters.length === figureParts.length) {
-		finalMessage.innerText = 'Unfortunately you lost. 😕';
+		finalMessage.innerText = `Unfortunately you lost, ${name}. 😕`;
 		finalMessageRevealWord.innerText = `...the word was: ${selectedWord}`;
 		popup.style.display = 'flex';
 

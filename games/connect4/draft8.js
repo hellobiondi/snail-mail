@@ -28,7 +28,7 @@ async function getData() {
     
     var data = await readFromDatabase(property);
     sessionStorage.setItem("name",data.name);       //Set name in session
-    sessionStorage.setItem("name",data.email);      //Set email in session
+    sessionStorage.setItem("email",data.email);      //Set email in session
 
     //Get opponent's ID from the URL
     /*const queryString = window.location.search;
