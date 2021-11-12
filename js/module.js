@@ -230,8 +230,11 @@ export async function isUserSignedIn() {
 				resolve(uid);
 				// ...
 			} else {
-				console.log("Please login again");
-				window.location.href = "./index.html"; //redirect non-logged in users back to index.html
+				//redirect non-logged in users back to index.html
+				if(!window.location.href=="./index.html"){
+					window.location.href=="./index.html"
+				}
+				resolve(false) 
 			}
 		});
 	});
