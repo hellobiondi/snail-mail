@@ -390,7 +390,6 @@
 		}
 
         async function loginViaGoogle(){
-            //console.log("logining via google");
             var data = await loginGoogle();
 
             if(data){
@@ -444,7 +443,7 @@
             var user_country = document.getElementById("country").value;
             var bio = "The world does not know who is he/she yet! :)";
 			//var activeGames = false;
-			var friends = false;
+			//var friends = "";
             if(user_postal_code==" "){
                 alert("postal code is required!");
             }else{
@@ -461,7 +460,7 @@
                     var user_country = document.getElementById("country").value;
 
                     var prop = "users/" + uid;
-                    var dt = {bio:bio,name:user_name,email:user_email,profile_picture:profile_pic,activeGames:false,friends:friends,address:{postalCode:user_postal_code,country:user_country}};
+                    var dt = {bio:bio,name:user_name,email:user_email,profile_picture:profile_pic,activeGames:"",friends:"",address:{postalCode:user_postal_code,country:user_country}};
                     await writeToDatabase(prop,dt);
 					var prop = "Chats/" + uid;
 					var dt = {name:user_name};
