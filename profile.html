@@ -39,14 +39,14 @@
 	<script type="module">
 		//Import firebase functions from module.js
 		import { isUserSignedIn, readFromDatabase, signOutUser, updateToDatabase } from './js/module.js';
-		import { getImages, uploadImages } from './js/storage_module.js';
+		import { getImages, uploadResizeImages } from './js/storage_module.js';
 
 		//Function: to change the user's profile picutre
 		async function uploadImage() {
 			var uid = await isUserSignedIn();
 			var file = document.getElementById("newImg").files[0];
 			console.log(file);
-			var upload = await uploadImages(uid, file);
+			var upload = await uploadResizeImages(uid, file);
 			//console.log(upload);
 			var url = await getImages(upload);
 			//console.log(url);
@@ -97,8 +97,7 @@
 
 			document.getElementById("userName").defaultValue = userName;
 			document.getElementById("userBio").defaultValue = userBio;
-			document.getElementById("countryCode").value = userCountry;
-			document.getElementById("postalCode").value = userPostalCode;
+			document.getElementById("country").innerText = userCountry;
 			document.getElementById("userPic").src = userPic;
 			document.getElementById("userAvatarPic").src = userPic;
 			//console.log(userFriends);
@@ -155,6 +154,8 @@
 			document.getElementById("cancelAbout").style.display = "none";
 			document.getElementById("saveAbout").style.display = "none";
 		});
+
+		document.getElementById("signout").addEventListener("click",signOutUser);
 	</script>
 	<!-- Navigation Bar-->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -170,7 +171,7 @@
 			<div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="chat.html">Mails</a>
+						<a class="nav-link" aria-current="page" href="chat.html">Mail</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" aria-current="page" href="games.html">Games</a>
@@ -209,8 +210,6 @@
 				<div class="row pb-3">
 					<div class="col-12 py-2 text-center">
 						<span id="fileChosen"></span>
-						<!--<input type="file" id="img" name="img" accept="image/png, image/jpeg">-->
-						<!--<button class="btn" id="upload">Change Profile Picture</button>-->
 					</div>
 				</div>
 			</div>
@@ -239,20 +238,10 @@
 			<div class="col-12">
 				<h1 class="col-12 py-4 px-4">Address</h1>
 				<div class="row px-4">
-					<div class="col-12 pb-4 col-md-6">
-						<div class="input-group">
-							<span class="input-group-text">Postal Code</span>
-							<input id="postalCode" type="text" aria-label="postalCode" class="form-control" disabled>
-						</div>
-					</div>
-					<div class="col-12 pb-4 col-md-6">
-						<div class="input-group">
-							<span class="input-group-text">Country Code</span>
-							<input id="countryCode" type="text" aria-label="countryCode" class="form-control" disabled>
-						</div>
-					</div>
-					<div class="col-12 pt-3 text-end">
-						<button id="editAddress" class="btn button-light">Edit Address</button>
+					<div class="col-12 pb-4">
+						<h5>
+							Country: <span id="country"></span>
+						</h5>
 					</div>
 					<div class="col-12 py-4">
 						<div id="map"></div>
@@ -261,8 +250,8 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-12">
-				<button class="btn button-light" id="signout">Sign Out</button>
+			<div class="col-12 text-center">
+				<button class="btn button-light button-large" id="signout">Sign Out</button>
 			</div>
 		</div>
 	</div>
@@ -274,7 +263,6 @@
 	
 	<script>
 		//Trigger input field to be editable and change button to save changes
-		
 		document.getElementById("editAbout").addEventListener("click", function () {
 			document.getElementById("userName").removeAttribute("disabled");
 			document.getElementById("userBio").removeAttribute("disabled");
@@ -282,25 +270,6 @@
 			document.getElementById("cancelAbout").style.display = "inline";
 			document.getElementById("saveAbout").style.display = "inline";
 		});
-	
-		/*document.getElementById("editAddress").addEventListener("click", function () {
-			document.getElementById("postalCode").removeAttribute("disabled");
-			document.getElementById("countryCode").removeAttribute("disabled");
-		});*/
-
-		//document.getElementById("newImg").addEventListener("onChange",readFile(this));
-
-		/*function readFile(input){
-			let output = "<p>"+input.files[0]["name"]+"</p>"
-			output = output + "<button class='btn button-light' id='upload'>Upload new image</button>";
-			
-			if(input.files[0]){
-				document.getElementById("fileChosen").innerHTML = output;
-				document.getElementById("upload").addEventListener("click", uploadImage);
-			}
-		}*/
-		
-		//showNotification();
 	</script>
 
 	<!-- Javascript -->

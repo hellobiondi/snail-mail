@@ -97,6 +97,7 @@
 			let p = document.createElement("p");
 			let linkName = document.createTextNode(userName);
 			p.appendChild(linkName);
+			link.style.textDecoration = "none";
 			link.appendChild(img);
 			link.appendChild(p);
 			outerDiv.appendChild(link);
@@ -207,13 +208,11 @@
 					<div class="card">
 						<img src="./img/hangman.jpeg" class="card-img-top" alt="...">
 						<div class="card-body">
-							<h2 class="card-title">Hangman</h2>
+							<h2 class="card-title">Hangman - Countries</h2>
 							<p class="card-text mt-5 gameCardText">
-								OA guessing gam where one player thinks of a word, phrase or sentence and the other(s)
-								tries to guess it by suggesting letters within a certain number of guesses.
+								A childhood classic. The most popular guessing game is here!
 								<br /> <br />
-								The game ends when guessing player completes/guess the word or when the other player
-								completes the diagram of the hanged man.
+								In this beautiful rendition of a paper-based game, test your knowledge of countries with a complete list of countries.
 							</p>
 							<a href="./games/hangman/hangman.html" class="btn button-light">Play Hangman</a>
 						</div>
