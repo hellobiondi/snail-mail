@@ -138,6 +138,20 @@
 		</div>
 	</div>
 	<script src="js/snailmail.js"></script>
+	<script type="module" src="./js/module.js"></script>
+	<script type="module">
+		import {isUserSignedIn} from './js/module.js';
+
+		check_signedIn();
+		async function check_signedIn(){
+			var check = await isUserSignedIn();
+			if(check){
+				console.log("helloworld");
+				console.log(check);
+				window.location.href="./homepage.html";
+			}
+		}
+	</script>
 </body>
 
 <!-- Bootstrap JS File -->

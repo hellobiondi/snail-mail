@@ -218,7 +218,7 @@ export function updateUsername(key, data) {
 	console.log("successfully update data!");
 }
 
-export function isUserSignedIn() {
+export async function isUserSignedIn() {
 	return new Promise(resolve => {
 		onAuthStateChanged(auth, (user) => {
 			if (user) {
