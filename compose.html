@@ -8,7 +8,6 @@
 	<meta name="author" content="Sun Jun, Mindy, Biondi, Wei Hern, Gadman">
 	<meta name="generator" content="Hugo 0.84.0">
 	<title>Snail Mail · Sure and Steady</title>
-	<link rel="shortcut icon" href="./img/snail.ico">
 
 	<!-- Bootstrap CSS File -->
 	<link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -135,7 +134,7 @@
             <div class="col-12 px-5">
                 <div class="row-md d-flex">
                     <h3 class="d-flex homeRow me-auto"> Write Your Mail</h3>
-                    <button type="button" class="my-auto me-2 btn button-light fs-5" @click="save_draft()" aria-label="savedraft">Save</button>                        
+                    <!-- <button type="button" class="my-auto me-2 btn button-light fs-5" @click="save_draft()" aria-label="savedraft">Save</button>                         -->
                     <button type="button" class="my-auto btn button-light fs-5" @click="discard()" aria-label="discard">Discard</button>                       
                 </div>
                 <div class="row-md d-flex">
@@ -274,9 +273,9 @@
 					this.friends = this.friends.split(",");
 					// console.log(this.friends);
 
-					for (let fren of this.friends){
+					// for (let fren of this.friends){
 						// console.log(this.data[fren]['name'])
-					}
+					// }
 
 					// auto select 
 					var reply = sessionStorage.getItem('sendToUid')
@@ -334,7 +333,7 @@
 						var received_date = moment().add(delay, 'days').format("lll");
 					}
 					// for testing
-					var received_date = moment().format("lll")
+					// var received_date = moment().format("lll")
 
 					console.log("Mail will be received on " + received_date);
 					this.receiveDate = received_date

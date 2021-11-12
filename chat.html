@@ -8,7 +8,6 @@
 	<meta name="author" content="Sun Jun, Mindy, Biondi, Wei Hern, Gadman">
 	<meta name="generator" content="Hugo 0.84.0">
 	<title>Snail Mail · Sure and Steady</title>
-	<link rel="shortcut icon" href="./img/snail.ico">
 
 	<!-- Bootstrap CSS File -->
 	<link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -116,6 +115,7 @@
 		<div class="row profile-card mt-5 px-5 pb-2">
 			<div class="row-md ">
 				<h3 class="homeRow"> Recently Received:</h3>
+				<p v-if="chatRecent == null"> No recently received mail </p>
 			</div>
 			<div class="row d-inline-flex">	
 				<div class="col-2 inline" v-for='(content,name) in chatRecent'>
@@ -175,6 +175,10 @@
 		<div class="row profile-card my-5 px-5 pb-2">
 			<div class="row-md d-block">
 				<h3 class="homeRow"> Chat History:</h3>
+				<div v-if="chatHistory == null"> 
+					<p> No chats has been made yet</p>
+				</div> 
+				
 			</div>
 			<div class="row d-inline-flex" >
 				<div class="col-2 inline" v-for='(content ,name) in chatHistory' >
@@ -259,10 +263,9 @@
 
 					this.chatRecent = data["chatRecent"];
 					this.chatHistory = data["chatHistory"];
-					
 					// Filter away all those mails that have not reached based on time
 					var currentdate = moment();
-					// console.log(this.chatRecent)
+					
 					if (this.chatRecent){
 						for (const [key,value] of Object.entries(this.chatRecent)){
 							var mailDTString = value['datetime'];
@@ -275,6 +278,9 @@
 								delete this.chatRecent[key];
 							}
 						}
+					}
+					if (this.chatRecent && Object.keys(this.chatRecent).length === 0){
+						this.chatRecent = null;
 					}
 					return "done";
 				},
@@ -327,12 +333,18 @@
 					this.display_mailbody= "flex"
 					this.body = this.chats[idx]['content'];
 					this.mailDesign = this.chats[idx]['mailDesign']
+					this.idx = idx
 				},
 				close(){
 					this.display = "none";
 				},
 				change_image(imageinput){
 					console.log(imageinput)
+				},
+				reply(){
+					// alert(this.idx);
+					// sessionStorage.setItem('sendToUid',idx)
+
 				}
 			}
 
