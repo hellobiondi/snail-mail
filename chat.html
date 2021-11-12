@@ -83,7 +83,7 @@
 			<div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="chat.html">Chats</a>
+						<a class="nav-link active" aria-current="page" href="chat.html">Mail</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" aria-current="page" href="games.html">Games</a>
@@ -168,7 +168,9 @@
 			</div>
 				
 			<div class="row-sm-3 d-flex m-3 justify-content-end">
-				<button type="button" class="my-auto me-3 btn button-light fs-4" @click="reply()" aria-label="Reply">Reply</button>
+				<a class="nav-link" href="compose.html">
+					<button type="button" class="my-auto me-3 btn button-light fs-4" @click="reply()" aria-label="Reply">Reply</button>
+				</a>
 			</div>
 
 		</div>
@@ -231,7 +233,8 @@
 					chats: [],
 					name: '',
 					avatar_img:'',
-					
+					whotoreply:'',
+
 					senderName:'None',
 					body: '',
 					mailDesign:"postcard1.jpg",
@@ -246,7 +249,7 @@
 					// default user is Sun Jun for now 
 					this.uid = await isUserSignedIn();
 					// for testing
-					this.uid = "xPXLbo2TisUWL2n99rF3rOPzFHs2"
+					// this.uid = "xPXLbo2TisUWL2n99rF3rOPzFHs2"
 					console.log(this.uid)
 					
 					// set avatar img 
@@ -311,12 +314,13 @@
 					this.body = this.chatRecent[name]['content'];
 					this.mailDesign = this.chatRecent[name]['mailDesign'];
 					this.display = 'none';
+					this.whotoreply = name;
 				},
 				async display_chat(name){
 					this.display = "inline-flex";
 					this.display_mailbody= "flex"
 					this.chats =  this.chatHistory[name]["mails"];
-					console.log(this.chats);
+					// console.log(this.chats);
 					let c_chat = this.chats[Object.keys(this.chats)[0]]
 					
 					//Update body design
@@ -326,6 +330,7 @@
 					loadRecentMails();
 
 					// console.log(this.chats);
+					this.whotoreply = name;
 
 				},
 				open_chat(idx){
@@ -334,7 +339,6 @@
 					this.display_mailbody= "flex"
 					this.body = this.chats[idx]['content'];
 					this.mailDesign = this.chats[idx]['mailDesign']
-					this.idx = idx
 				},
 				close(){
 					this.display = "none";
@@ -343,9 +347,8 @@
 					console.log(imageinput)
 				},
 				reply(){
-					// alert(this.idx);
-					// sessionStorage.setItem('sendToUid',idx)
-
+					sessionStorage.setItem('sendToUid',this.whotoreply)
+					// console.log(sessionStorage.getItem('sendToUid'))
 				}
 			}
 
