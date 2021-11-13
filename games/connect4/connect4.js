@@ -223,6 +223,7 @@ async function startGame() {
                     row[0].style.backgroundColor = player1Color;
                     Array.prototype.forEach.call(tableCell, (cell) => {
                         cell.removeEventListener('click', changeColor);
+                        document.getElementById("exitToHomepage").classList.remove("disabled");;
                         // Set all slots to white for new game.
                     });
                     //ow[0].style.backgroundImage = player1Img; //red
@@ -264,6 +265,7 @@ async function startGame() {
                     row[0].style.backgroundColor = player2Color;
                     Array.prototype.forEach.call(tableCell, (cell) => {
                         cell.removeEventListener('click', changeColor);
+                        document.getElementById("exitToHomepage").classList.remove("disabled");;
                         // Set all slots to white for new game.
                     });
                     //row[0].style.backgroundImage = player2Img;
