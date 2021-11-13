@@ -1,5 +1,5 @@
 // import { loginGoogle, readFromDatabase, writeToDatabase } from "./../../js/module.js";
-import { readFromDatabase, writeToDatabase, isUserSignedIn } from "./../../js/module.js";
+import { readFromDatabase, writeToDatabase, isUserSignedIn } from "../../js/module.js";
 //import {readFromDatabase, writeToDatabase, isUserSignedIn} from "./../../js/module.js";
 
 async function getUsername(uid){
