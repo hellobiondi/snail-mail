@@ -21,12 +21,12 @@ export function uploadResizeImages(uid,item){
   reader.readAsDataURL(item);
   reader.name = item.name;//get the image's name
   reader.size = item.size; //get the image's size
-  reader.onload = function(event) {
+  return new Promise(resolve => {reader.onload = function(event) {
     var img = new Image();//create a image
     img.src = event.target.result;//result is base64-encoded Data URI
     img.name = event.target.name;//set name (optional)
     img.size = event.target.size;//set size (optional)
-    img.onload = function(el) {
+    var ou = new Promise(resolve => {img.onload = function(el) {
       var elem = document.createElement('canvas');//create a canvas
 
       //scale the image to 600 (width) and keep aspect ratio
@@ -41,11 +41,20 @@ export function uploadResizeImages(uid,item){
       //get the base64-encoded Data URI from the resize image
       var srcEncoded = ctx.canvas.toDataURL('image/png', 1);
   const storageRef = ref(storage, uid+"/profilepic.jpeg");
-  return new Promise(resolve => {uploadString(storageRef, srcEncoded, 'data_url').then((snapshot) => {
+  var output = new Promise(resolve => {uploadString(storageRef, srcEncoded, 'data_url').then((snapshot) => {
     console.log('Successfully uploaded!');
-    resolve(uid+"/profilepic");
+    resolve(uid+"/profilepic.jpeg");
   });
-});}}}
+  
+});
+resolve(output);
+}
+});
+resolve(ou);
+}
+});
+
+}
 
 export function uploadImages(uid,file){
   const storageRef = ref(storage, uid+"/profilepic.jpeg");
