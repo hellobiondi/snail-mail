@@ -32,7 +32,7 @@
 </head>
 
 <body>
-	<div class="container my-3">
+	<div class="container my-3 py-2">
 		<div class="mt-5 row justify-content-center">
 			<div class="col-sm">
 				<img id="login_icon" class="mx-auto d-block" src="img/snail.PNG" onclick="redirect()">
@@ -57,16 +57,11 @@
 				<div>
 				<input type='hidden' class="form-control" id="check_login">
 				<div class="invalid-feedback text-center" style="font-size: large;">
-					Please enter valid email and password!
+					The email or password you entered is incorrect!
 				</div>
 				</div>
 				Email:<input type="email" class="form-control" id="email"><br>
 				Password:<input type="password" class="form-control" id="password">
-				<!--<div class="d-flex justify-content-end">
-					<div id="text">
-						<p class="d-inline-block" id="resetPwd">Forgot password?</p>
-					</div>
-				</div>-->
 				<br>
 				<br>
 				<div class="text-center">
@@ -740,8 +735,8 @@
 			var login_check = await loginEmail(email, password);
 			if(!login_check){
 				document.getElementById("check_login").classList.add("is-invalid");
-			}
-			var check = await readFromDatabase("users/" + login_check);
+			}else{
+				var check = await readFromDatabase("users/" + login_check);
 
 			if(!check){
 				var input1 = document.createElement("input");
@@ -754,6 +749,8 @@
 			}else{
 				window.location.href = "./homepage.html";
 			}
+			}
+			
 		}
 
         async function loginViaGoogle(){
