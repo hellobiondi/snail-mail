@@ -35,7 +35,7 @@
 	<div class="container my-3">
 		<div class="mt-5 row justify-content-center">
 			<div class="col-sm">
-				<img id="icon" class="mx-auto d-block" src="img/snail.PNG">
+				<img id="login_icon" class="mx-auto d-block" src="img/snail.PNG" onclick="redirect()">
 			</div>
 		</div>
 		<div class="mt-1 row justify-content-center" id="bfrSignUp">
@@ -129,9 +129,7 @@
 				<br>
 				<div>
 					Postal Code:<input type="text" class="form-control" id="update_postal_code">
-					<div class="invalid-feedback">
-						This field cannot be empty
-					</div></div><br>
+					</div><br>
 					<div>
 					Country:
 					<select class="form-select" id="update_country">
@@ -387,9 +385,7 @@
 			<div class="d-none col-lg-6 p-4" id="addressBox">
 				<div>
 				Postal Code:<input type="text" class="form-control" id="postal_code">
-				<div class="invalid-feedback">
-					This field cannot be empty
-				</div></div><br>
+				</div><br>
 				<div>
 				Country:
 				<select class="form-select" id="country">
@@ -658,10 +654,11 @@
 		document.getElementById("name").addEventListener("input",check_validation);
 		document.getElementById("register_password").addEventListener("input",check_validation);
 		document.getElementById("confirm_password").addEventListener("input",check_validation);
-		document.getElementById("postal_code").addEventListener("input",check_validation);
-		document.getElementById("update_postal_code").addEventListener("input",check_validation);
 		document.getElementById("update_name").addEventListener("input",check_validation);
+		//document.getElementById("icon").addEventListener("click",redirect);
 
+
+		
 
 		function check_validation(){
 			if(this.value==""){
