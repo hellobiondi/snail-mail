@@ -14,7 +14,7 @@ export function getImages(img){
   });
 }
 
-export async function uploadResizeImages(uid,item){
+export function uploadResizeImages(uid,item){
   var reader = new FileReader();
 
   //image turned to base64-encoded Data URI.
@@ -43,7 +43,7 @@ export async function uploadResizeImages(uid,item){
   const storageRef = ref(storage, uid+"/profilepic.jpeg");
   return new Promise(resolve => {uploadString(storageRef, srcEncoded, 'data_url').then((snapshot) => {
     console.log('Successfully uploaded!');
-    resolve(uid+"/profilepic.jpeg");
+    resolve(uid+"/profilepic");
   });
 });}}}
 
