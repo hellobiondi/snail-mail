@@ -25,8 +25,8 @@ users:{'uid':'data'}
 <br/>The application is currently hosted on https://snailmailhuat.netlify.app/
 
 Feel free to use the test account to view the interface 
-<br/>Email: vipuser1@gmail.com
-<br/>Password: pass1234
+<br/>Email: sunjun@email.com
+<br/>Password: Sunjun1234
 
 ## Features
 
