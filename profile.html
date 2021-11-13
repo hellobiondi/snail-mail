@@ -46,11 +46,11 @@
 		async function uploadImage() {
 			var uid = await isUserSignedIn();
 			var file = document.getElementById("newImg").files[0];
-			console.log(file);
+			console.log("File: "+file);
 			var upload = await uploadResizeImages(uid, file);
-			//console.log(upload);
+			console.log("uploadLink: "+upload);
 			var url = await getImages(upload);
-			//console.log(url);
+			console.log("Returned: "+url);
 			var prop = "users/" + uid;
 			var dt = { profile_picture: url };
 			let updateImageStatus = await updateToDatabase(prop, dt);

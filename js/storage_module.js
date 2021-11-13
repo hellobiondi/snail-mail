@@ -14,7 +14,7 @@ export function getImages(img){
   });
 }
 
-export async function uploadResizeImages(uid,item){
+export function uploadResizeImages(uid,item){
   var reader = new FileReader();
 
   //image turned to base64-encoded Data URI.
