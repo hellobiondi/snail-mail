@@ -1,6 +1,10 @@
 document.getElementById("sign_in").addEventListener("click",signInPage);
 document.getElementById("sign_up").addEventListener("click",signUpPage);
 
+function redirect(){
+    window.location.href = "./index.html";
+}
+
 function signInPage(){
     
     if(this.classList.contains("unselected")){
