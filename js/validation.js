@@ -9,7 +9,7 @@ async function checkSignedIn(){
     || window.location.pathname.includes("/hangman.html") || window.location.pathname.includes("/compose.html")){
         var check = await isUserSignedIn();
         if(!check){
-            window.location.href="./index.html";
+            window.location.href="/index.html";
         }
     }
 }
