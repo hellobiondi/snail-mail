@@ -4,11 +4,11 @@ Snail Mail is an online social networking portal that enables our users to conne
 
 ## Description
 
-As we are living in a fast-paced society, we hope to promote a slower pace of life through Snail Mail. Snail Mail aims to allow users to relax and take things slowly when meeting new people - by delaying mail/parcel delivery according to geographic distance.
+Living in a fast-paced society where instant messaging becomes an incessant distraction from genuine interactions, our group hopes to promote a slower pace of life through Snail Mail. Snail Mail allows users to take things slowly and meet new people - by delaying mail delivery according to geographic distance.
 
-To cultivate the habit of patient and meaningful conversation, we have designed our mail application to only allow one mail at a time until the receiver opened it. The anticipation and uncertainty whether the receiver open is also taken into consideration in our design.  
+To cultivate the habit of patient and meaningful conversation, we have designed our mail application to only allow one mail at a time until the receiver opens it. The intentional lack of 'Read' signatures also takes away the urgency in replies, and imparts a sense of transience in a friendship.
 
-Moreover, as our users send countless Snail Mails to their new companions, the waiting period brings back the nostalgic feeling of anticipation we got when we were younger from waiting for mail in our letterbox. Connected users can also choose to engage in various mini games, where a player can only make a move after the other player has done so, like ‘Correspondence connect 4’.
+Moreover, as our users send countless Snail Mails to their new companions, the waiting period brings back the nostalgic anticipation we get from waiting for mail in our letterboxes back in the heydays of physical mail. Connected users can also choose to engage in various mini-games, where a player can only make a move after the other player has done so; however long that might take. With the exception of several APIs, most of the functionalities in this application is coded from scratch without the use of existing website templates.
 
 ## Getting Started
 
@@ -24,23 +24,23 @@ users:{'uid':'data'}
 
 <br/>The application is currently hosted on https://snailmailhuat.netlify.app/
 
-Feel free to use test account to see the interface 
-<br/>email: vipuser1@gmail.com
-<br/>pwd: pass1234
+Feel free to use the test account to view the interface 
+<br/>Email: vipuser1@gmail.com
+<br/>Password: pass1234
 
 ## Features
 
-* Delay Mail
-* Corresponding Connect 4
+* Snail Mail with built-in delay
+* Correspondence Connect 4
 * Hangman (Beta) individual game for now  
 
 ## Testing Interface
 ```
-Sign up and login with an account 
-Find friends
-Send a Mail to friend
-Receive Mail from friend 
-Play Connect 4 with friend 
+Sign up and login with an account
+Get randomly matched to a friend
+Send a Snail Mail to a friend
+Receive Snail Mail from a friend 
+Play Connect 4 with a friend
 ```
 
 ## Delay details in cal_dist.js
@@ -58,8 +58,8 @@ Play Connect 4 with friend
 | >=4000  | 8 days    |
 
 ## Authors
-Tan Hui Ru<br/>
-Mindy Bok Zhaung Min<br/>
-Teo Wei Hern<br/>
-Gadman Tang Yi Luo<br/>
-Biondi Lee
+Tan Hui Ru
+<br/>Mindy Bok Zhuang Min
+<br/>Teo Wei Hern
+<br/>Gadman Tang Yi Luo
+<br/>Biondi Lee
