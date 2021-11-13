@@ -14,7 +14,7 @@ export function getImages(img){
   });
 }
 
-export function UploadResizeImages(uid,item){
+export async function uploadResizeImages(uid,item){
   var reader = new FileReader();
 
   //image turned to base64-encoded Data URI.
@@ -41,11 +41,11 @@ export function UploadResizeImages(uid,item){
       //get the base64-encoded Data URI from the resize image
       var srcEncoded = ctx.canvas.toDataURL('image/png', 1);
   const storageRef = ref(storage, uid+"/profilepic.jpeg");
-  uploadString(storageRef, srcEncoded, 'data_url').then((snapshot) => {
+  return new Promise(resolve => {uploadString(storageRef, srcEncoded, 'data_url').then((snapshot) => {
     console.log('Successfully uploaded!');
     resolve(uid+"/profilepic");
   });
-}}}
+});}}}
 
 export function uploadImages(uid,file){
   const storageRef = ref(storage, uid+"/profilepic.jpeg");
