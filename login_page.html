@@ -650,7 +650,6 @@
 		document.getElementById("register_password").addEventListener("input",check_validation);
 		document.getElementById("confirm_password").addEventListener("input",check_validation);
 		document.getElementById("update_name").addEventListener("input",check_validation);
-		//document.getElementById("icon").addEventListener("click",redirect);
 
 
 		
@@ -824,9 +823,7 @@
 			var user_postal_code = document.getElementById("update_postal_code").value;
             var user_country = document.getElementById("update_country").value;
             var bio = "The world does not know who is he/she yet! :)";
-            if(user_postal_code==""){
-                alert("postal code is required!");
-            }else{
+           
                 var checkAddress = await codeAddress(user_postal_code + ", " + user_country);
                 if(checkAddress){
                     var userData = document.getElementById("hidden_data").value;
@@ -847,16 +844,14 @@
                     alert("Please enter a valid address!");
                 }
                 
-            }
+            
 		}
 
         async function complete(){
             var user_postal_code = document.getElementById("postal_code").value;
             var user_country = document.getElementById("country").value;
             var bio = "The world does not know who is he/she yet! :)";
-            if(user_postal_code==""){
-                alert("postal code is required!");
-            }else{
+           
                 var checkAddress = await codeAddress(user_postal_code + ", " + user_country);
                 if(checkAddress){
                     var userData = document.getElementById("hidden_data").value;
@@ -879,8 +874,6 @@
                 }else{
                     alert("Please enter a valid address!");
                 }
-                
-            }
             
         }
 

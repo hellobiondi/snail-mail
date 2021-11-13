@@ -1,4 +1,4 @@
-import { isUserSignedIn } from "./module.js";
+import { isUserSignedIn,readFromDatabase,signOutUser } from "./module.js";
 
 checkSignedIn();
 
@@ -8,8 +8,18 @@ async function checkSignedIn(){
     || window.location.pathname.includes("/chat.html") || window.location.pathname.includes("/connect4.html")
     || window.location.pathname.includes("/hangman.html") || window.location.pathname.includes("/compose.html")){
         var check = await isUserSignedIn();
+        
         if(!check){
             window.location.href="/index.html";
+        }else{
+            var second_check = await readFromDatabase("users/"+check);
+            if(!second_check){
+                signOutUser();
+            }
         }
     }
+
+    
 }
+
+
