@@ -43,7 +43,7 @@ export async function uploadResizeImages(uid,item){
   const storageRef = ref(storage, uid+"/profilepic.jpeg");
   return new Promise(resolve => {uploadString(storageRef, srcEncoded, 'data_url').then((snapshot) => {
     console.log('Successfully uploaded!');
-    resolve(uid+"/profilepic");
+    resolve(uid+"/profilepic.jpeg");
   });
 });}}}
 
