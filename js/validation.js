@@ -3,13 +3,14 @@ import { isUserSignedIn } from "./module.js";
 checkSignedIn();
 
 async function checkSignedIn(){
-    if(window.location.href=="homepage.html" || window.location.href=="friend.html" 
-    || window.location.href=="games.html" || window.location.href=="profile.html" || window.location.href=="chat.html"){
-    var check = await isUserSignedIn();
-    if(!check){
-        window.location.href="index.html";
-    }
+    if(window.location.pathname.includes("/homepage.html") || window.location.pathname.includes("/friend.html")
+    || window.location.pathname.includes("/games.html") || window.location.pathname.includes("/profile.html") 
+    || window.location.pathname.includes("/chat.html") || window.location.pathname.includes("/connect4.html")
+    || window.location.pathname.includes("/hangman.html")){
+        console.log("checking in process")
+        var check = await isUserSignedIn();
+        if(!check){
+            window.location.href="./index.html";
+        }
     }
 }
-
-// <script src=".js/validation.js" type="module"></script> put this in all html files
