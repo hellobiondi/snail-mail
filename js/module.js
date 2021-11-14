@@ -94,10 +94,7 @@ export async function loginGoogle() {
 					}
 					//console.log(result);
 					if (exist == false) {
-						//var data ={uid:user.uid,name:user.displayName,email:user.email,profile_picture:user.photoURL};
 						resolve(user);
-						//writeToDatabase(prop,dt);
-						//window.location.href="./requestAddress.html";
 					} else {
 						resolve(false);
 					}
@@ -109,11 +106,7 @@ export async function loginGoogle() {
 
 					const errorMessage = error.message;
 					console.log(errorCode + " " + errorMessage);
-					// The email of the user's account used.
-					//const email = error.email;
-					// The AuthCredential type that was used.
-					//const credential = GoogleAuthProvider.credentialFromError(error);
-					// ...
+					
 				});
 
 			})
@@ -171,25 +164,6 @@ export async function writeToDatabase(key, data){
   
 }
 
-/*
-export async function writeToDatabase(key, data) {
-	return new Promise(resolve => {
-		set(ref(db, key), data).then((result) => {
-			console.log("Successfully added to database!");
-			resolve(result);
-		}).catch((error) => {
-			const errorCode = error.code;
-			const errorMessage = error.message;
-			console.log(errorCode + " " + errorMessage);
-			resolve(false);
-		});
-	});
-}*/
-
-/*export function updateToDatabase(key,data){
-  update(ref(db,key),data);
-  console.log("Successfully update data!");
-}*/
 
 export async function updateToDatabase(key, data) {
 	return new Promise(resolve => {
@@ -222,18 +196,11 @@ export async function isUserSignedIn() {
 	return new Promise(resolve => {
 		onAuthStateChanged(auth, (user) => {
 			if (user) {
-				// User is signed in, see docs for a list of available properties
-				// https://firebase.google.com/docs/reference/js/firebase.User
 				const uid = user.uid;
-
-				//console.log("current user:"+uid);//see if this appears in console, if yes meant user currently signed in
 				resolve(uid);
 				// ...
 			} else {
-				//redirect non-logged in users back to index.html
-				if(!window.location.href=="./index.html"){
-					window.location.href=="./index.html"
-				}
+				
 				resolve(false) 
 			}
 		});
