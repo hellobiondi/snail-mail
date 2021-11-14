@@ -26,14 +26,12 @@ export function uploadResizeImages(uid, item) {
     reader.onload = function (event) {
       var img = new Image();//create a image
       img.src = event.target.result;//result is base64-encoded Data URI
-      img.name = event.target.name;//set name (optional)
-      img.size = event.target.size;//set size (optional)
+      img.name = event.target.name;//set name
+      img.size = event.target.size;//set size
       var ou = new Promise(resolve => {
         img.onload = function (el) {
           var elem = document.createElement('canvas');//create a canvas
 
-          //scale the image to 600 (width) and keep aspect ratio
-          //var scaleFactor = resize_width / el.target.width;
           elem.width = 200;
           elem.height = 200;
 
@@ -58,18 +56,4 @@ export function uploadResizeImages(uid, item) {
     }
   });
 
-}
-
-export function uploadImages(uid, file) {
-  const storageRef = ref(storage, uid + "/profilepic.jpeg");
-  const metadata = {
-    contentType: 'image/jpeg',
-  };
-
-  return new Promise(resolve => {
-    uploadBytes(storageRef, file, metadata).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-      resolve(uid + "/profilepic.jpeg");
-    });
-  });
 }
