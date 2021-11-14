@@ -1,9 +1,0 @@
-1) Index.html
-2) About.html
-3) Login.html
-4) Homepage.html
-5) Profile.html
-6) Friend.html
-7) Chat.html
-8) Compose.html
-9) Games.html
